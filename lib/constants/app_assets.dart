@@ -60,6 +60,9 @@ class AppAssets {
   static const String carIcon = 'assets/images/car_icon.png';
   static const String bookmarkIcon = 'assets/images/bookmark.png';
 
+  static const String bookcarVols = 'assets/images/bookcar_vols.png';
+  static const String bookcarToy = 'assets/images/bookcar_toy.png';
+
 
 
 

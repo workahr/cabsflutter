@@ -12,9 +12,10 @@ import 'login_model.dart';
 
 
 class OtpVerificationPage extends StatefulWidget {
-  final String phoneNumber;
+   final String? phoneNumber;
+  final int? otp;
 
-  const OtpVerificationPage({Key? key, required this.phoneNumber})
+   OtpVerificationPage({Key? key,  this.phoneNumber, this.otp})
       : super(key: key);
 
   @override
@@ -29,6 +30,16 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
        final CabsApiService apiService = CabsApiService();
 
         final otpFocusNode = FocusNode();
+
+         @override
+  void initState() {
+    
+  //  setState(() {
+  //    otpCtrl.text = widget.otp.toString();
+  //  });
+    
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -56,29 +67,20 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
 
         if (response.status.toString() == 'SUCCESS') {
-          // setState(() {
-          // Navigator.push(
-          //                 context,
-          //                 MaterialPageRoute(
-          //                   builder: (context) => OtpVerificationPage(
-          //                     phoneNumber: _phoneController.text,
-          //                   ),
-          //                 ),
-          //               );
-          // });
-        
-          final prefs = await SharedPreferences.getInstance();
+           final prefs = await SharedPreferences.getInstance();
           
-          
-          //prefs.setString('fullname', response.fullname ?? '');
-
-    
-
             if(response.authToken != null){
-              Navigator.pushNamed(context, '/');
+              //Navigator.pushNamed(context, '/');
               prefs.setString('auth_token', response.authToken ?? '');
               prefs.setBool('isLoggedin', true);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DisplayContentPage(),
+                    ),
+                  );
             }
+         
           
         } else {
           showInSnackBar(context, response.message.toString());
@@ -131,7 +133,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                   style: const TextStyle(fontSize: 16, color: Colors.grey),
                 ),
                 Text(
-                  widget.phoneNumber,
+                  widget.phoneNumber.toString(),
                   style: const TextStyle(fontSize: 16, color: Colors.grey),
                 )
               ],
@@ -250,12 +252,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DisplayContentPage(),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => DisplayContentPage(),
+                  //   ),
+                  // );
+
+                  login();
 
                   print(
                       'OTP entered: ${_otpControllers.map((c) => c.text).join()}');

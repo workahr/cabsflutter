@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 
 import 'package:google_places_flutter/google_places_flutter.dart';
+import '../../widgets/custom_text_field.dart';
 import 'latlong_model.dart';
 import 'package:http/http.dart' as http;  // For making HTTP requests
 import 'dart:convert'; 
@@ -22,6 +23,10 @@ class _HomePageState extends State<HomePage> {
   TextEditingController pickupLocCtrl = TextEditingController();
   TextEditingController dropDateCtrl = TextEditingController();
   TextEditingController dropLocCtrl = TextEditingController();
+  TextEditingController dobCtrl = TextEditingController();
+
+
+  
 
   LatLong pickupLatLng = LatLong(latitude: 0.0, longitude: 0.0);
   LatLong dropLatLng = LatLong(latitude: 0.0, longitude: 0.0);
@@ -67,13 +72,23 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index;
     });
   }
+final client = http.Client();
+   static var headerData = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json ',
+  };
 
    Future<List<Prediction>> fetchPlaces(String input) async {
     String apiKey = 'AIzaSyCV_BHnDXUjS0B5p4x4SxaqpHbcBoY-EHs'; // Replace with your actual API key
-    final url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$apiKey';
+    //final url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$apiKey';
 
     try {
-      final response = await http.get(Uri.parse(url));
+      final url = Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$apiKey');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+     // final response = await http.get(Uri.parse(url, headerData));
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
         var predictions = jsonData['predictions'] as List;
@@ -139,152 +154,291 @@ class _HomePageState extends State<HomePage> {
                   //   },
                   // ),
 
-               TypeAheadField<Prediction>(
-                 suggestionsCallback: (pattern) async {
-                  return await fetchPlaces(pattern);
-                },
-                    builder: (context, controller, focusNode) {
-                    return TextField(
-                      controller: controller,
-                      focusNode: focusNode,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'City',
-                      )
-                    );
-                    },
+              //  TypeAheadField<Prediction>(
+              //    suggestionsCallback: (pattern) async {
+              //     return await fetchPlaces(pattern);
+              //   },
+              //       builder: (context, controller, focusNode) {
+              //       return TextField(
+              //         controller: pickupLocCtrl,
+              //         focusNode: focusNode,
+              //         autofocus: true,
+              //         decoration: InputDecoration(
+              //           border: OutlineInputBorder(),
+              //           labelText: 'pick Location',
+              //         )
+              //       );
+              //       },
         
-                    itemBuilder: (context, Prediction suggestion) {
-                      return ListTile(
-                        leading: Icon(Icons.location_on),
-                        title: Text(suggestion.description ?? ""),
-                      );
-                    },
-                   onSelected: (Prediction value) {  
-                       setState(() {
-                        pickupLocCtrl.text = value.description ?? '';
-                        pickupLatLng.latitude = double.parse(value.lat!);
-                        pickupLatLng.longitude = double.parse(value.lng!);
-                      });
-                    },
-                  ),
+              //       itemBuilder: (context, Prediction suggestion) {
+              //         return ListTile(
+              //           leading: Icon(Icons.location_on),
+              //           title: Text(suggestion.description ?? ""),
+              //         );
+              //       },
+              //      onSelected: (Prediction value) {  
+              //          setState(() {
+              //           pickupLocCtrl.text = value.description ?? '';
+              //           pickupLatLng.latitude = double.parse(value.lat!);
+              //           pickupLatLng.longitude = double.parse(value.lng!);
+              //         });
+              //       },
+              //     ),
 
 
-                  // GooglePlaceAutoCompleteTextField(
-                  //           textEditingController: pickupLocCtrl,
-                  //           googleAPIKey: AppConstants.googleMapApiKey,
-                  //           // inputDecoration: InputDecoration(),
-                  //           boxDecoration: BoxDecoration(),
-                  //           inputDecoration: InputDecoration(
-                  //             labelText: 'Pickup Location',
-                  //             iconColor: AppColors.primary,
-                  //             floatingLabelStyle: TextStyle(
-                  //                 fontSize: 14.0, color: AppColors.primary),
-                  //             hintStyle: TextStyle(
-                  //                 fontSize: 14.0, color: AppColors.lightGrey),
-                  //             labelStyle: TextStyle(
-                  //                 fontSize: 14.0, color: AppColors.lightGrey),
-                  //             contentPadding: const EdgeInsets.symmetric(
-                  //                 horizontal: 12, vertical: 5),
-                  //             border: OutlineInputBorder(
-                  //                 borderSide: BorderSide(
-                  //                     width: 1.5, color: AppColors.lightGrey),
-                  //                 borderRadius:
-                  //                     BorderRadius.all(Radius.circular(25))),
-                  //             enabledBorder: OutlineInputBorder(
-                  //                 borderSide: BorderSide(
-                  //                     width: 1.5, color: AppColors.lightGrey),
-                  //                 borderRadius:
-                  //                     BorderRadius.all(Radius.circular(25))),
-                  //             focusedBorder: OutlineInputBorder(
-                  //                 borderSide: BorderSide(
-                  //                     width: 1.5, color: AppColors.primary),
-                  //                 borderRadius:
-                  //                     BorderRadius.all(Radius.circular(25))),
-                  //           ),
-                  //           debounceTime: 800, // default 600 ms,
-                  //           // countries: [
-                  //           //   "in",
-                  //           //   "uae",
-                  //           //   // "fr"
-                  //           // ], // optional by default null is set
-                  //           isLatLngRequired:
-                  //               true, // if you required coordinates from place detail
-                  //           getPlaceDetailWithLatLng: (Prediction prediction) {
-                  //             pickupLatLng.latitude =
-                  //                 double.parse(prediction.lat!);
-                  //             pickupLatLng.longitude =
-                  //                 double.parse(prediction.lng!);
-                  //             // this method will return latlng with place detail
-                  //             print("placeDetails lng" +
-                  //                 prediction.lng.toString());
-                  //             print("placeDetails lat" +
-                  //                 prediction.lat.toString());
-                  //           }, // this callback is called when isLatLngRequired is true
-                  //           itemClick: (Prediction prediction) {
-                  //             pickupLocCtrl.text = prediction.description!;
-                  //             pickupLocCtrl.selection =
-                  //                 TextSelection.fromPosition(TextPosition(
-                  //                     offset: prediction.description!.length));
-                  //           },
-                  //           itemBuilder:
-                  //               (context, index, Prediction prediction) {
-                  //             return Container(
-                  //               padding: EdgeInsets.all(10),
-                  //               child: Row(
-                  //                 children: [
-                  //                   Icon(Icons.location_on),
-                  //                   SizedBox(
-                  //                     width: 7,
-                  //                   ),
-                  //                   Expanded(
-                  //                       child: Text(
-                  //                           "${prediction.description ?? ""}"))
-                  //                 ],
-                  //               ),
-                  //             );
-                  //           },
-                  //           // if you want to add seperator between list items
-                  //           // seperatedBuilder: Divider(),
-                  //           // want to show close icon
-                  //           isCrossBtnShown: false,
-                  //         ),
+                  GooglePlaceAutoCompleteTextField(
+                            textEditingController: pickupLocCtrl,
+                            googleAPIKey: AppConstants.googleMapApiKey,
+                            // inputDecoration: InputDecoration(),
+                            boxDecoration: BoxDecoration(),
+                            inputDecoration: InputDecoration(
+                              labelText: 'Pickup Location',
+                              iconColor: AppColors.primary,
+                              floatingLabelStyle: TextStyle(
+                                  fontSize: 14.0, color: AppColors.primary),
+                              hintStyle: TextStyle(
+                                  fontSize: 14.0, color: AppColors.lightGrey),
+                              labelStyle: TextStyle(
+                                  fontSize: 14.0, color: AppColors.lightGrey),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 5),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1.5, color: AppColors.lightGrey),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25))),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1.5, color: AppColors.lightGrey),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25))),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1.5, color: AppColors.primary),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25))),
+                            ),
+                            debounceTime: 800, // default 600 ms,
+                            // countries: [
+                            //   "in",
+                            //   "uae",
+                            //   // "fr"
+                            // ], // optional by default null is set
+                            isLatLngRequired:
+                                true, // if you required coordinates from place detail
+                            getPlaceDetailWithLatLng: (Prediction prediction) {
+                              pickupLatLng.latitude =
+                                  double.parse(prediction.lat!);
+                              pickupLatLng.longitude =
+                                  double.parse(prediction.lng!);
+                              // this method will return latlng with place detail
+                              print("placeDetails lng" +
+                                  prediction.lng.toString());
+                              print("placeDetails lat" +
+                                  prediction.lat.toString());
+                            }, // this callback is called when isLatLngRequired is true
+                            itemClick: (Prediction prediction) {
+                              pickupLocCtrl.text = prediction.description!;
+                              pickupLocCtrl.selection =
+                                  TextSelection.fromPosition(TextPosition(
+                                      offset: prediction.description!.length));
+                            },
+                            itemBuilder:
+                                (context, index, Prediction prediction) {
+                              return Container(
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.location_on),
+                                    SizedBox(
+                                      width: 7,
+                                    ),
+                                    Expanded(
+                                        child: Text(
+                                            "${prediction.description ?? ""}"))
+                                  ],
+                                ),
+                              );
+                            },
+                            // if you want to add seperator between list items
+                            // seperatedBuilder: Divider(),
+                            // want to show close icon
+                            isCrossBtnShown: false,
+                          ),
 
 
                   SizedBox(height: 10),
                   // Drop Location Field
-                  TextField(
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.location_on_outlined),
-                      labelText: 'Drop',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        dropLocation = value;
-                      });
-                    },
-                  ),
+                  // TextField(
+                  //   decoration: InputDecoration(
+                  //     prefixIcon: Icon(Icons.location_on_outlined),
+                  //     labelText: 'Drop',
+                  //     border: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //   ),
+                  //   onChanged: (value) {
+                  //     setState(() {
+                  //       dropLocation = value;
+                  //     });
+                  //   },
+                  // ),
+
+
+                  GooglePlaceAutoCompleteTextField(
+                              textEditingController: dropLocCtrl,
+                              googleAPIKey: AppConstants.googleMapApiKey,
+
+                              // inputDecoration: InputDecoration(),
+                              boxDecoration: BoxDecoration(),
+                              inputDecoration: InputDecoration(
+                                labelText: 'Drop',
+                                iconColor: AppColors.primary,
+                                floatingLabelStyle: TextStyle(
+                                    fontSize: 14.0, color: AppColors.primary),
+                                hintStyle: TextStyle(
+                                    fontSize: 14.0, color: AppColors.lightGrey),
+                                labelStyle: TextStyle(
+                                    fontSize: 14.0, color: AppColors.lightGrey),
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 5),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1.5, color: AppColors.lightGrey),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25))),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1.5, color: AppColors.lightGrey),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25))),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 1.5, color: AppColors.primary),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25))),
+                              ),
+                              debounceTime: 800, // default 600 ms,
+                              // countries: [
+                              //   "in",
+                              //   "uae",
+                              //   // "fr"
+                              // ], // optional by default null is set
+                              isLatLngRequired:
+                                  true, // if you required coordinates from place detail
+                              getPlaceDetailWithLatLng:
+                                  (Prediction prediction) {
+                                dropLatLng.latitude =
+                                    double.parse(prediction.lat!);
+                                dropLatLng.longitude =
+                                    double.parse(prediction.lng!);
+                                // this method will return latlng with place detail
+                                print("placeDetails lng" +
+                                    prediction.lng.toString());
+                                print("placeDetails lat" +
+                                    prediction.lat.toString());
+                              }, // this callback is called when isLatLngRequired is true
+                              itemClick: (Prediction prediction) {
+                                dropLocCtrl.text = prediction.description!;
+                                dropLocCtrl.selection =
+                                    TextSelection.fromPosition(TextPosition(
+                                        offset:
+                                            prediction.description!.length));
+                              },
+                              itemBuilder:
+                                  (context, index, Prediction prediction) {
+                                return Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.location_on),
+                                      SizedBox(
+                                        width: 7,
+                                      ),
+                                      Expanded(
+                                          child: Text(
+                                              "${prediction.description ?? ""}"))
+                                    ],
+                                  ),
+                                );
+                              },
+                              // if you want to add seperator between list items
+                              // seperatedBuilder: Divider(),
+                              // want to show close icon
+                              isCrossBtnShown: false,
+                            ),
+
+
+
                   SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
                         // Date Field
-                        child: TextField(
-                          onTap: () => _selectDate(context),
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.calendar_month_outlined),
-                            labelText: DateFormat('dd MMM yyyy')
-                                .format(selectedDate), // Format as dd MMM yyyy
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                        child: 
+                        // TextField(
+                        //   onTap: () => _selectDate(context),
+                        //   readOnly: true,
+                        //   decoration: InputDecoration(
+                        //     prefixIcon: Icon(Icons.calendar_month_outlined),
+                        //     labelText: DateFormat('dd MMM yyyy')
+                        //         .format(selectedDate), // Format as dd MMM yyyy
+                        //     border: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.circular(10),
+                        //     ),
+                        //   ),
+                        // ),
+
+
+                        CustomeTextField(
+                          labelText: 'DD/MM/YYYY',
+                          prefixIcon: const Icon(
+                            Icons.date_range,
                           ),
-                        ),
+                          control: dobCtrl,
+                          width: MediaQuery.of(context).size.width - 10,
+                          readOnly: true, // when true user cannot edit text
+
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1948),
+                              lastDate: DateTime(2100),
+                              builder: (context, child) {
+                                return Theme(
+                                  
+                                  data: Theme.of(context).copyWith(
+                                    
+                                    colorScheme: ColorScheme.light(
+                                      primary: Theme.of(context)
+                                          .primaryColor, // <-- SEE HERE
+                                      onSurface: Theme.of(context)
+                                          .primaryColor, // <-- SEE HERE
+                                    ),
+                                    textButtonTheme: TextButtonThemeData(
+                                      style: TextButton.styleFrom(
+                                         foregroundColor: AppColors.light,
+                                          backgroundColor: AppColors.primary,
+                                      ),
+                                    ),
+                                  ),
+                                  child: child!,
+                                );
+                              },
+                            );
+
+                            if (pickedDate != null) {
+                              String formattedDate =
+                                  DateFormat('dd-MM-yyyy').format(pickedDate);
+
+                              setState(() {
+                                dobCtrl.text = formattedDate;
+                              });
+                            } else {
+                              print("Date is not selected");
+                            }
+                          }),
                       ),
                       SizedBox(width: 10),
                       Expanded(
@@ -303,14 +457,20 @@ class _HomePageState extends State<HomePage> {
                               selectedPersons = newValue!;
                             });
                           },
-                          decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.person_outline),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
+                         decoration: InputDecoration(
+      prefixIcon: Icon(Icons.person_outline),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey, width: 1.5), // Grey border when not focused
+        borderRadius: BorderRadius.circular(12),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey, width: 1.5), // Grey border when focused
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+  ),
+),
                     ],
                   ),
                   SizedBox(height: 20),
@@ -397,7 +557,7 @@ class CarTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
+            color: Colors.grey.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 5,
             offset: Offset(0, 3), // changes position of shadow

@@ -103,12 +103,17 @@ class _DisplayContentPageState extends State<DisplayContentPage> {
                       onPressed: () {
                         if (_currentPage == 2) {
                           print('next scn');
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainContainer(),
-                            ),
-                          );
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => MainContainer(),
+                          //   ),
+                          // );
+
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => MainContainer()),
+                              (Route<dynamic> route) => false, // Remove OTP page from the stack
+                            );
                         } else {
                           print('auto next screen ');
                           _controller.nextPage(

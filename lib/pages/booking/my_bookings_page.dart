@@ -1,3 +1,4 @@
+import 'package:cabs/constants/app_assets.dart';
 import 'package:flutter/material.dart';
 
 class MyBookingsPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
             "My Bookings",
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Color(0xFF06234C)),
+          backgroundColor: Color(0xFF06234C),automaticallyImplyLeading: false,),
       body: ListView(
         children: [
           BookingCard(
@@ -27,7 +28,7 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
             todateRange: "02-Sept-2024",
             amount: '₹5000',
             status: 'Completed',
-            carImage: 'assets/images/bookcar_vols.png',
+            carImage: AppAssets.bookcarVols,
           ),
           BookingCard(
             carName: 'Toyota Fortuner',
@@ -39,7 +40,7 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
             todateRange: "02-Sept-2024",
             amount: '₹5000',
             status: 'Completed',
-            carImage: 'assets/images/bookcar_toy.png',
+            carImage: AppAssets.bookcarToy,
           ),
           BookingCard(
             carName: 'Toyota Fortuner',
@@ -51,7 +52,7 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
             todateRange: "02-Sept-2024",
             amount: '₹5000',
             status: 'Completed',
-            carImage: 'assets/images/bookcar_toy.png',
+            carImage: AppAssets.bookcarToy,
           ),
         ],
       ),
@@ -86,8 +87,20 @@ class BookingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
+    return Container(                         
+          //width: MediaQuery.of(context).size.width * 0.43,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
       margin: EdgeInsets.all(10),
       child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -130,26 +143,30 @@ class BookingCard extends StatelessWidget {
               ),
               Text('To: '),
             ]),
-            Row(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
               Text(
                 '$fromLocation',
                 style: TextStyle(
                     color: Color(0xFF06234C), fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                width: 150,
-              ),
+              // SizedBox(
+              //   width: 150,
+              // ),
               Text(
                 '$toLocation',
                 style: TextStyle(
                     color: Color(0xFF06234C), fontWeight: FontWeight.bold),
               ),
             ]),
-            Row(children: [
+            Row(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
               Text('$fromdateRange'),
-              SizedBox(
-                width: 170,
-              ),
+              // SizedBox(
+              //   width: 170,
+              // ),
               Text('$todateRange'),
             ]),
             SizedBox(height: 20),
@@ -157,14 +174,16 @@ class BookingCard extends StatelessWidget {
               color: Color(0xFFF3F8FF),
               child: Column(
                 children: [
-                  Row(children: [
+                  Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                     Text('Total Amount:',
                         style: TextStyle(
                             color: Color(0xFF06234C),
                             fontWeight: FontWeight.bold)),
-                    SizedBox(
-                      width: 170,
-                    ),
+                    // SizedBox(
+                    //   width: 170,
+                    // ),
                     Text('$amount',
                         style: TextStyle(
                             color: Color(0xFF06234C),
