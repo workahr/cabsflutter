@@ -23,15 +23,7 @@ class _AddCarsPageState extends State<AddCarsPage> {
           'Add Cars',
           style: TextStyle(color: Colors.white),
         ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            // Handle back action
-          },
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

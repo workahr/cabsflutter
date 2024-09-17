@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 
+import 'package:cabs/pages/auth/otp_verification_page.dart';
 import 'package:cabs/pages/main_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -124,6 +125,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 child: LoginPage(),
                 // child: LoginPageGoogle(),
               ),
+              '/loginotp': (context) => UpgradeAlert(
+              upgrader: Upgrader(
+                showIgnore: false,
+                showLater: false,
+                durationUntilAlertAgain: const Duration(seconds: 1),
+              ),
+              child: OtpVerificationPage(),
+            ),
           '/home': (context) => UpgradeAlert(
                 upgrader: Upgrader(
                    showIgnore: false,

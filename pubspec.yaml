@@ -48,6 +48,15 @@ dependencies:
   google_maps_flutter: ^2.9.0
   google_places_flutter: ^2.0.9
   pinput: ^3.0.1
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  
+  ios: true
+  android: true
+  image_path: "assets/images/logo_img.png" 
+  adaptive_icon_background: "#FFFFFF" 
+  adaptive_icon_foreground: "assets/images/logo_img.png"
 
 dev_dependencies:
   flutter_test:

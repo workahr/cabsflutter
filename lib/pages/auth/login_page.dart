@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                           MaterialPageRoute(
                             builder: (context) => OtpVerificationPage(
                               phoneNumber: _phoneController.text,
+                              otp: response.otp!
                             ),
                           ),
                         );
@@ -135,7 +136,15 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                       login();
+                        //   Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => OtpVerificationPage(
+                        //       phoneNumber: _phoneController.text,
+                        //     ),
+                        //   ),
+                        // );
+                        login();
                         print(
                             'Get OTP tapped with number: ${_phoneController.text}');
                       },
