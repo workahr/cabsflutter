@@ -1,5 +1,6 @@
 import 'package:cabs/constants/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'booking/my_bookings_page.dart';
 import 'cars/add_cars_page.dart';
@@ -31,10 +32,16 @@ class _MainContainerState extends State<MainContainer>
     AddCarsPage(),
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+ void _onItemTapped(int index) async {
+    if (index == 3) {
+      // Handle logout
+      await _handleLogout();
+    } else {
+      // Handle other navigation
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -78,6 +85,16 @@ class _MainContainerState extends State<MainContainer>
     }
   }
 
+  Future<void> _handleLogout() async {
+    // Clear SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    // Navigate to Login Page
+    Navigator.pushNamedAndRemoveUntil(
+          context, '/login', ModalRoute.withName('/login'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -111,6 +128,10 @@ class _MainContainerState extends State<MainContainer>
               ),
               //  icon: Icon(Icons.add),
               label: 'Add Cars',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.logout), // Correct logout icon
+              label: 'Logout',
             ),
 
           ],
