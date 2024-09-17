@@ -16,8 +16,7 @@ class CabsApiService {
 //     'Accept': 'application/json ',
 //   };
 
-
-static var headerData;
+  static var headerData;
 
   CabsApiService() {
     getBearerToken();
@@ -31,7 +30,6 @@ static var headerData;
       'Authorization': 'Bearer $value',
     };
   }
- 
 
 //get all UserBranchList
   Future getAllUserBranchList() async {
@@ -51,17 +49,18 @@ static var headerData;
     }
   }
 
-   // get Kpi chart data
-   Future getKpiChartData(postData) async {
+  // get Kpi chart data
+  Future getKpiChartData(postData) async {
     try {
-      final url = Uri.parse('${liveApiPath}SignumReport/KPIEvolution/KPIEvolutionAllDataBranchwiseVisual');
+      final url = Uri.parse(
+          '${liveApiPath}SignumReport/KPIEvolution/KPIEvolutionAllDataBranchwiseVisual');
       final response = await client.post(
         url,
         headers: headerData,
         body: jsonEncode(postData),
       );
       if (response.statusCode == 200) {
-       return jsonDecode(response.body);
+        return jsonDecode(response.body);
       } else {
         return [];
       }
@@ -70,8 +69,8 @@ static var headerData;
     }
   }
 
-     // get Overview chart data
-   Future getOverviewChartData(postData) async {
+  // get Overview chart data
+  Future getOverviewChartData(postData) async {
     try {
       final url = Uri.parse('${liveApiPath}SignumReport/RoleBasedKPIVisual');
       final response = await client.post(
@@ -89,10 +88,11 @@ static var headerData;
     }
   }
 
-    // get festival
-   Future getFilterFestivalData() async {
+  // get festival
+  Future getFilterFestivalData() async {
     try {
-      final url = Uri.parse('${liveApiPath}ControlPanelSettingMasters/FestivalMaster');
+      final url =
+          Uri.parse('${liveApiPath}ControlPanelSettingMasters/FestivalMaster');
       final response = await client.get(
         url,
         headers: headerData,
@@ -107,10 +107,11 @@ static var headerData;
     }
   }
 
-   // get Brands
-   Future getFilterBrandsData(postData) async {
+  // get Brands
+  Future getFilterBrandsData(postData) async {
     try {
-      final url = Uri.parse('${liveApiPath}ControlPanelSettingMasters/GeneralMaster');
+      final url =
+          Uri.parse('${liveApiPath}ControlPanelSettingMasters/GeneralMaster');
       final response = await client.post(
         url,
         headers: headerData,
@@ -126,10 +127,11 @@ static var headerData;
     }
   }
 
-   // get Types
-   Future getFilterTypesData(postData) async {
+  // get Types
+  Future getFilterTypesData(postData) async {
     try {
-      final url = Uri.parse('${liveApiPath}ControlPanelSettingMasters/GeneralMaster');
+      final url =
+          Uri.parse('${liveApiPath}ControlPanelSettingMasters/GeneralMaster');
       final response = await client.post(
         url,
         headers: headerData,
@@ -145,8 +147,8 @@ static var headerData;
     }
   }
 
-   // get Shape
-   Future getFilterShapeData() async {
+  // get Shape
+  Future getFilterShapeData() async {
     try {
       final url = Uri.parse('${liveApiPath}Filter/FilterShape');
       final response = await client.get(
@@ -164,7 +166,7 @@ static var headerData;
   }
 
   // get Shape
-   Future getFilterFluorData() async {
+  Future getFilterFluorData() async {
     try {
       final url = Uri.parse('${liveApiPath}Filter/FilterFluor');
       final response = await client.get(
@@ -182,9 +184,10 @@ static var headerData;
   }
 
   // get Salesman
-   Future getFilterSalesmanData() async {
+  Future getFilterSalesmanData() async {
     try {
-      final url = Uri.parse('${liveApiPath}ControlPanelSettingMasters/Salesman');
+      final url =
+          Uri.parse('${liveApiPath}ControlPanelSettingMasters/Salesman');
       final response = await client.get(
         url,
         headers: headerData,
@@ -198,8 +201,6 @@ static var headerData;
       return e;
     }
   }
-
-
 
   // post customer details
   Future inertCustomerDetails(postData) async {
@@ -243,14 +244,17 @@ static var headerData;
     }
   }
 
-   handleError({message}) {
+  handleError({message}) {
     throw Exception(message ?? 'Network Error');
   }
 
   // user  login
   Future userLogin(strUsername, strPassword) async {
     try {
-      final url = Uri.parse('${liveApiPath}ValidatePassword?strusername='+strUsername+'&strPassword='+strPassword);
+      final url = Uri.parse('${liveApiPath}ValidatePassword?strusername=' +
+          strUsername +
+          '&strPassword=' +
+          strPassword);
       final response = await client.get(
         url,
         headers: headerData,
@@ -285,11 +289,29 @@ static var headerData;
     }
   }
 
+// carlist
+  Future getcarList() async {
+    try {
+      final url = Uri.parse('${liveApiPath}expenses/getallexpenses');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
 
   // get all employee details
   Future employeeDetails(strUsername) async {
     try {
-      final url = Uri.parse('${liveApiPath}EmployeeDetails?EMPMST_NAME='+strUsername);
+      final url =
+          Uri.parse('${liveApiPath}EmployeeDetails?EMPMST_NAME=' + strUsername);
       final response = await client.get(
         url,
         headers: headerData,
@@ -305,10 +327,8 @@ static var headerData;
     }
   }
 
-
-
-   // get daily Status
-   Future getAllDailyStatus(postData) async {
+  // get daily Status
+  Future getAllDailyStatus(postData) async {
     try {
       final url = Uri.parse('${liveApiPath}ComOverallReports');
       final response = await client.post(
@@ -326,12 +346,10 @@ static var headerData;
     }
   }
 
-
   //get all
   Future get(apiUrl) async {
     try {
-      final url =
-          Uri.parse(liveApiPath + apiUrl);
+      final url = Uri.parse(liveApiPath + apiUrl);
       final response = await client.get(
         url,
         headers: headerData,
@@ -345,7 +363,6 @@ static var headerData;
       return e;
     }
   }
-
 
   // get all Leave Balance
   Future getAllLeaveBalance() async {
@@ -366,12 +383,10 @@ static var headerData;
     }
   }
 
-
-    //get all LeaveApproval
+  //get all LeaveApproval
   Future getAllLeaveApproval() async {
     try {
-      final url =
-          Uri.parse('${liveApiPath}EmployeeComLeave');
+      final url = Uri.parse('${liveApiPath}EmployeeComLeave');
       final response = await client.get(
         url,
         headers: headerData,
@@ -389,11 +404,10 @@ static var headerData;
   // update customer details
   Future requestAction(postData) async {
     try {
-      final url = Uri.parse(
-          '${liveApiPath}EmployeeComLeave?MID=${postData['MID']}');
+      final url =
+          Uri.parse('${liveApiPath}EmployeeComLeave?MID=${postData['MID']}');
       final response = await client.put(url,
-          headers: headerData,
-          body: jsonEncode(postData));
+          headers: headerData, body: jsonEncode(postData));
       if (response.statusCode == 200) {
         final json = response.body;
         return jsonDecode(json);
@@ -407,7 +421,7 @@ static var headerData;
     }
   }
 
-    // Save EntryWorkFromHome
+  // Save EntryWorkFromHome
   Future saveEntryWorkFromHome(postData) async {
     try {
       final url = Uri.parse('${liveApiPath}EmployeeComWorkfromhome');
@@ -427,7 +441,7 @@ static var headerData;
     }
   }
 
-    // Save EntryLeave
+  // Save EntryLeave
   Future saveEntryLeave(postData) async {
     try {
       final url = Uri.parse('${liveApiPath}EmployeeComLeave');
@@ -446,7 +460,6 @@ static var headerData;
       handleError();
     }
   }
-
 
   // Save Entry Permission
   Future saveEntryPermission(postData) async {
@@ -468,7 +481,6 @@ static var headerData;
     }
   }
 
-
   // Save Entry Working Extra
   Future saveEntryWorkingExtra(postData) async {
     try {
@@ -489,8 +501,7 @@ static var headerData;
     }
   }
 
-
-   // Save Entry Client Visit
+  // Save Entry Client Visit
   Future saveEntryClientVisit(postData) async {
     try {
       final url = Uri.parse('${liveApiPath}EmployeeComClientLocation');
@@ -510,9 +521,8 @@ static var headerData;
     }
   }
 
-
-       // get Overview chart data
-   Future getAllEntryList(postData) async {
+  // get Overview chart data
+  Future getAllEntryList(postData) async {
     try {
       final url = Uri.parse('${liveApiPath}ComOverallReports');
       final response = await client.post(
@@ -531,30 +541,29 @@ static var headerData;
   }
 
   // update Entry WorkFromHome
-Future updateEntryWorkFromHome(mid, postData) async {
-  try {
-    
-    final url = Uri.parse('${liveApiPath}EmployeeComWorkfromhome?MID=$mid');
-    
-    final response = await client.put(
-      url,
-      headers: headerData,
-      body: jsonEncode(postData),
-    );
-    
-    if (response.statusCode == 200) {
-      final json = response.body;
-      return json;
-    } else {
-      print('error');
-      throw Exception(
-          'Failed. Status code: ${response.statusCode} ${response.toString()}');
+  Future updateEntryWorkFromHome(mid, postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}EmployeeComWorkfromhome?MID=$mid');
+
+      final response = await client.put(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror $e');
+      return e;
     }
-  } catch (e) {
-    print('catcherror $e');
-    return e;
   }
-}
 
 // delete WorkFromHomeById
   Future delete(apiUrl) async {
@@ -575,32 +584,30 @@ Future updateEntryWorkFromHome(mid, postData) async {
     }
   }
 
+  // update Entry Permission
+  Future updateEntryPermission(mid, postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}EmployeeComPermission?MID=$mid');
 
- // update Entry Permission
-Future updateEntryPermission(mid, postData) async {
-  try {
-    
-    final url = Uri.parse('${liveApiPath}EmployeeComPermission?MID=$mid');
-    
-    final response = await client.put(
-      url,
-      headers: headerData,
-      body: jsonEncode(postData),
-    );
-    
-    if (response.statusCode == 200) {
-      final json = response.body;
-      return json;
-    } else {
-      print('error');
-      throw Exception(
-          'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      final response = await client.put(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror $e');
+      return e;
     }
-  } catch (e) {
-    print('catcherror $e');
-    return e;
   }
-}
 
 // delete PermissionById
   Future deletePermissionById(mid) async {
@@ -621,83 +628,77 @@ Future updateEntryPermission(mid, postData) async {
   }
 
   // update Entry Leave
-Future updateEntryLeave(mid, postData) async {
-  try {
-    
-    final url = Uri.parse('${liveApiPath}EmployeeComLeave?MID=$mid');
-    
-    final response = await client.put(
-      url,
-      headers: headerData,
-      body: jsonEncode(postData),
-    );
-    
-    if (response.statusCode == 200) {
-      final json = response.body;
-      return json;
-    } else {
-      print('error');
-      throw Exception(
-          'Failed. Status code: ${response.statusCode} ${response.toString()}');
-    }
-  } catch (e) {
-    print('catcherror $e');
-    return e;
-  }
-}
+  Future updateEntryLeave(mid, postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}EmployeeComLeave?MID=$mid');
 
- // update Entry WorkingExtra
-Future updateEntryWorkingExtra(mid, postData) async {
-  try {
-    
-    final url = Uri.parse('${liveApiPath}EmployeeComWorkingExtra?MID=$mid');
-    
-    final response = await client.put(
-      url,
-      headers: headerData,
-      body: jsonEncode(postData),
-    );
-    
-    if (response.statusCode == 200) {
-      final json = response.body;
-      return json;
-    } else {
-      print('error');
-      throw Exception(
-          'Failed. Status code: ${response.statusCode} ${response.toString()}');
-    }
-  } catch (e) {
-    print('catcherror $e');
-    return e;
-  }
-}
+      final response = await client.put(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
 
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror $e');
+      return e;
+    }
+  }
+
+  // update Entry WorkingExtra
+  Future updateEntryWorkingExtra(mid, postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}EmployeeComWorkingExtra?MID=$mid');
+
+      final response = await client.put(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror $e');
+      return e;
+    }
+  }
 
 // update Entry ClientVisit
-Future updateEntryClientVisit(mid, postData) async {
-  try {
-    
-    final url = Uri.parse('${liveApiPath}EmployeeComClientLocation?MID=$mid');
-    
-    final response = await client.put(
-      url,
-      headers: headerData,
-      body: jsonEncode(postData),
-    );
-    
-    if (response.statusCode == 200) {
-      final json = response.body;
-      return json;
-    } else {
-      print('error');
-      throw Exception(
-          'Failed. Status code: ${response.statusCode} ${response.toString()}');
+  Future updateEntryClientVisit(mid, postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}EmployeeComClientLocation?MID=$mid');
+
+      final response = await client.put(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror $e');
+      return e;
     }
-  } catch (e) {
-    print('catcherror $e');
-    return e;
   }
-}
-
-
 }
