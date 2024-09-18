@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../widgets/rounded_icon_button_widget.dart';
-import '../../widgets/custom_text_field.dart';
-import '../../constants/app_colors.dart';
-import '../../services/cabs_api_service.dart';
-import '../../services/comFuncService.dart';
+import '../../../widgets/rounded_icon_button_widget.dart';
+import '../../../widgets/custom_text_field.dart';
+import '../../../constants/app_colors.dart';
+import '../../../services/cabs_api_service.dart';
+import '../../../services/comFuncService.dart';
+import 'add_cars.dart';
 import 'car_list_model.dart';
 
 class car_list extends StatefulWidget {
@@ -210,160 +211,11 @@ class _car_listState extends State<car_list> {
             title: 'Add Expense',
             buttonColor: AppColors.primary,
             onPressed: () {
-              // addExpense();
+              AddCarScreen();
             },
           ),
         ],
       ),
     );
   }
-} 
-
-
-// SingleChildScrollView(
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             ListView(
-//               shrinkWrap: true,
-//               physics: NeverScrollableScrollPhysics(),
-//               children: [
-//                 CarTile(
-//                   carName: 'Volkswagen Virtus',
-//                   carType: 'Sedan',
-//                   vechicalno: '1',
-//                   seats: 5,
-//                   imageUrl: 'assets/images/car_vols.png',
-//                 ),
-//                 CarTile(
-//                   carName: 'Toyota Fortuner',
-//                   carType: 'SUV',
-//                   vechicalno: '2',
-//                   seats: 7,
-//                   imageUrl: 'assets/images/car_toy.png',
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class CarTile extends StatelessWidget {
-//   final String carName;
-//   final String carType;
-//   final String vechicalno;
-//   final int seats;
-//   final String imageUrl;
-
-//   CarTile({
-//     required this.carName,
-//     required this.carType,
-//     required this.vechicalno,
-//     required this.seats,
-//     required this.imageUrl,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       margin: EdgeInsets.symmetric(vertical: 8),
-//       padding: EdgeInsets.all(10),
-//       decoration: BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.circular(10),
-//         boxShadow: [
-//           BoxShadow(
-//             color: Colors.grey.withOpacity(0.2),
-//             spreadRadius: 2,
-//             blurRadius: 5,
-//             offset: Offset(0, 3),
-//           ),
-//         ],
-//       ),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           ClipRRect(
-//             borderRadius: BorderRadius.circular(10),
-//             child: Image.asset(
-//               imageUrl,
-//               fit: BoxFit.cover,
-//               height: 150,
-//               width: double.infinity,
-//             ),
-//           ),
-//           SizedBox(height: 10),
-//           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-//             Text(
-//               carType,
-//               style: TextStyle(
-//                 color: Colors.blueAccent,
-//                 fontSize: 14,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//             Text(
-//               'Vechical No.',
-//               style: TextStyle(
-//                 fontSize: 16,
-//                 color: Colors.black,
-//               ),
-//             ),
-//           ]),
-//           SizedBox(height: 5),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Text(
-//                 carName,
-//                 style: TextStyle(
-//                   fontSize: 18,
-//                   fontWeight: FontWeight.bold,
-//                 ),
-//               ),
-//               SizedBox(height: 5),
-//               Text(
-//                 ' $vechicalno',
-//                 style: TextStyle(
-//                   fontSize: 16,
-//                   color: Colors.black,
-//                 ),
-//               ),
-//             ],
-//           ),
-//           SizedBox(height: 10),
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Row(
-//                 children: [
-//                   Icon(Icons.settings, size: 16),
-//                   SizedBox(width: 4),
-//                   Text('Manual'),
-//                 ],
-//               ),
-//               Row(
-//                 children: [
-//                   Icon(Icons.local_gas_station, size: 16),
-//                   SizedBox(width: 4),
-//                   Text('Petrol'),
-//                 ],
-//               ),
-//               Row(
-//                 children: [
-//                   Icon(Icons.person, size: 16),
-//                   SizedBox(width: 4),
-//                   Text('$seats Seats'),
-//                 ],
-//               ),
-//             ],
-//           ),
-//           SizedBox(height: 15),
-//         ],
-//       ),
-//     );
-//   }
-// }
+}

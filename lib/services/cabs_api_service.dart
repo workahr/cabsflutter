@@ -292,10 +292,29 @@ class CabsApiService {
 // carlist
   Future getcarList() async {
     try {
-      final url = Uri.parse('${liveApiPath}expenses/getallexpenses');
+      final url = Uri.parse('${liveApiPath}v1/cars/getallcars');
       final response = await client.get(
         url,
         headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+// save the car
+  Future saveCar(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}expenses/create-expenses');
+      final response = await client.post(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
       );
       if (response.statusCode == 200) {
         return response.body;
