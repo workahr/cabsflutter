@@ -49,6 +49,7 @@ class _car_listState extends State<car_list> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0xFF06234C),
         title: Text(
           'Cars List',
@@ -208,9 +209,15 @@ class _car_listState extends State<car_list> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           RoundedIconButtonWidget(
-            title: 'Add Expense',
+            title: 'Add Cars',
             buttonColor: AppColors.primary,
             onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddCarScreen(),
+                ),
+              );
               AddCarScreen();
             },
           ),

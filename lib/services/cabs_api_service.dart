@@ -308,18 +308,38 @@ class CabsApiService {
   }
 
 // save the car
-  Future saveCar(postData) async {
+
+  Future saveCar(
+      String apiCtrl, Map<String, dynamic> postData, imageFile) async {
     try {
-      final url = Uri.parse('${liveApiPath}expenses/create-expenses');
-      final response = await client.post(
+      final url = Uri.parse(liveApiPath + apiCtrl);
+
+      print('url $url');
+
+      var headers = headerData;
+      var request = http.MultipartRequest(
+        'POST',
         url,
-        headers: headerData,
-        body: jsonEncode(postData),
       );
+      request.headers.addAll(headerData);
+
+      for (var entry in postData.entries) {
+        request.fields[entry.key] = entry.value.toString();
+      }
+
+      if (imageFile != null) {
+        var image = await http.MultipartFile.fromPath('media', imageFile!.path);
+        print(image);
+        request.files.add(image);
+      }
+
+      request.headers.addAll(headers);
+      var response = await request.send();
       if (response.statusCode == 200) {
-        return response.body;
+        final json = await response.stream.bytesToString();
+        return json;
       } else {
-        return response;
+        return [];
       }
     } catch (e) {
       return e;
