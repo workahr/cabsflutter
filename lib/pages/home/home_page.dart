@@ -8,6 +8,7 @@ import 'package:google_places_flutter/model/prediction.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import '../../widgets/custom_text_field.dart';
 import '../admin_panel/cars/car_list_page.dart';
+import '../admin_panel/driver/driver_list_page.dart';
 import 'latlong_model.dart';
 import 'package:http/http.dart' as http; // For making HTTP requests
 import 'dart:convert';
@@ -627,41 +628,33 @@ class CarTile extends StatelessWidget {
             ],
           ),
           SizedBox(height: 15),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => car_list(),
-                ),
-              );
-              print('car list');
-            },
-            child: Center(
-              child: Text('Book Now'),
-            ),
-            style: ElevatedButton.styleFrom(
-              textStyle: TextStyle(color: Colors.white),
-              backgroundColor: Color(0xFF06234C),
-              padding: EdgeInsets.symmetric(vertical: 16),
-              minimumSize: Size(double.infinity, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10), // Rounded corners
-              ),
-            ),
-          ),
           // ElevatedButton(
-          //   onPressed: () {},
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Color(0xFF06234C),
-          //     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-          //     shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(8),
-          //     ),
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => DriverList(),
+          //       ),
+          //     );
+          //     // Navigator.push(
+          //     //   context,
+          //     //   MaterialPageRoute(
+          //     //     builder: (context) => car_list(),
+          //     //   ),
+          //     // );
+          //     print('car list');
+          //   },
+          //   child: Center(
+          //     child: Text('Book Now'),
           //   ),
-          //   child: Text(
-          //     'Book Now',
-          //     style: TextStyle(color: Colors.white),
+          //   style: ElevatedButton.styleFrom(
+          //     textStyle: TextStyle(color: Colors.white),
+          //     backgroundColor: Color(0xFF06234C),
+          //     padding: EdgeInsets.symmetric(vertical: 16),
+          //     minimumSize: Size(double.infinity, 50),
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(10), // Rounded corners
+          //     ),
           //   ),
           // ),
         ],

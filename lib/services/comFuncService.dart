@@ -25,10 +25,8 @@ void showInSnackBarTop(context, String message) {
       borderRadius: BorderRadius.circular(24),
     ),
     margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height - 100,
-        right: 20,
-        left: 75),
-));
+        bottom: MediaQuery.of(context).size.height - 100, right: 20, left: 75),
+  ));
 }
 
 // loading
@@ -128,6 +126,10 @@ Future showAlertDialogInfo(
           content: SingleChildScrollView(child: Text(msg)),
           actions: [
             ElevatedButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () async {
                   Navigator.of(context).pop('OK');
                 },
@@ -434,7 +436,6 @@ idleBorder() {
       borderSide: BorderSide(width: 1.5, color: AppColors.grey),
       borderRadius: BorderRadius.circular(30));
 }
-
 
 // Custom snack bar
 void showSnackBar(

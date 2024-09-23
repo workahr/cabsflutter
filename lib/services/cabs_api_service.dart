@@ -309,8 +309,165 @@ class CabsApiService {
 
 // save the car
 
+  // Future saveCar(
+  //     String apiCtrl, Map<String, dynamic> postData, imageFile) async {
+  //   try {
+  //     final url = Uri.parse(liveApiPath + apiCtrl);
+
+  //     print('url $url');
+
+  //     var headers = headerData;
+  //     var request = http.MultipartRequest(
+  //       'POST',
+  //       url,
+  //     );
+  //     request.headers.addAll(headerData);
+
+  //     for (var entry in postData.entries) {
+  //       request.fields[entry.key] = entry.value.toString();
+  //     }
+
+  //     if (imageFile != null) {
+  //       var image = await http.MultipartFile.fromPath('media', imageFile!.path);
+  //       print(image);
+  //       request.files.add(image);
+  //     }
+
+  //     request.headers.addAll(headers);
+  //     var response = await request.send();
+  //     if (response.statusCode == 200) {
+  //       final json = await response.stream.bytesToString();
+  //       return json;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     return e;
+  //   }
+  // }
+
+//save car and update
+
   Future saveCar(
       String apiCtrl, Map<String, dynamic> postData, imageFile) async {
+    try {
+      final url = Uri.parse(liveApiPath + apiCtrl);
+
+      var headers = headerData;
+      var request = http.MultipartRequest(
+        'POST',
+        url,
+      );
+      request.headers.addAll(headerData);
+
+      for (var entry in postData.entries) {
+        request.fields[entry.key] = entry.value.toString();
+      }
+      if (imageFile != null) {
+        var image = await http.MultipartFile.fromPath('media', imageFile!.path);
+        request.files.add(image);
+      }
+      request.headers.addAll(headers);
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        final json = await response.stream.bytesToString();
+        return json;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // delete CarById
+  Future deleteCarById(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/cars/delete-cars');
+      final response = await client.delete(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  //get Carbyid
+  Future getCarById(id) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/cars/list-cars-ById?id=$id');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // update Car
+  // Future updatecar(postData, imageFile) async {
+  //   try {
+  //     final url = Uri.parse('${liveApiPath}v1/cars/update-cars');
+  //     final response = await client.post(url,
+  //         headers: headerData, body: jsonEncode(postData));
+  //     var request = http.MultipartRequest(
+  //       'POST',
+  //       url,
+  //     );
+  //     if (imageFile != null) {
+  //       var image = await http.MultipartFile.fromPath('media', imageFile!.path);
+  //       print(image);
+  //       request.files.add(image);
+  //     }
+
+  //     if (response.statusCode == 200) {
+  //       final json = response.body;
+  //       return json;
+  //     } else {
+  //       print('error');
+  //       throw Exception(
+  //           'Failed. Status code: ${response.statusCode} ${response.toString()}');
+  //     }
+  //   } catch (e) {
+  //     print('catcherror ${e}');
+  //     return e;
+  //   }
+  // }
+
+  // driverlist
+  Future getdriverList() async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/user_details/getalluser_details');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+// save the Driver
+
+  Future saveDriver(String apiCtrl, Map<String, dynamic> postData) async {
     try {
       final url = Uri.parse(liveApiPath + apiCtrl);
 
@@ -327,11 +484,11 @@ class CabsApiService {
         request.fields[entry.key] = entry.value.toString();
       }
 
-      if (imageFile != null) {
-        var image = await http.MultipartFile.fromPath('media', imageFile!.path);
-        print(image);
-        request.files.add(image);
-      }
+      // if (imageFile != null) {
+      //   var image = await http.MultipartFile.fromPath('media', imageFile!.path);
+      //   print(image);
+      //   request.files.add(image);
+      // }
 
       request.headers.addAll(headers);
       var response = await request.send();
@@ -342,6 +499,68 @@ class CabsApiService {
         return [];
       }
     } catch (e) {
+      return e;
+    }
+  }
+
+  // delete DriverById
+  Future deleteDriverById(postData) async {
+    print('driver delete test $postData');
+    try {
+      final url =
+          Uri.parse('${liveApiPath}v1/user_details/delete-user_details');
+      final response = await client.delete(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  //get Driverbyid
+  Future getDriverById(id) async {
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/user_details/list-user_details-ById?id=$id');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // update Driver
+  Future updatedriver(postData) async {
+    try {
+      final url =
+          Uri.parse('${liveApiPath}v1/user_details/update-user_details');
+      final response = await client.post(url,
+          headers: headerData, body: jsonEncode(postData));
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror ${e}');
       return e;
     }
   }

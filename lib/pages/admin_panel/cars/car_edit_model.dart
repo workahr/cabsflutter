@@ -1,61 +1,64 @@
+// To parse this JSON data, do
+//
+//     final carEditModel = carEditModelFromJson(jsonString);
+
 import 'dart:convert';
 
-CarListData carListDataFromJson(String str) =>
-    CarListData.fromJson(json.decode(str));
+CarEditModel carEditModelFromJson(String str) =>
+    CarEditModel.fromJson(json.decode(str));
 
-String carListDataToJson(CarListData data) => json.encode(data.toJson());
+String carEditModelToJson(CarEditModel data) => json.encode(data.toJson());
 
-class CarListData {
+class CarEditModel {
   String status;
-  List<ListElement> list;
+  CarDetails list;
   String code;
   String message;
 
-  CarListData({
+  CarEditModel({
     required this.status,
     required this.list,
     required this.code,
     required this.message,
   });
 
-  factory CarListData.fromJson(Map<String, dynamic> json) => CarListData(
+  factory CarEditModel.fromJson(Map<String, dynamic> json) => CarEditModel(
         status: json["status"],
-        list: List<ListElement>.from(
-            json["list"].map((x) => ListElement.fromJson(x))),
+        list: CarDetails.fromJson(json["list"]),
         code: json["code"],
         message: json["message"],
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "list": List<dynamic>.from(list.map((x) => x.toJson())),
+        "list": list.toJson(),
         "code": code,
         "message": message,
       };
 }
 
-class ListElement {
+class CarDetails {
   int id;
   String brand;
   String modal;
   String fuelType;
   int seatCapacity;
   String vehicleNumber;
-  String? imageUrl;
+  String imageUrl;
   String status;
   String createdBy;
   DateTime createdDate;
   int? updatedBy;
   DateTime? updatedDate;
 
-  ListElement({
+  CarDetails({
     required this.id,
     required this.brand,
     required this.modal,
     required this.fuelType,
     required this.seatCapacity,
     required this.vehicleNumber,
-    this.imageUrl,
+    required this.imageUrl,
     required this.status,
     required this.createdBy,
     required this.createdDate,
@@ -63,7 +66,7 @@ class ListElement {
     this.updatedDate,
   });
 
-  factory ListElement.fromJson(Map<String, dynamic> json) => ListElement(
+  factory CarDetails.fromJson(Map<String, dynamic> json) => CarDetails(
         id: json["id"],
         brand: json["brand"],
         modal: json["modal"],
