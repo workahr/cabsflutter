@@ -465,6 +465,63 @@ class CabsApiService {
     }
   }
 
+  //save the Booking
+
+  Future saveBooking(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/booking/create-booking');
+      final response = await client.post(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+// cancle update
+  Future updatecancelbooking(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/booking/booking-cancel');
+      final response = await client.post(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // get all booking
+  Future getbookingList() async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/booking/getallbooking');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
 // save the Driver
 
   Future saveDriver(String apiCtrl, Map<String, dynamic> postData) async {

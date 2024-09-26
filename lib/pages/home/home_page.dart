@@ -9,6 +9,8 @@ import 'package:google_places_flutter/google_places_flutter.dart';
 import '../../widgets/custom_text_field.dart';
 import '../admin_panel/cars/car_list_page.dart';
 import '../admin_panel/driver/driver_list_page.dart';
+import '../user_panel/booking/add_booking.dart';
+import '../user_panel/booking/user_my_booking.dart';
 import 'latlong_model.dart';
 import 'package:http/http.dart' as http; // For making HTTP requests
 import 'dart:convert';
@@ -456,7 +458,14 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 20),
                   // Book Now Button
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserMyBookings(),
+                        ),
+                      );
+                    },
                     child: Center(
                       child: Text('Book Now'),
                     ),

@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'booking/my_bookings_page.dart';
 import 'cars/add_cars_page.dart';
 import 'home/home_page.dart';
-
+import 'user_panel/booking/add_booking.dart';
+import 'user_panel/booking/user_my_booking.dart';
 
 class MainContainer extends StatefulWidget {
   MainContainer({super.key, this.childWidget});
@@ -21,18 +22,17 @@ class _MainContainerState extends State<MainContainer>
   int _selectedIndex = 0;
   bool navBack = false;
 
-
   final List pageId = [1, 5, 8, 12, 15];
   static List<Widget> pageOptions = <Widget>[
     // DashboardPage(),
 
-    HomePage(),
+    add_booking(),
 
-    MyBookingsPage(),
-    AddCarsPage(),
+    UserMyBookings(),
+    // AddCarsPage(),
   ];
 
- void _onItemTapped(int index) async {
+  void _onItemTapped(int index) async {
     if (index == 3) {
       // Handle logout
       await _handleLogout();
@@ -76,7 +76,7 @@ class _MainContainerState extends State<MainContainer>
     // Exit the app or return to the home page:
     if (_selectedIndex == 0) {
       // Exit the app if already on the home page.
-      return; 
+      return;
     } else {
       // Otherwise, navigate back to the first tab (home page).
       setState(() {
@@ -92,7 +92,7 @@ class _MainContainerState extends State<MainContainer>
 
     // Navigate to Login Page
     Navigator.pushNamedAndRemoveUntil(
-          context, '/login', ModalRoute.withName('/login'));
+        context, '/login', ModalRoute.withName('/login'));
   }
 
   @override
@@ -101,7 +101,7 @@ class _MainContainerState extends State<MainContainer>
       onPopInvoked: (popDisposition) async {
         await _onPop();
       },
-      child:Scaffold(
+      child: Scaffold(
         // appBar: CustomAppBar(title: '', leading: SizedBox(), showSearch: true,showCart: false, backgroundColor: [0,2].contains(_selectedIndex) ? AppColors.light: null ,),
         // onPressed: widget.onThemeToggle),
         // drawer: SideMenu(),
@@ -115,25 +115,24 @@ class _MainContainerState extends State<MainContainer>
               icon: Icon(Icons.home),
               label: 'Home',
             ),
-           BottomNavigationBarItem(
+            BottomNavigationBarItem(
               icon: Image.asset(
                 AppAssets.carIcon,
               ),
               //icon: Icon(Icons.book),
               label: 'My Booking',
             ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                AppAssets.bookmarkIcon,
-              ),
-              //  icon: Icon(Icons.add),
-              label: 'Add Cars',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Image.asset(
+            //     AppAssets.bookmarkIcon,
+            //   ),
+            //   //  icon: Icon(Icons.add),
+            //   label: 'Add Cars',
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.logout), // Correct logout icon
               label: 'Logout',
             ),
-
           ],
           currentIndex: _selectedIndex,
 
