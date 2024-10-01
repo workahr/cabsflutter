@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-
 import 'package:cabs/pages/auth/otp_verification_page.dart';
 import 'package:cabs/pages/main_container.dart';
 import 'package:flutter/foundation.dart';
@@ -18,9 +17,10 @@ import 'package:upgrader/upgrader.dart';
 // import 'package:flutter/services.dart';
 
 import 'pages/auth/login_page.dart';
+
+import 'pages/driver_page/trips/driver_mytrip.dart';
 import 'pages/landing_page.dart';
 import 'pages/splash_screen.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +39,6 @@ class MyApp extends StatefulWidget with WidgetsBindingObserver {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   BaseController baseCtrl = Get.put(BaseController());
-  
 
   _MyAppState() {
     print('baseCtrl ${baseCtrl.isDarkModeEnabled.value}');
@@ -104,7 +103,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
@@ -113,33 +112,34 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         theme: isDarkModeEnabled ? AppTheme.darkTheme : AppTheme.lightTheme,
         initialRoute: '/',
+        // home: driver_mytrip(),
         routes: {
           '/': (context) => SplashScreen(),
           '/landing': (context) => LandingPage(),
           '/login': (context) => UpgradeAlert(
                 upgrader: Upgrader(
-                   showIgnore: false,
-                   showLater: false,
+                  showIgnore: false,
+                  showLater: false,
                   durationUntilAlertAgain: const Duration(seconds: 1),
                 ),
                 child: LoginPage(),
                 // child: LoginPageGoogle(),
               ),
-              '/loginotp': (context) => UpgradeAlert(
-              upgrader: Upgrader(
-                showIgnore: false,
-                showLater: false,
-                durationUntilAlertAgain: const Duration(seconds: 1),
-              ),
-              child: OtpVerificationPage(),
-            ),
-          '/home': (context) => UpgradeAlert(
+          '/loginotp': (context) => UpgradeAlert(
                 upgrader: Upgrader(
-                   showIgnore: false,
-                   showLater: false,
+                  showIgnore: false,
+                  showLater: false,
                   durationUntilAlertAgain: const Duration(seconds: 1),
                 ),
-                child: MainContainer(),
+                child: OtpVerificationPage(),
+              ),
+          '/home': (context) => UpgradeAlert(
+                upgrader: Upgrader(
+                  showIgnore: false,
+                  showLater: false,
+                  durationUntilAlertAgain: const Duration(seconds: 1),
+                ),
+                child: MainContainerAdmin(),
               ),
         },
       ),

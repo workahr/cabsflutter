@@ -2,8 +2,12 @@ import 'package:cabs/constants/app_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'admin_panel/booking_histroy/booking_histroy.dart';
+import 'admin_panel/bookings/admin_all_booking.dart';
+import 'admin_panel/vehical_report/vehical_reports.dart';
 import 'booking/my_bookings_page.dart';
 import 'cars/add_cars_page.dart';
+import 'driver_page/trips/driver_mytrip.dart';
 import 'home/home_page.dart';
 import 'user_panel/booking/add_booking.dart';
 import 'user_panel/booking/user_my_booking.dart';
@@ -24,16 +28,15 @@ class _MainContainerState extends State<MainContainer>
 
   final List pageId = [1, 5, 8, 12, 15];
   static List<Widget> pageOptions = <Widget>[
-    // DashboardPage(),
-
+    // DriverMyTrip(),
     add_booking(),
+    // Admin_All_Bookings(),
 
     UserMyBookings(),
-    // AddCarsPage(),
   ];
 
   void _onItemTapped(int index) async {
-    if (index == 3) {
+    if (index == 2) {
       // Handle logout
       await _handleLogout();
     } else {
@@ -136,6 +139,72 @@ class _MainContainerState extends State<MainContainer>
           ],
           currentIndex: _selectedIndex,
 
+          showUnselectedLabels: true,
+          onTap: _onItemTapped,
+          type: BottomNavigationBarType.fixed,
+        ),
+      ),
+    );
+  }
+}
+
+class MainContainerAdmin extends StatefulWidget {
+  MainContainerAdmin({super.key, this.childWidget});
+
+  final Widget? childWidget;
+
+  @override
+  State<MainContainerAdmin> createState() => _MainContainerAdminState();
+}
+
+class _MainContainerAdminState extends State<MainContainerAdmin>
+    with WidgetsBindingObserver {
+  int _selectedIndex = 0;
+
+  static List<Widget> pageOptions = <Widget>[
+    Admin_All_Bookings(),
+    Vechical_ReportsPage(),
+    BookingHistory(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: Scaffold(
+        body: pageOptions[_selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          // onTap: onTabTapped,
+          // currentIndex: currentIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                AppAssets.carIcon,
+              ),
+              label: 'Bookings',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                AppAssets.reportfile,
+              ),
+              label: 'Reports',
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                AppAssets.bookmarkIcon,
+              ),
+              label: 'Histroy',
+            ),
+          ],
+          currentIndex: _selectedIndex,
           showUnselectedLabels: true,
           onTap: _onItemTapped,
           type: BottomNavigationBarType.fixed,

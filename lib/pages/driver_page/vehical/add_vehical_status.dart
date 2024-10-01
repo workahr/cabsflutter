@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../widgets/custom_text_field.dart';
 
-class vehicalstatusScreen extends StatefulWidget {
+class add_vehical_status extends StatefulWidget {
   @override
-  State<vehicalstatusScreen> createState() => _vehicalstatusScreenState();
+  State<add_vehical_status> createState() => _add_vehical_statusState();
 }
 
-class _vehicalstatusScreenState extends State<vehicalstatusScreen> {
+class _add_vehical_statusState extends State<add_vehical_status> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -38,7 +38,7 @@ class _vehicalstatusScreenState extends State<vehicalstatusScreen> {
               hint: 'Enter Vehicle Number',
               width: screenWidth * 1,
             ),
-            Spacer(), 
+            Spacer(),
             Padding(
               padding: EdgeInsets.only(bottom: screenWidth * 0.04),
               child: ElevatedButton(

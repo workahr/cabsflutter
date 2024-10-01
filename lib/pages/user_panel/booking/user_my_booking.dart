@@ -324,8 +324,7 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                             ),
                                                             softWrap:
                                                                 true, // Enable soft wrapping
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Optional: Handle overflow
+                                                            maxLines: 4,
                                                           ),
                                                         ),
                                                         SizedBox(
@@ -343,8 +342,7 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                             ),
                                                             softWrap:
                                                                 true, // Enable soft wrapping
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Optional: Handle overflow
+                                                            maxLines: 4,
                                                           ),
                                                         ),
                                                       ],
@@ -385,57 +383,137 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                             MainAxisAlignment
                                                                 .spaceBetween,
                                                         children: [
-                                                          Text('Price'),
-                                                          Text('Booking Date'),
-                                                          Text('Vehicle No.'),
+                                                          Column(children: [
+                                                            Text('Price'),
+                                                            Text(
+                                                              e.bookingCharges
+                                                                          .toString() ==
+                                                                      "null"
+                                                                  ? ''
+                                                                  : e.bookingCharges,
+                                                              style: TextStyle(
+                                                                  color: Color(
+                                                                      0xFF06234C),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ]),
+                                                          Column(children: [
+                                                            Text('From Date'),
+                                                            Text(
+                                                              formattedDate =
+                                                                  DateFormat(
+                                                                          'dd-MM-yyyy')
+                                                                      .format(e
+                                                                          .fromDatetime),
+                                                              // e.createdDate
+                                                              // .toString(),
+                                                              style: TextStyle(
+                                                                  color: Color(
+                                                                      0xFF06234C),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ]),
+                                                          Column(children: [
+                                                            Text('To Date'),
+                                                            Text(
+                                                              formattedDate =
+                                                                  DateFormat(
+                                                                          'dd-MM-yyyy')
+                                                                      .format(e
+                                                                          .toDatetime),
+                                                              // e.createdDate
+                                                              // .toString(),
+                                                              style: TextStyle(
+                                                                  color: Color(
+                                                                      0xFF06234C),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ]),
+                                                          Column(children: [
+                                                            Text('Vehicle No.'),
+                                                            Text(
+                                                              e.vehicleNumber
+                                                                          .toString() ==
+                                                                      "null"
+                                                                  ? ''
+                                                                  : e.vehicleNumber
+                                                                      .toString(),
+                                                              style: TextStyle(
+                                                                  color: Color(
+                                                                      0xFF06234C),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                          ]),
                                                         ]),
-                                                    Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            e.bookingCharges
-                                                                        .toString() ==
-                                                                    "null"
-                                                                ? ''
-                                                                : e.bookingCharges,
-                                                            style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF06234C),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          Text(
-                                                            formattedDate = DateFormat(
-                                                                    'dd-MM-yyyy')
-                                                                .format(e
-                                                                    .createdDate),
-                                                            // e.createdDate
-                                                            // .toString(),
-                                                            style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF06234C),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          Text(
-                                                            e.vehicleNumber
-                                                                        .toString() ==
-                                                                    "null"
-                                                                ? ''
-                                                                : e.vehicleNumber
-                                                                    .toString(),
-                                                            style: TextStyle(
-                                                                color: Color(
-                                                                    0xFF06234C),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                        ]),
+                                                    // Row(
+                                                    //     mainAxisAlignment:
+                                                    //         MainAxisAlignment
+                                                    //             .spaceBetween,
+                                                    //     children: [
+                                                    //       Text(
+                                                    //         e.bookingCharges
+                                                    //                     .toString() ==
+                                                    //                 "null"
+                                                    //             ? ''
+                                                    //             : e.bookingCharges,
+                                                    //         style: TextStyle(
+                                                    //             color: Color(
+                                                    //                 0xFF06234C),
+                                                    //             fontWeight:
+                                                    //                 FontWeight
+                                                    //                     .bold),
+                                                    //       ),
+                                                    //       Text(
+                                                    //         formattedDate = DateFormat(
+                                                    //                 'dd-MM-yyyy')
+                                                    //             .format(e
+                                                    //                 .fromDatetime),
+                                                    //         // e.createdDate
+                                                    //         // .toString(),
+                                                    //         style: TextStyle(
+                                                    //             color: Color(
+                                                    //                 0xFF06234C),
+                                                    //             fontWeight:
+                                                    //                 FontWeight
+                                                    //                     .bold),
+                                                    //       ),
+                                                    //       Text(
+                                                    //         formattedDate = DateFormat(
+                                                    //                 'dd-MM-yyyy')
+                                                    //             .format(e
+                                                    //                 .toDatetime),
+                                                    //         // e.createdDate
+                                                    //         // .toString(),
+                                                    //         style: TextStyle(
+                                                    //             color: Color(
+                                                    //                 0xFF06234C),
+                                                    //             fontWeight:
+                                                    //                 FontWeight
+                                                    //                     .bold),
+                                                    //       ),
+                                                    //       Text(
+                                                    //         e.vehicleNumber
+                                                    //                     .toString() ==
+                                                    //                 "null"
+                                                    //             ? ''
+                                                    //             : e.vehicleNumber
+                                                    //                 .toString(),
+                                                    //         style: TextStyle(
+                                                    //             color: Color(
+                                                    //                 0xFF06234C),
+                                                    //             fontWeight:
+                                                    //                 FontWeight
+                                                    //                     .bold),
+                                                    //       ),
+                                                    //     ]),
                                                     SizedBox(height: 20),
                                                     ElevatedButton(
                                                       onPressed: () {
@@ -541,16 +619,17 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                             SizedBox(height: 16),
 
                                                                             // Description text field
-                                                                            TextFormField(
-                                                                              controller: _descriptionController,
-                                                                              maxLines: 4,
-                                                                              decoration: InputDecoration(
-                                                                                hintText: "Description",
-                                                                                border: OutlineInputBorder(
-                                                                                  borderRadius: BorderRadius.circular(12),
-                                                                                  borderSide: BorderSide(color: Colors.grey),
-                                                                                ),
-                                                                              ),
+                                                                            CustomeTextField(
+                                                                              control: _descriptionController,
+                                                                              lines: 4,
+                                                                              hint: "Description",
+                                                                              // decoration: InputDecoration(
+                                                                              //   hintText: "Description",
+                                                                              //   border: OutlineInputBorder(
+                                                                              //     borderRadius: BorderRadius.circular(12),
+                                                                              //     borderSide: BorderSide(color: Colors.grey),
+                                                                              //   ),
+                                                                              // ),
                                                                             ),
                                                                             SizedBox(height: 30),
 
@@ -830,11 +909,13 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                     children: [
                                                                       Text(
                                                                           "From"),
-                                                                      Text(
-                                                                          e.pickupLocation,
-                                                                          //  "Ramanathapuram",
-
-                                                                          style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                      Text(e.pickupLocation,
+                                                                          softWrap:
+                                                                              true,
+                                                                          maxLines:
+                                                                              4,
+                                                                          style:
+                                                                              TextStyle(fontWeight: FontWeight.bold)),
                                                                       Text(
                                                                         formattedDate =
                                                                             DateFormat('dd-MM-yyyy').format(e.fromDatetime),
@@ -858,9 +939,15 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                       Text(
                                                                           "To"),
                                                                       Text(
-                                                                          e.dropLocation,
+                                                                          e
+                                                                              .dropLocation,
+                                                                          softWrap:
+                                                                              true,
+                                                                          maxLines:
+                                                                              4,
                                                                           //   "Kaniyakumari",
-                                                                          style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                          style:
+                                                                              TextStyle(fontWeight: FontWeight.bold)),
                                                                       Text(
                                                                         formattedDate =
                                                                             DateFormat('dd-MM-yyyy').format(e.toDatetime),

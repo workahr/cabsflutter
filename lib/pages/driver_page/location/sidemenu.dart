@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Drawerpage extends StatefulWidget {
-  const Drawerpage({super.key});
+class SideMenu extends StatefulWidget {
+  const SideMenu({super.key});
 
   @override
-  State<Drawerpage> createState() => _DrawerpageState();
+  State<SideMenu> createState() => _SideMenuState();
 }
 
-class _DrawerpageState extends State<Drawerpage> {
+class _SideMenuState extends State<SideMenu> {
   // final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
 
   @override

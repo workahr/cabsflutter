@@ -522,6 +522,46 @@ class CabsApiService {
     }
   }
 
+  // get booking by id
+
+  Future getBookingById(id) async {
+    try {
+      final url =
+          Uri.parse('${liveApiPath}v1/booking/list-booking-ById?id=$id');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // Driver Panel get all driver mytrip
+
+  Future getmytripByidList(id) async {
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/user_details/driver-trip-list?driver_id=$id');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
 // save the Driver
 
   Future saveDriver(String apiCtrl, Map<String, dynamic> postData) async {

@@ -20,7 +20,7 @@ class AppAssets {
   static const String overviewIcon = 'assets/images/overview_icon.png';
   static const String kpiIcon = 'assets/images/kpi_icon.png';
   static const String branchIcon = 'assets/images/branch_icon.png';
-    static const String salesIcon = 'assets/images/sales_icon.png';
+  static const String salesIcon = 'assets/images/sales_icon.png';
   static const String salesmanIcon = 'assets/images/salesman_icon.png';
   static const String inventoryIcon = 'assets/images/inventory_icon.png';
   static const String customerIcon = 'assets/images/customers_icon.png';
@@ -34,8 +34,6 @@ class AppAssets {
   static const String gmIcon = 'assets/images/gm_img.png';
   static const String revenueIcon = 'assets/images/revenue_img.png';
 
-
-
   static const String dailyStatus = 'assets/images/daily_status_icon.png';
   static const String addEntry = 'assets/images/add_entry_icon.png';
   static const String leaveApproval = 'assets/images/leave_approval_icon.png';
@@ -45,9 +43,10 @@ class AppAssets {
 
   static const String pendingIcon = 'assets/images/pending_icon.png';
   static const String profileNewIcon = 'assets/images/profile_icon.png';
-  static const String profileBackgroundIcon = 'assets/images/profile_background_img.png';
-  static const String profileBackgroundIcon1 = 'assets/images/background1_img.png';
-
+  static const String profileBackgroundIcon =
+      'assets/images/profile_background_img.png';
+  static const String profileBackgroundIcon1 =
+      'assets/images/background1_img.png';
 
   static const String contentImg1 = 'assets/images/content1.png';
   static const String contentImg2 = 'assets/images/content2.png';
@@ -62,18 +61,7 @@ class AppAssets {
 
   static const String bookcarVols = 'assets/images/bookcar_vols.png';
   static const String bookcarToy = 'assets/images/bookcar_toy.png';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  static const String arrows = 'assets/images/Streamline.png';
+  static const String reportfile = 'assets/images/reportfile_icon.png';
+  static const String profileimg = 'assets/images/profileimg.png';
 }

@@ -1,33 +1,32 @@
 // To parse this JSON data, do
 //
-//     final bookingListData = bookingListDataFromJson(jsonString);
+//     final mytripsListData = mytripsListDataFromJson(jsonString);
 
 import 'dart:convert';
 
-BookingListData bookingListDataFromJson(String str) =>
-    BookingListData.fromJson(json.decode(str));
+MytripsListData mytripsListDataFromJson(String str) =>
+    MytripsListData.fromJson(json.decode(str));
 
-String bookingListDataToJson(BookingListData data) =>
+String mytripsListDataToJson(MytripsListData data) =>
     json.encode(data.toJson());
 
-class BookingListData {
+class MytripsListData {
   String status;
-  List<BookingList> list;
+  List<MyTrips> list;
   String code;
   String message;
 
-  BookingListData({
+  MytripsListData({
     required this.status,
     required this.list,
     required this.code,
     required this.message,
   });
 
-  factory BookingListData.fromJson(Map<String, dynamic> json) =>
-      BookingListData(
+  factory MytripsListData.fromJson(Map<String, dynamic> json) =>
+      MytripsListData(
         status: json["status"],
-        list: List<BookingList>.from(
-            json["list"].map((x) => BookingList.fromJson(x))),
+        list: List<MyTrips>.from(json["list"].map((x) => MyTrips.fromJson(x))),
         code: json["code"],
         message: json["message"],
       );
@@ -40,19 +39,8 @@ class BookingListData {
       };
 }
 
-class BookingList {
+class MyTrips {
   int id;
-  String? brand;
-  String? modal;
-  String? fuelType;
-  int? seatCapacity;
-  String? vehicleNumber;
-  String? imageUrl;
-  String status;
-  int? createdBy;
-  DateTime createdDate;
-  int? updatedBy;
-  DateTime? updatedDate;
   String driverId;
   String carId;
   String customerId;
@@ -64,21 +52,15 @@ class BookingList {
   String dropLocation;
   dynamic totalDistance;
   dynamic bookingCharges;
-  dynamic cancelReason;
+  String? cancelReason;
+  String status;
+  int? createdBy;
+  DateTime createdDate;
+  int? updatedBy;
+  DateTime? updatedDate;
 
-  BookingList({
+  MyTrips({
     required this.id,
-    required this.brand,
-    required this.modal,
-    required this.fuelType,
-    required this.seatCapacity,
-    required this.vehicleNumber,
-    this.imageUrl,
-    required this.status,
-    required this.createdBy,
-    required this.createdDate,
-    required this.updatedBy,
-    this.updatedDate,
     required this.driverId,
     required this.carId,
     required this.customerId,
@@ -91,23 +73,15 @@ class BookingList {
     required this.totalDistance,
     required this.bookingCharges,
     required this.cancelReason,
+    required this.status,
+    required this.createdBy,
+    required this.createdDate,
+    this.updatedBy,
+    this.updatedDate,
   });
 
-  factory BookingList.fromJson(Map<String, dynamic> json) => BookingList(
+  factory MyTrips.fromJson(Map<String, dynamic> json) => MyTrips(
         id: json["id"],
-        brand: json["brand"],
-        modal: json["modal"],
-        fuelType: json["fuel_type"],
-        seatCapacity: json["seat_capacity"],
-        vehicleNumber: json["vehicle_number"],
-        imageUrl: json["image_url"],
-        status: json["status"],
-        createdBy: json["created_by"],
-        createdDate: DateTime.parse(json["created_date"]),
-        updatedBy: json["updated_by"],
-        updatedDate: json["updated_date"] == null
-            ? null
-            : DateTime.parse(json["updated_date"]),
         driverId: json["driver_id"],
         carId: json["car_id"],
         customerId: json["customer_id"],
@@ -118,23 +92,20 @@ class BookingList {
         pickupLocation: json["pickup_location"],
         dropLocation: json["drop_location"],
         totalDistance: json["total_distance"],
-        bookingCharges: json["booking_charges"],
+        bookingCharges:
+            json["booking_charges"] == null ? "" : json["booking_charges"],
         cancelReason: json["cancel_reason"],
+        status: json["status"],
+        createdBy: json["created_by"],
+        createdDate: DateTime.parse(json["created_date"]),
+        updatedBy: json["updated_by"],
+        updatedDate: json["updated_date"] == null
+            ? null
+            : DateTime.parse(json["updated_date"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "brand": brand,
-        "modal": modal,
-        "fuel_type": fuelType,
-        "seat_capacity": seatCapacity,
-        "vehicle_number": vehicleNumber,
-        "image_url": imageUrl,
-        "status": status,
-        "created_by": createdBy,
-        "created_date": createdDate.toIso8601String(),
-        "updated_by": updatedBy,
-        "updated_date": updatedDate?.toIso8601String(),
         "driver_id": driverId,
         "car_id": carId,
         "customer_id": customerId,
@@ -147,5 +118,10 @@ class BookingList {
         "total_distance": totalDistance,
         "booking_charges": bookingCharges,
         "cancel_reason": cancelReason,
+        "status": status,
+        "created_by": createdBy,
+        "created_date": createdDate.toIso8601String(),
+        "updated_by": updatedBy,
+        "updated_date": updatedDate?.toIso8601String(),
       };
 }

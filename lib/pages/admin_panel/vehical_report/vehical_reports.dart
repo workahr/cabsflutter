@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class vehicalreport extends StatefulWidget {
-  const vehicalreport({super.key});
+class Vechical_ReportsPage extends StatefulWidget {
+  const Vechical_ReportsPage({super.key});
 
   @override
-  State<vehicalreport> createState() => _vehicalreportState();
+  State<Vechical_ReportsPage> createState() => _Vechical_ReportsPageState();
 }
 
-class _vehicalreportState extends State<vehicalreport> {
+class _Vechical_ReportsPageState extends State<Vechical_ReportsPage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -17,7 +17,7 @@ class _vehicalreportState extends State<vehicalreport> {
         toolbarHeight: screenHeight * 0.13,
         backgroundColor: Color(0xFF193358),
         title: Text(
-          ' Vehical Reports',
+          'Reports',
           style: TextStyle(
               fontSize: 23, color: Colors.white, fontWeight: FontWeight.w700),
         ),
@@ -48,50 +48,29 @@ class _vehicalreportState extends State<vehicalreport> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Text(
-                                  'Issue Update on:',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: const Color(0xFF888888)),
+                                CircleAvatar(
+                                  backgroundColor: const Color(0xFFF3F8FF),
+                                  child: Icon(Icons.person_2_outlined,
+                                      color: const Color(0xFF193358)),
                                 ),
                                 SizedBox(
                                   width: 16,
                                 ),
                                 Text(
-                                  '25-May-2024',
+                                  'Shiva Kumar',
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: 17.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF193358)),
+                                      color: const Color(0xFF1E1E1E)),
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor: const Color(0xFFF3F8FF),
-                                  child: Image.asset(
-                                    'assets/images/pencil.png',
-                                    width: 20,
-                                    height: 20,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: screenWidth * 0.03,
-                                ),
-                                CircleAvatar(
-                                  backgroundColor: Color(0xFFFFE9E9),
-                                  child: Image.network(
-                                    'assets/images/trash.png',
-                                    width: 24,
-                                    height: 24,
-                                  ),
-                                ),
-                              ],
+                            CircleAvatar(
+                              backgroundColor: const Color(0xFFF3F8FF),
+                              child: Icon(Icons.phone_outlined,
+                                  color: const Color(0xFF193358)),
                             ),
                           ],
                         ),
@@ -168,8 +147,7 @@ class _vehicalreportState extends State<vehicalreport> {
                                 ),
                               ],
                             ),
-                            ImageIcon(
-                                NetworkImage('assets/images/Streamline.png')),
+                            Icon(Icons.compare_arrows, color: Colors.black),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -197,10 +175,11 @@ class _vehicalreportState extends State<vehicalreport> {
                         ),
                         Row(
                           children: [
-                            Icon(Icons.error_outline, color: Color(0xFFCF3434)),
+                            const Icon(Icons.error_outline,
+                                color: Color(0xFFCF3434)),
                             SizedBox(width: screenWidth * 0.01),
                             const Text(
-                              'Issue is',
+                              'Important',
                               style: TextStyle(
                                   color: Color(0xFFCF3434),
                                   fontWeight: FontWeight.w400,

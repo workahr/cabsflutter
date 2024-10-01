@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-import 'drawerpage.dart';
+import 'sidemenu.dart';
 
-class DriverhomePage2 extends StatefulWidget {
-  const DriverhomePage2({super.key});
+class start_trip extends StatefulWidget {
+  const start_trip({super.key});
 
   @override
-  State<DriverhomePage2> createState() => _DriverhomePage2State();
+  State<start_trip> createState() => _start_tripState();
 }
 
-class _DriverhomePage2State extends State<DriverhomePage2> {
+class _start_tripState extends State<start_trip> {
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -21,7 +21,7 @@ class _DriverhomePage2State extends State<DriverhomePage2> {
 
     return Scaffold(
       key: _drawerKey,
-      drawer: Drawerpage(),
+      drawer: SideMenu(),
       body: Stack(
         children: [
           Image.asset(

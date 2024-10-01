@@ -128,6 +128,10 @@ class _add_bookingState extends State<add_booking> {
       if (response.status.toString() == 'SUCCESS') {
         showInSnackBar(context, response.message.toString());
         // Navigator.pop(context, {'add': true});
+        pickupLocCtrl.text = '';
+        dropLocCtrl.text = '';
+        pickupDateCtrl.text = '';
+        dropDateCtrl.text = '';
         Navigator.push(
           context,
           MaterialPageRoute(

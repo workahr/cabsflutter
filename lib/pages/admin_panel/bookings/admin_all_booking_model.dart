@@ -1,33 +1,33 @@
 // To parse this JSON data, do
 //
-//     final bookingListData = bookingListDataFromJson(jsonString);
+//     final allbookingListData = allbookingListDataFromJson(jsonString);
 
 import 'dart:convert';
 
-BookingListData bookingListDataFromJson(String str) =>
-    BookingListData.fromJson(json.decode(str));
+AllbookingListData allbookingListDataFromJson(String str) =>
+    AllbookingListData.fromJson(json.decode(str));
 
-String bookingListDataToJson(BookingListData data) =>
+String allbookingListDataToJson(AllbookingListData data) =>
     json.encode(data.toJson());
 
-class BookingListData {
+class AllbookingListData {
   String status;
-  List<BookingList> list;
+  List<AllBookings> list;
   String code;
   String message;
 
-  BookingListData({
+  AllbookingListData({
     required this.status,
     required this.list,
     required this.code,
     required this.message,
   });
 
-  factory BookingListData.fromJson(Map<String, dynamic> json) =>
-      BookingListData(
+  factory AllbookingListData.fromJson(Map<String, dynamic> json) =>
+      AllbookingListData(
         status: json["status"],
-        list: List<BookingList>.from(
-            json["list"].map((x) => BookingList.fromJson(x))),
+        list: List<AllBookings>.from(
+            json["list"].map((x) => AllBookings.fromJson(x))),
         code: json["code"],
         message: json["message"],
       );
@@ -40,16 +40,19 @@ class BookingListData {
       };
 }
 
-class BookingList {
+class AllBookings {
   int id;
   String? brand;
   String? modal;
   String? fuelType;
   int? seatCapacity;
   String? vehicleNumber;
-  String? imageUrl;
+  String? currentStatus;
+  dynamic latitude;
+  dynamic longitude;
+  dynamic imageUrl;
   String status;
-  int? createdBy;
+  int createdBy;
   DateTime createdDate;
   int? updatedBy;
   DateTime? updatedDate;
@@ -57,27 +60,30 @@ class BookingList {
   String carId;
   String customerId;
   dynamic bookingOtp;
-  String bookingStatus;
+  BookingStatus bookingStatus;
   DateTime fromDatetime;
   DateTime toDatetime;
   String pickupLocation;
   String dropLocation;
   dynamic totalDistance;
   dynamic bookingCharges;
-  dynamic cancelReason;
+  String? cancelReason;
 
-  BookingList({
+  AllBookings({
     required this.id,
     required this.brand,
     required this.modal,
     required this.fuelType,
     required this.seatCapacity,
     required this.vehicleNumber,
-    this.imageUrl,
+    required this.currentStatus,
+    required this.latitude,
+    required this.longitude,
+    required this.imageUrl,
     required this.status,
     required this.createdBy,
     required this.createdDate,
-    required this.updatedBy,
+    this.updatedBy,
     this.updatedDate,
     required this.driverId,
     required this.carId,
@@ -93,13 +99,16 @@ class BookingList {
     required this.cancelReason,
   });
 
-  factory BookingList.fromJson(Map<String, dynamic> json) => BookingList(
+  factory AllBookings.fromJson(Map<String, dynamic> json) => AllBookings(
         id: json["id"],
         brand: json["brand"],
         modal: json["modal"],
         fuelType: json["fuel_type"],
         seatCapacity: json["seat_capacity"],
         vehicleNumber: json["vehicle_number"],
+        currentStatus: json["current_status"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
         imageUrl: json["image_url"],
         status: json["status"],
         createdBy: json["created_by"],
@@ -112,7 +121,7 @@ class BookingList {
         carId: json["car_id"],
         customerId: json["customer_id"],
         bookingOtp: json["booking_otp"],
-        bookingStatus: json["booking_status"],
+        bookingStatus: bookingStatusValues.map[json["booking_status"]]!,
         fromDatetime: DateTime.parse(json["from_datetime"]),
         toDatetime: DateTime.parse(json["to_datetime"]),
         pickupLocation: json["pickup_location"],
@@ -129,6 +138,9 @@ class BookingList {
         "fuel_type": fuelType,
         "seat_capacity": seatCapacity,
         "vehicle_number": vehicleNumber,
+        "current_status": currentStatus,
+        "latitude": latitude,
+        "longitude": longitude,
         "image_url": imageUrl,
         "status": status,
         "created_by": createdBy,
@@ -139,7 +151,7 @@ class BookingList {
         "car_id": carId,
         "customer_id": customerId,
         "booking_otp": bookingOtp,
-        "booking_status": bookingStatus,
+        "booking_status": bookingStatusValues.reverse[bookingStatus],
         "from_datetime": fromDatetime.toIso8601String(),
         "to_datetime": toDatetime.toIso8601String(),
         "pickup_location": pickupLocation,
@@ -148,4 +160,21 @@ class BookingList {
         "booking_charges": bookingCharges,
         "cancel_reason": cancelReason,
       };
+}
+
+enum BookingStatus { COMPLETED, NEW }
+
+final bookingStatusValues = EnumValues(
+    {"COMPLETED": BookingStatus.COMPLETED, "NEW": BookingStatus.NEW});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }
