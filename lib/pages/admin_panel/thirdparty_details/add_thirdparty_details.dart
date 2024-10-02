@@ -7,11 +7,17 @@ import '../../../services/cabs_api_service.dart';
 
 import '../../../services/comFuncService.dart';
 import '../../../widgets/custom_text_field.dart';
+import '../driver/driver_edit_model.dart';
 import '../driver/driver_list_page.dart';
 import 'add_thirdparty_model.dart';
 
+import 'thirdparty_edit_model.dart';
+import 'thirdparty_list_page.dart';
+import 'thirdparty_update_model.dart';
+
 class Third_party_details extends StatefulWidget {
-  const Third_party_details({super.key});
+  int? thirdpartyId;
+  Third_party_details({super.key, this.thirdpartyId});
 
   @override
   State<Third_party_details> createState() => _Third_party_detailsState();
@@ -45,7 +51,74 @@ class _Third_party_detailsState extends State<Third_party_details> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DriverList(),
+            builder: (context) => Third_party_List(),
+          ),
+        );
+      } else {
+        print(response.message.toString());
+        showInSnackBar(context, response.message.toString());
+      }
+    } else {
+      showInSnackBar(context, "Please fill all fields");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    refresh();
+    print('ThirdpartyId :' + widget.thirdpartyId.toString());
+  }
+
+  refresh() async {
+    if (widget.thirdpartyId != null) {
+      await getThirdpartyById();
+    }
+  }
+
+  ThirdpartyDetails? thirdpartyDetails;
+
+  Future getThirdpartyById() async {
+    await apiService.getBearerToken();
+
+    var result = await apiService.getThirdpartyById(widget.thirdpartyId);
+    ThirdpartyEditModel response = thirdpartyEditModelFromJson(result);
+    print(response);
+    if (response.status.toString() == 'SUCCESS') {
+      setState(() {
+        thirdpartyDetails = response.list;
+        ownernameController.text =
+            (thirdpartyDetails!.ownerName ?? '').toString();
+        ownermobileNumberController.text = thirdpartyDetails!.ownerMobile ?? '';
+
+        owneraddressController.text = thirdpartyDetails!.ownerAddress ?? '';
+      });
+    } else {
+      showInSnackBar(context, "Data not found");
+      //isLoaded = false;
+    }
+  }
+
+  Future updatethirdparty() async {
+    await apiService.getBearerToken();
+    if (thirdpartyForm.currentState!.validate()) {
+      Map<String, dynamic> postData = {
+        "id": widget.thirdpartyId,
+        "u_owner_name": ownernameController.text,
+        "u_owner_mobile": ownermobileNumberController.text,
+        "u_owner_address": owneraddressController.text,
+      };
+      print("driverupdate $postData");
+      var result = await apiService.updatethirdparty(postData);
+
+      ThirdpartyupdateModel response = thirdpartyupdateModelFromJson(result);
+
+      if (response.status.toString() == 'SUCCESS') {
+        showInSnackBar(context, response.message.toString());
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Third_party_List(),
           ),
         );
       } else {
@@ -63,10 +136,14 @@ class _Third_party_detailsState extends State<Third_party_details> {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: screenHeight * 0.13,
         backgroundColor: Color(0xFF193358),
         title: Text(
-          'Third Party Details',
+          widget.thirdpartyId == null
+              ? "Add Owner Details"
+              : "Update Owner Details",
+          // 'Third Party Details',
           style: TextStyle(
               fontSize: 23, color: Colors.white, fontWeight: FontWeight.w700),
         ),
@@ -110,8 +187,10 @@ class _Third_party_detailsState extends State<Third_party_details> {
               ElevatedButton(
                 onPressed: () {
                   // print(widget.driverId);
-                  // widget.driverId == null ? saveDriver() : updatedriver();
-                  saveThirdparty();
+                  widget.thirdpartyId == null
+                      ? saveThirdparty()
+                      : updatethirdparty();
+                  // saveThirdparty();
                 },
                 child: Text('Submit'),
                 style: ElevatedButton.styleFrom(

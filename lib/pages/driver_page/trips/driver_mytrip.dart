@@ -1,6 +1,7 @@
 import 'package:cabs/pages/driver_page/trips/driver_mytrip_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../services/cabs_api_service.dart';
@@ -29,14 +30,17 @@ class _DriverMyTripState extends State<DriverMyTrip> {
   }
 
   refresh() async {
-    if (2 != null) {
-      await getmytripByidList();
-    }
+    print("userid :" + user_id.toString());
+    getmytripByidList();
   }
 
+  int? user_id;
   Future getmytripByidList() async {
+    final prefs = await SharedPreferences.getInstance();
+    user_id = prefs.getInt('user_id' ?? '');
+    print("userid 1 api :" + user_id.toString());
     await apiService.getBearerToken();
-    var result = await apiService.getmytripByidList(2);
+    var result = await apiService.getmytripByidList(user_id);
     var response = mytripsListDataFromJson(result);
     if (response.status.toString() == 'SUCCESS') {
       setState(() {
@@ -147,7 +151,8 @@ class _DriverMyTripState extends State<DriverMyTrip> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Column(
+                                                    Flexible(
+                                                        child: Column(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .start,
@@ -176,8 +181,9 @@ class _DriverMyTripState extends State<DriverMyTrip> {
                                                                       .w600),
                                                         )
                                                       ],
-                                                    ),
-                                                    Column(
+                                                    )),
+                                                    Flexible(
+                                                        child: Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .start,
@@ -203,7 +209,7 @@ class _DriverMyTripState extends State<DriverMyTrip> {
                                                                       .w600),
                                                         )
                                                       ],
-                                                    ),
+                                                    )),
                                                   ],
                                                 ),
                                               ),
@@ -262,7 +268,13 @@ class _DriverMyTripState extends State<DriverMyTrip> {
                                                                       .w400),
                                                         ),
                                                         Text(
-                                                          'Vetrimaran',
+                                                          e.customerName
+                                                                      .toString() ==
+                                                                  "null"
+                                                              ? ''
+                                                              : e.customerName
+                                                                  .toString(),
+                                                          //'Vetrimaran',
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.black,
@@ -289,7 +301,13 @@ class _DriverMyTripState extends State<DriverMyTrip> {
                                                                       .w400),
                                                         ),
                                                         Text(
-                                                          '+91 856325241',
+                                                          e.customerMobile
+                                                                      .toString() ==
+                                                                  "null"
+                                                              ? ''
+                                                              : e.customerMobile
+                                                                  .toString(),
+                                                          // '+91 856325241',
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.black,

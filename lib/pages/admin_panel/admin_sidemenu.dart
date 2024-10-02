@@ -10,6 +10,7 @@ import 'driver/add_drivers.dart';
 import 'driver/driver_list_page.dart';
 import 'profile/profile_screen.dart';
 import 'thirdparty_details/add_thirdparty_details.dart';
+import 'thirdparty_details/thirdparty_list_page.dart';
 
 class Admin_SideMenu extends StatefulWidget {
   const Admin_SideMenu({super.key});
@@ -173,7 +174,7 @@ class _Admin_SideMenuState extends State<Admin_SideMenu> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Third_party_details()),
+                MaterialPageRoute(builder: (context) => Third_party_List()),
               );
             },
           ),

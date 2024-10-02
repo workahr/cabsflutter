@@ -3,6 +3,8 @@ import 'package:cabs/pages/main_container.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../driver_page/trips/driver_mytrip.dart';
+
 class DisplayContentPage extends StatefulWidget {
   const DisplayContentPage({Key? key}) : super(key: key);
 
@@ -28,12 +30,17 @@ class _DisplayContentPageState extends State<DisplayContentPage> {
     if (loginuser == "User") {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => MainContainer()),
-        (Route<dynamic> route) => false, // Remove OTP page from the stack
+        (Route<dynamic> route) => false,
+      );
+    } else if (loginuser == "Driver") {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => DriverMyTrip()),
+        (Route<dynamic> route) => false,
       );
     } else {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => MainContainerAdmin()),
-        (Route<dynamic> route) => false, // Remove OTP page from the stack
+        (Route<dynamic> route) => false,
       );
     }
   }

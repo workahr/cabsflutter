@@ -114,7 +114,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         theme: isDarkModeEnabled ? AppTheme.darkTheme : AppTheme.lightTheme,
         initialRoute: '/',
-        // home: driver_mytrip(),
+        // home: DriverMyTrip(),
         routes: {
           '/': (context) => SplashScreen(),
           '/landing': (context) => LandingPage(),

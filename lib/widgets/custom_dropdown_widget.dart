@@ -5,49 +5,57 @@ import '../constants/constants.dart';
 import '../services/comFuncService.dart';
 
 class CustomDropdownWidget extends StatelessWidget {
-  final List<dynamic> valArr;
+  var valArr;
   final Function(dynamic) onChanged;
   final String? labelText;
-  final String Function(dynamic) labelField;
+  // final String Function(dynamic) labelField;
   final dynamic selectedItem;
   final double? height;
   final double? width;
   final double? labelStyleFs;
   final Color? labelColor;
   final String? Function(dynamic)? validator;
+  String Function(dynamic)? itemAsString;
 
-  CustomDropdownWidget({
-    super.key,
-    required this.valArr,
-    required this.onChanged,
-    this.labelText,
-    this.validator,
-    required this.labelField,
-    this.height,
-    this.selectedItem,
-    this.width,
-    this.labelColor,
-    this.labelStyleFs,
-  });
+  CustomDropdownWidget(
+      {super.key,
+      required this.valArr,
+      required this.onChanged,
+      this.labelText,
+      this.validator,
+      //  required this.labelField,
+      this.height,
+      this.selectedItem,
+      this.width,
+      this.labelColor,
+      this.labelStyleFs,
+      this.itemAsString});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 40.0,
+      height: height ?? 150.0,
       margin: const EdgeInsets.all(0.0),
       width: width ?? MediaQuery.of(context).size.width - 10.0,
       child: DropdownSearch<dynamic>(
         popupProps: const PopupProps.menu(
-          //showSearchBox: true,
-        ),
+            //showSearchBox: true,
+            ),
         items: valArr.toList(),
-        itemAsString: (item) => labelField(item),
+        itemAsString: itemAsString,
+        //   itemAsString: (item) => labelField(item),
         dropdownDecoratorProps: DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
-            floatingLabelStyle: TextStyle(fontSize: 10.0, color: labelColor ?? AppColors.primary),
-            hintStyle: TextStyle(fontSize: labelStyleFs ?? 16, color: labelColor ?? AppColors.dark),
-            labelStyle: TextStyle(fontSize: labelStyleFs ?? 16.0, color: labelColor ?? AppColors.dark),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
+            floatingLabelStyle: TextStyle(
+                fontSize: 10.0, color: labelColor ?? AppColors.primary),
+            hintStyle: TextStyle(
+                fontSize: labelStyleFs ?? 36,
+                color: labelColor ?? AppColors.dark),
+            labelStyle: TextStyle(
+                fontSize: labelStyleFs ?? 16.0,
+                color: labelColor ?? AppColors.dark),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(width: 1.5, color: AppColors.light),
               //borderRadius: BorderRadius.circular(30)

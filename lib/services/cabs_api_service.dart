@@ -565,6 +565,86 @@ class CabsApiService {
     }
   }
 
+  // delete thirdpartyById
+  Future deleteThirdpartyById(postData) async {
+    print('thirdparty delete test $postData');
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/rental_owner_details/delete-rental_owner_details');
+      final response = await client.delete(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  //get Thirdpartybyid
+  Future getThirdpartyById(id) async {
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/rental_owner_details/list-rental_owner_details-ById?id=$id');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // update ThirdParty
+  Future updatethirdparty(postData) async {
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/rental_owner_details/update-rental_owner_details');
+      final response = await client.post(url,
+          headers: headerData, body: jsonEncode(postData));
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror ${e}');
+      return e;
+    }
+  }
+
+  Future getthirdpartyList() async {
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/rental_owner_details/getallrental_owner_details');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
   // Driver Panel get all driver mytrip
 
   Future getmytripByidList(id) async {

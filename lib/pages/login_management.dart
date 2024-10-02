@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/app_constants.dart';
+import 'driver_page/trips/driver_mytrip.dart';
 
 class LoginManagement extends StatefulWidget with WidgetsBindingObserver {
   const LoginManagement({Key? key}) : super(key: key);
@@ -36,6 +37,11 @@ class _MyAppState extends State<LoginManagement> with WidgetsBindingObserver {
     if (loginuser == "User") {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => MainContainer()),
+        (Route<dynamic> route) => false,
+      );
+    } else if (loginuser == "Driver") {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => DriverMyTrip()),
         (Route<dynamic> route) => false,
       );
     } else {
