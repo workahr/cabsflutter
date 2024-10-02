@@ -7,6 +7,7 @@ import '../../../services/cabs_api_service.dart';
 import '../../../services/comFuncService.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../../../widgets/rounded_icon_button_widget.dart';
+import '../admin_sidemenu.dart';
 import 'add_drivers.dart';
 import 'driver_delete_model.dart';
 import 'driver_list_model.dart';
@@ -20,6 +21,8 @@ class DriverList extends StatefulWidget {
 
 class _DriverListState extends State<DriverList> {
   final CabsApiService apiService = CabsApiService();
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
+
   List<DriversList>? driverList;
   List<DriversList>? driverListtAll;
   bool isLoading = false;
@@ -90,13 +93,18 @@ class _DriverListState extends State<DriverList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _drawerKey,
+      drawer: Admin_SideMenu(),
       appBar: AppBar(
         title: const Text(
           'Driver List',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color(0xFF06234C),
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(
+          color: Colors.white, // Change drawer icon color to white
+        ),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())

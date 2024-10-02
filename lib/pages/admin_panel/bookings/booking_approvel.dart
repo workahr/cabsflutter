@@ -2,6 +2,7 @@ import 'package:cabs/pages/admin_panel/bookings/car_list_model.dart';
 import 'package:cabs/pages/admin_panel/bookings/driver_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_assets.dart';
 import '../../../constants/app_constants.dart';
@@ -20,13 +21,15 @@ class BookingApprovel extends StatefulWidget {
 
 class _BookingApprovelState extends State<BookingApprovel> {
   final CabsApiService apiService = CabsApiService();
-
+  String phoneNumber = "tel:1234567890";
   String selectedDriver = '';
   String selectedCar = '';
   String BookingId = '';
   String BookingDate = '';
   String Fromlocation = '';
   String Tolocation = '';
+  String Fromdate = '';
+  String Todate = '';
 
   @override
   void initState() {
@@ -40,6 +43,14 @@ class _BookingApprovelState extends State<BookingApprovel> {
   refresh() async {
     if (widget.bookingId != null) {
       await getBookingById();
+    }
+  }
+
+  void _makePhoneCall() async {
+    if (await canLaunch(phoneNumber)) {
+      await launch(phoneNumber);
+    } else {
+      throw 'Could not launch $phoneNumber';
     }
   }
 
@@ -106,11 +117,18 @@ class _BookingApprovelState extends State<BookingApprovel> {
       setState(() {
         bookingsDetails = response.list;
         BookingId = (bookingsDetails!.id ?? '').toString();
+        // phoneNumber = (bookingsDetails!.id ?? '').toString(); //phone number
         Fromlocation = (bookingsDetails!.pickupLocation ?? '').toString();
         Tolocation = (bookingsDetails!.dropLocation ?? '').toString();
         DateTime parsedDate = DateFormat('yyyy-MM-dd')
             .parse(bookingsDetails!.createdDate.toIso8601String());
         BookingDate = DateFormat('dd-MM-yyyy').format(parsedDate);
+        DateTime parsedDate1 = DateFormat('yyyy-MM-dd')
+            .parse(bookingsDetails!.fromDatetime.toIso8601String());
+        Fromdate = DateFormat('dd-MM-yyyy').format(parsedDate1);
+        DateTime parsedDate2 = DateFormat('yyyy-MM-dd')
+            .parse(bookingsDetails!.toDatetime.toIso8601String());
+        Todate = DateFormat('dd-MM-yyyy').format(parsedDate2);
 
         // licenseExpiryDateController.text = formattedDate;
         // mobileNumberController.text = driverDetails!.mobile ?? '';
@@ -261,18 +279,62 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                       ),
                                     ],
                                   ),
+                                  // Column(
+                                  //     crossAxisAlignment:
+                                  //         CrossAxisAlignment.start,
+                                  //     children: [
+                                  //       Text(
+                                  //         'No. of Persons:',
+                                  //         style: TextStyle(fontSize: 15),
+                                  //         textAlign: TextAlign.end,
+                                  //       ),
+                                  //       Text(
+                                  //         // e.,
+                                  //         '5',
+                                  //         style: TextStyle(
+                                  //           fontWeight: FontWeight.bold,
+                                  //           color: Color(0xFF06234C),
+                                  //           fontSize: 15,
+                                  //         ),
+                                  //         textAlign: TextAlign.left,
+                                  //       ),
+                                  //     ])
+                                ],
+                              ),
+                              SizedBox(height: 30),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'From Date :',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                      Text(
+                                        Fromdate,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF06234C),
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'No. of Persons:',
+                                          'To :',
                                           style: TextStyle(fontSize: 15),
                                           textAlign: TextAlign.end,
                                         ),
                                         Text(
-                                          // e.,
-                                          '5',
+                                          Todate,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFF06234C),
@@ -487,7 +549,9 @@ class _BookingApprovelState extends State<BookingApprovel> {
                           height: 50,
                           width: 130,
                           child: ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              _makePhoneCall();
+                            },
                             icon: Icon(
                               Icons.phone_outlined,
                               color: Colors.black,

@@ -1,6 +1,7 @@
 import 'package:cabs/constants/app_assets.dart';
 import 'package:cabs/pages/main_container.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplayContentPage extends StatefulWidget {
   const DisplayContentPage({Key? key}) : super(key: key);
@@ -17,6 +18,24 @@ class _DisplayContentPageState extends State<DisplayContentPage> {
     setState(() {
       _currentPage = page;
     });
+  }
+
+  String? loginuser;
+
+  Future getLoginScreen() async {
+    final prefs = await SharedPreferences.getInstance();
+    loginuser = prefs.getString('role_name' ?? '');
+    if (loginuser == "User") {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => MainContainer()),
+        (Route<dynamic> route) => false, // Remove OTP page from the stack
+      );
+    } else {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => MainContainerAdmin()),
+        (Route<dynamic> route) => false, // Remove OTP page from the stack
+      );
+    }
   }
 
   @override
@@ -102,17 +121,13 @@ class _DisplayContentPageState extends State<DisplayContentPage> {
                       onPressed: () {
                         if (_currentPage == 2) {
                           print('next scn');
-
+                          getLoginScreen();
                           // Navigator.of(context).pushAndRemoveUntil(
-                          //     MaterialPageRoute(builder: (context) => MainContainer()),
-                          //     (Route<dynamic> route) => false, // Remove OTP page from the stack
-                          //   );
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => MainContainerAdmin()),
-                            (Route<dynamic> route) =>
-                                false, // Remove OTP page from the stack
-                          );
+                          //   MaterialPageRoute(
+                          //       builder: (context) => MainContainerAdmin()),
+                          //   (Route<dynamic> route) =>
+                          //       false, // Remove OTP page from the stack
+                          // );
                         } else {
                           print('auto next screen ');
                           _controller.nextPage(

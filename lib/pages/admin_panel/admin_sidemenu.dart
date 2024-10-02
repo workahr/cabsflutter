@@ -1,12 +1,15 @@
 import 'package:cabs/constants/app_assets.dart';
 import 'package:cabs/pages/admin_panel/cars/car_list_page.dart';
+import 'package:cabs/pages/main_container.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bookings/admin_all_booking.dart';
 import 'cars/add_cars.dart';
 import 'driver/add_drivers.dart';
 import 'driver/driver_list_page.dart';
 import 'profile/profile_screen.dart';
+import 'thirdparty_details/add_thirdparty_details.dart';
 
 class Admin_SideMenu extends StatefulWidget {
   const Admin_SideMenu({super.key});
@@ -59,6 +62,22 @@ class _Admin_SideMenuState extends State<Admin_SideMenu> {
                 )),
           ),
           ListTile(
+            leading: Icon(Icons.home),
+            title: Text(
+              'Home ',
+              style: TextStyle(
+                  color: const Color(0xFF193358),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MainContainerAdmin()),
+              );
+            },
+          ),
+          ListTile(
             leading: Image.asset(
               'assets/images/User.png',
               height: 24,
@@ -98,26 +117,26 @@ class _Admin_SideMenuState extends State<Admin_SideMenu> {
               );
             },
           ),
-          ListTile(
-            leading: Image.asset(
-              AppAssets.bookmarkIcon,
-              height: 24,
-              width: 24,
-            ),
-            title: Text(
-              'Add Car',
-              style: TextStyle(
-                  color: const Color(0xFF193358),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddCarScreen()),
-              );
-            },
-          ),
+          // ListTile(
+          //   leading: Image.asset(
+          //     AppAssets.bookmarkIcon,
+          //     height: 24,
+          //     width: 24,
+          //   ),
+          //   title: Text(
+          //     'Add Car',
+          //     style: TextStyle(
+          //         color: const Color(0xFF193358),
+          //         fontSize: 18,
+          //         fontWeight: FontWeight.w500),
+          //   ),
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => AddCarScreen()),
+          //     );
+          //   },
+          // ),
           ListTile(
             leading: Icon(
               Icons.person_outline,
@@ -125,7 +144,7 @@ class _Admin_SideMenuState extends State<Admin_SideMenu> {
               // width: 24,
             ),
             title: Text(
-              'My Driver List',
+              'Driver List',
               style: TextStyle(
                   color: const Color(0xFF193358),
                   fontSize: 18,
@@ -145,7 +164,7 @@ class _Admin_SideMenuState extends State<Admin_SideMenu> {
               width: 24,
             ),
             title: Text(
-              'Add Driver',
+              'Third Party Details',
               style: TextStyle(
                   color: const Color(0xFF193358),
                   fontSize: 18,
@@ -154,7 +173,7 @@ class _Admin_SideMenuState extends State<Admin_SideMenu> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddDrivers()),
+                MaterialPageRoute(builder: (context) => Third_party_details()),
               );
             },
           ),

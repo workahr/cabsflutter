@@ -6,6 +6,7 @@ import 'package:cabs/pages/main_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'controllers/base_controller.dart';
 
@@ -20,6 +21,7 @@ import 'pages/auth/login_page.dart';
 
 import 'pages/driver_page/trips/driver_mytrip.dart';
 import 'pages/landing_page.dart';
+import 'pages/login_management.dart';
 import 'pages/splash_screen.dart';
 
 Future<void> main() async {
@@ -139,7 +141,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   showLater: false,
                   durationUntilAlertAgain: const Duration(seconds: 1),
                 ),
-                child: MainContainerAdmin(),
+                child: LoginManagement(),
               ),
         },
       ),

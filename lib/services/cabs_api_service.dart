@@ -542,6 +542,29 @@ class CabsApiService {
     }
   }
 
+  // thirdparty details Add
+
+  Future saveThirdParty(postData) async {
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/rental_owner_details/create-rental_owner_details');
+      print("test1 ");
+      final response = await client.post(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+      print("test2 ");
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
   // Driver Panel get all driver mytrip
 
   Future getmytripByidList(id) async {

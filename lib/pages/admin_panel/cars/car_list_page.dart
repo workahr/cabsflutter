@@ -1,3 +1,4 @@
+import 'package:cabs/pages/admin_panel/admin_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../constants/app_assets.dart';
@@ -18,6 +19,7 @@ class car_list extends StatefulWidget {
 
 class _car_listState extends State<car_list> {
   final CabsApiService apiService = CabsApiService();
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -79,12 +81,17 @@ class _car_listState extends State<car_list> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _drawerKey,
+      drawer: Admin_SideMenu(),
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        //  automaticallyImplyLeading: false,
         backgroundColor: Color(0xFF06234C),
         title: Text(
           'Cars List',
           style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white, // Change drawer icon color to white
         ),
       ),
       body: SingleChildScrollView(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/app_assets.dart';
+import '../admin_sidemenu.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -8,6 +9,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
+
   final TextEditingController nameController =
       TextEditingController(text: 'Vetrimaran');
   final TextEditingController mobileController =
@@ -19,12 +22,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _drawerKey,
+        drawer: Admin_SideMenu(),
         appBar: AppBar(
           title: Text(
             'Profile',
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Color(0xFF06234C),
+          iconTheme: IconThemeData(
+            color: Colors.white, // Change drawer icon color to white
+          ),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -127,18 +135,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 SizedBox(height: 60),
-                TextButton.icon(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.logout,
-                    color: Color(0xFF06234C),
-                  ),
-                  label: Text('Log out',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color(0xFF06234C),
-                      )),
-                ),
+                // TextButton.icon(
+                //   onPressed: () {},
+                //   icon: Icon(
+                //     Icons.logout,
+                //     color: Color(0xFF06234C),
+                //   ),
+                //   label: Text('Log out',
+                //       style: TextStyle(
+                //         fontSize: 20,
+                //         color: Color(0xFF06234C),
+                //       )),
+                // ),
               ],
             ),
           ),

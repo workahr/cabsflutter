@@ -28,10 +28,7 @@ class _MainContainerState extends State<MainContainer>
 
   final List pageId = [1, 5, 8, 12, 15];
   static List<Widget> pageOptions = <Widget>[
-    // DriverMyTrip(),
     add_booking(),
-    // Admin_All_Bookings(),
-
     UserMyBookings(),
   ];
 

@@ -66,7 +66,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           if (response.authToken != null) {
             //Navigator.pushNamed(context, '/');
             prefs.setString('auth_token', response.authToken ?? '');
-            //  prefs.setString('role_name', response.roleName ?? '');
+            prefs.setString('role_name', response.roleName ?? '');
+            prefs.setInt('user_id', response.userId ?? 0);
             prefs.setBool('isLoggedin', true);
             Navigator.push(
               context,
