@@ -16,6 +16,7 @@ class CustomDropdownWidget extends StatelessWidget {
   final Color? labelColor;
   final String? Function(dynamic)? validator;
   String Function(dynamic)? itemAsString;
+  var labelField;
 
   CustomDropdownWidget(
       {super.key,
@@ -23,7 +24,7 @@ class CustomDropdownWidget extends StatelessWidget {
       required this.onChanged,
       this.labelText,
       this.validator,
-      //  required this.labelField,
+      this.labelField,
       this.height,
       this.selectedItem,
       this.width,
@@ -34,7 +35,7 @@ class CustomDropdownWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 150.0,
+      height: height ?? 50.0,
       margin: const EdgeInsets.all(0.0),
       width: width ?? MediaQuery.of(context).size.width - 10.0,
       child: DropdownSearch<dynamic>(
@@ -42,30 +43,49 @@ class CustomDropdownWidget extends StatelessWidget {
             //showSearchBox: true,
             ),
         items: valArr.toList(),
-        itemAsString: itemAsString,
-        //   itemAsString: (item) => labelField(item),
+        // itemAsString: itemAsString,
+        itemAsString: (item) => labelField(item),
         dropdownDecoratorProps: DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
-            floatingLabelStyle: TextStyle(
-                fontSize: 10.0, color: labelColor ?? AppColors.primary),
+            contentPadding: EdgeInsets.all(9.0),
+            floatingLabelStyle:
+                const TextStyle(fontSize: 10.0, color: AppColors.primary),
             hintStyle: TextStyle(
-                fontSize: labelStyleFs ?? 36,
+                fontSize: labelStyleFs ?? 16,
                 color: labelColor ?? AppColors.dark),
             labelStyle: TextStyle(
                 fontSize: labelStyleFs ?? 16.0,
                 color: labelColor ?? AppColors.dark),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1.5, color: AppColors.light),
-              //borderRadius: BorderRadius.circular(30)
+              borderSide: BorderSide(width: 1.5, color: AppColors.grey),
+              borderRadius: BorderRadius.circular(30),
             ),
-            // focusedBorder: defaultBorder(),
-            //border: idleBorder(),
             border: null,
             labelText: labelText,
           ),
         ),
+        // dropdownDecoratorProps: DropDownDecoratorProps(
+        //   dropdownSearchDecoration: InputDecoration(
+        //     contentPadding:
+        //         const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
+        //     floatingLabelStyle: TextStyle(
+        //         fontSize: 10.0, color: labelColor ?? AppColors.primary),
+        //     hintStyle: TextStyle(
+        //         fontSize: labelStyleFs ?? 36,
+        //         color: labelColor ?? AppColors.dark),
+        //     labelStyle: TextStyle(
+        //         fontSize: labelStyleFs ?? 16.0,
+        //         color: labelColor ?? AppColors.dark),
+        //     enabledBorder: OutlineInputBorder(
+        //       borderSide: BorderSide(width: 1.5, color: AppColors.light),
+        //       //borderRadius: BorderRadius.circular(30)
+        //     ),
+        //     // focusedBorder: defaultBorder(),
+        //     //border: idleBorder(),
+        //     border: null,
+        //     labelText: labelText,
+        //   ),
+        // ),
         dropdownButtonProps: DropdownButtonProps(
           alignment: Alignment.centerRight,
           icon: const Icon(

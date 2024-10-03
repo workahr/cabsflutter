@@ -108,7 +108,7 @@ class _Third_party_detailsState extends State<Third_party_details> {
         "u_owner_mobile": ownermobileNumberController.text,
         "u_owner_address": owneraddressController.text,
       };
-      print("driverupdate $postData");
+      print("thirdpartyupdate $postData");
       var result = await apiService.updatethirdparty(postData);
 
       ThirdpartyupdateModel response = thirdpartyupdateModelFromJson(result);

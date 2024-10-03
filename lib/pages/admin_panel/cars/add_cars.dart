@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/app_assets.dart';
@@ -7,10 +8,14 @@ import '../../../constants/app_constants.dart';
 import '../../../services/cabs_api_service.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import '../../../services/comFuncService.dart';
+import '../../../widgets/custom_autocomplete_widget.dart';
 import '../../../widgets/custom_dropdown_widget.dart';
+import '../../../widgets/custom_dropdown_widget1.dart';
+import '../../../widgets/custom_m_drodown.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../../../widgets/outline_btn_widget.dart';
 import '../bookings/car_list_model.dart';
+import '../thirdparty_details/thirdparty_list_model.dart';
 import 'add_cars_model.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -36,12 +41,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final TextEditingController seatCapacityCtrl = TextEditingController();
   final TextEditingController vehicleNumberCtrl = TextEditingController();
 
+  String? selectedThirdParty;
+
   // Uint8List data = Uint8List(0);
 
   @override
   void initState() {
     super.initState();
-
+    getthirdpartyList();
     refresh();
     print('car id :' + widget.carId.toString());
   }
@@ -52,10 +59,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
     }
   }
 
-  Map<String, dynamic>? selectedWeight = {'label': 'No', 'value': '2'};
-  List<Map<String, dynamic>>? weightList = [
-    {'label': 'Yes', 'value': 1},
-    {'label': 'No', 'value': 2},
+  var selectedthirpartyedit;
+  var selectedReferArr;
+  String? selectedyes;
+  int? selectedThirdpartyId;
+  List referList = [
+    {"name": "Yes", "value": 1},
+    {"name": "No", "value": 2},
   ];
   String? selectedSpecies = 'No';
 
@@ -80,6 +90,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
         seatCapacityCtrl.text = (carDetails!.seatCapacity ?? '').toString();
         vehicleNumberCtrl.text = carDetails!.vehicleNumber ?? '';
         liveimgSrc = carDetails!.imageUrl ?? '';
+        selectedyes = carDetails!.rental ?? '';
+        selectedThirdParty = (carDetails!.rentalId ?? '').toString();
         //  imageFile = carDetails!.imageUrl as XFile?;
       });
     } else {
@@ -105,8 +117,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
       await prefs.setString('vehicle_number', vehicleNumberCtrl.toString());
 
       Map<String, dynamic> postData = {
-        "rental": selectedWeight.toString(),
-        "rental_id": selectedWeight.toString(),
+        "rental": selectedyes,
+        "rental_id": selectedThirdParty,
         "brand": brandCtrl.text,
         "modal": modelCtrl.text,
         "fuel_type": fuelTypeCtrl.text,
@@ -127,7 +139,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
           "u_modal": modelCtrl.text,
           "u_fuel_type": fuelTypeCtrl.text,
           "u_seat_capacity": seatCapacityCtrl.text,
-          "u_vehicle_number": vehicleNumberCtrl.text
+          "u_vehicle_number": vehicleNumberCtrl.text,
+          "u_rental": selectedReferArr,
+          "u_rentalId": selectedThirdParty
         };
         url = 'v1/cars/update-cars';
       }
@@ -163,84 +177,19 @@ class _AddCarScreenState extends State<AddCarScreen> {
     }
   }
 
-  // Future saveCar() async {
-  //   if (carsForm.currentState!.validate()) {
-  //     if (imageFile == null) {
-  //       showInSnackBar(context, 'Car image is required');
-  //       return;
-  //     }
-
-  //     Map<String, dynamic> postData = {
-  //       //"user_id": selectedUserId,
-  //       "brand": brandCtrl.text,
-  //       "modal": modelCtrl.text,
-  //       "fuel_type": fuelTypeCtrl.text,
-  //       "seat_capacity": seatCapacityCtrl.text,
-  //       "vehicle_number": vehicleNumberCtrl.text
-  //     };
-  //     print('postData $postData');
-
-  //     String url = 'v1/cars/create-cars';
-
-  //     var result = await apiService.saveCar(url, postData, imageFile);
-  //     print('result $result');
-  //     CarAddModel response = carAddModelFromJson(result);
-
-  //     if (response.status.toString() == 'SUCCESS') {
-  //       showInSnackBar(context, response.message.toString());
-  //       // Navigator.pop(context, {'type': 1});
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => car_list(),
-  //         ),
-  //       );
-  //     } else {
-  //       print(response.message.toString());
-  //       showInSnackBar(context, response.message.toString());
-  //     }
-  //   } else {
-  //     showInSnackBar(context, "Please fill all fields");
-  //   }
-  // }
-
-  // Future updateCar() async {
-  //   await apiService.getBearerToken();
-  //   if (imageFile == null) {
-  //     showInSnackBar(context, 'Car image is required');
-  //     return;
-  //   }
-  //   Map<String, dynamic> postData = {
-  //     "id": widget.carId,
-  //     "u_brand": brandCtrl.text,
-  //     "u_modal": modelCtrl.text,
-  //     "u_fuel_type": fuelTypeCtrl.text,
-  //     "u_seat_capacity": seatCapacityCtrl.text,
-  //     "u_vehicle_number": vehicleNumberCtrl.text
-  //   };
-
-  //   var result = await apiService.updatecar(postData, imageFile);
-  //   print('result $result');
-  //   CarupdateModel response = carupdateModelFromJson(result);
-
-  //   if (response.status.toString() == 'SUCCESS') {
-  //     showInSnackBar(context, response.message.toString());
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => car_list(),
-  //       ),
-  //     );
-  //   } else {
-  //     print(response.message.toString());
-  //     showInSnackBar(context, response.message.toString());
-  //   }
-  // }
-
   errValidatebrand(String? value) {
     return (value) {
       if (value.isEmpty) {
         return 'Brand is required';
+      }
+      return null;
+    };
+  }
+
+  errValidatethirdparty(String value) {
+    return (value) {
+      if (value.toString().isEmpty) {
+        return 'Category is required';
       }
       return null;
     };
@@ -363,6 +312,34 @@ class _AddCarScreenState extends State<AddCarScreen> {
         });
   }
 
+  List<ThirdpartyList>? thirdpartyList;
+  List<ThirdpartyList>? thirdpartyListAll;
+  bool isLoading = false;
+
+  Future getthirdpartyList() async {
+    setState(() {
+      isLoading = true;
+    });
+    await apiService.getBearerToken();
+    var result = await apiService.getthirdpartyList();
+    var response = thirdpartyListDataFromJson(result);
+    if (response.status.toString() == 'SUCCESS') {
+      setState(() {
+        thirdpartyList = response.list;
+        thirdpartyListAll = thirdpartyList;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        thirdpartyList = [];
+        thirdpartyListAll = [];
+        isLoading = false;
+      });
+      showInSnackBar(context, response.message.toString());
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -417,18 +394,49 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   labelText: 'Vehicle Number',
                   width: MediaQuery.of(context).size.width - 10,
                 ),
-                CustomDropdownWidget(
-                  labelText: 'Select weight range',
-                  height: 50.0,
-                  valArr: weightList,
-                  itemAsString: (p0) => p0['label'],
-                  selectedItem: selectedWeight,
+                const SizedBox(height: 16.0),
+                CustomAutoCompleteWidget(
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  selectedItem: selectedReferArr,
+                  labelText: 'Refer Type',
+                  labelField: (item) => item["name"],
                   onChanged: (value) {
-                    print(value['label']); // Print only the label value
-                    selectedWeight = value;
-                    setState(() {});
+                    selectedyes = value["name"];
+                    selectedThirdpartyId = value["value"];
+                    print(selectedyes);
                   },
+                  valArr: referList,
                 ),
+                const SizedBox(height: 16.0),
+                if (thirdpartyList != null)
+                  CustomAutoCompleteWidget(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    selectedItem: selectedthirpartyedit,
+                    labelText: 'Refer Type',
+                    labelField: (item) => item["name"],
+                    onChanged: (value) {
+                      selectedyes = value["name"];
+                      selectedThirdpartyId = value["value"];
+                      print(selectedyes);
+                    },
+                    valArr: thirdpartyList,
+                  ),
+                // DropdownButton<String>(
+                //   hint: Text("Select Third Party"),
+                //   value: selectedThirdParty,
+                //   onChanged: (newValue) {
+                //     print("test value" + newValue.toString());
+                //     setState(() {
+                //       selectedThirdParty = newValue;
+                //     });
+                //   },
+                //   items: thirdpartyList!.map((ThirdpartyList item) {
+                //     return DropdownMenuItem<String>(
+                //       value: item.id.toString(),
+                //       child: Text(item.ownerName),
+                //     );
+                //   }).toList(),
+                // ),
                 const SizedBox(height: 16.0),
                 OutlineBtnWidget(
                     title: 'Upload Image of Car',
