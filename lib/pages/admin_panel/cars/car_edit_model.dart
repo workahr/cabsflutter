@@ -171,7 +171,7 @@ class CarDetails {
   String status;
   String createdBy;
   DateTime createdDate;
-  String? updatedBy;
+  int? updatedBy;
   DateTime? updatedDate;
 
   CarDetails({

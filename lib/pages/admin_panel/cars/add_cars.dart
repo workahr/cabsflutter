@@ -59,6 +59,32 @@ class _AddCarScreenState extends State<AddCarScreen> {
     }
   }
 
+  selectedThirdpartyArray() {
+    List result;
+
+    if (thirdpartyList!.isNotEmpty) {
+      result = thirdpartyList!
+          .where((element) => element.id == carDetails!.rentalId)
+          .toList();
+
+      if (result.isNotEmpty) {
+        setState(() {
+          selectedthirpartyedit = result[0];
+        });
+      } else {
+        setState(() {
+          selectedthirpartyedit = null;
+        });
+      }
+    } else {
+      setState(() {
+        print('selectedVisitPurposeArr empty');
+
+        selectedthirpartyedit = null;
+      });
+    }
+  }
+
   var selectedthirpartyedit;
   var selectedReferArr;
   String? selectedyes;
@@ -90,8 +116,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
         seatCapacityCtrl.text = (carDetails!.seatCapacity ?? '').toString();
         vehicleNumberCtrl.text = carDetails!.vehicleNumber ?? '';
         liveimgSrc = carDetails!.imageUrl ?? '';
-        selectedyes = carDetails!.rental ?? '';
-        selectedThirdParty = (carDetails!.rentalId ?? '').toString();
+        selectedReferArr = carDetails!.rental ?? '';
+        selectedthirpartyedit = (carDetails!.rentalId ?? '').toString();
         //  imageFile = carDetails!.imageUrl as XFile?;
       });
     } else {
@@ -118,16 +144,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
       Map<String, dynamic> postData = {
         "rental": selectedyes,
-        "rental_id": selectedThirdParty,
+        "rental_id": selectedThirdpartyId,
         "brand": brandCtrl.text,
         "modal": modelCtrl.text,
         "fuel_type": fuelTypeCtrl.text,
         "seat_capacity": seatCapacityCtrl.text,
         "vehicle_number": vehicleNumberCtrl.text
       };
-      setState(() {
-        // isLoading = true;
-      });
+      print(postData);
+
       showSnackBar(context: context);
       // update-Car_management
       String url = 'v1/cars/create-cars';
@@ -140,8 +165,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
           "u_fuel_type": fuelTypeCtrl.text,
           "u_seat_capacity": seatCapacityCtrl.text,
           "u_vehicle_number": vehicleNumberCtrl.text,
-          "u_rental": selectedReferArr,
-          "u_rentalId": selectedThirdParty
+          "u_rental": selectedyes,
+          "u_rentalId": selectedThirdpartyId
         };
         url = 'v1/cars/update-cars';
       }
@@ -328,6 +353,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
         thirdpartyList = response.list;
         thirdpartyListAll = thirdpartyList;
         isLoading = false;
+        if (widget.carId != null) {
+          selectedThirdpartyArray();
+        }
       });
     } else {
       setState(() {
@@ -402,7 +430,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   labelField: (item) => item["name"],
                   onChanged: (value) {
                     selectedyes = value["name"];
-                    selectedThirdpartyId = value["value"];
                     print(selectedyes);
                   },
                   valArr: referList,
@@ -413,11 +440,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     width: MediaQuery.of(context).size.width / 1.1,
                     selectedItem: selectedthirpartyedit,
                     labelText: 'Refer Type',
-                    labelField: (item) => item["name"],
+                    labelField: (item) => item.ownerName,
                     onChanged: (value) {
-                      selectedyes = value["name"];
-                      selectedThirdpartyId = value["value"];
-                      print(selectedyes);
+                      selectedThirdParty = value.ownerName;
+                      selectedThirdpartyId = value.id;
                     },
                     valArr: thirdpartyList,
                   ),
