@@ -4,6 +4,8 @@ import 'package:cabs/pages/main_container.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'add_new_booking/add_booking.dart';
+
 import 'bookings/admin_all_booking.dart';
 import 'cars/add_cars.dart';
 import 'driver/add_drivers.dart';
@@ -178,6 +180,27 @@ class _Admin_SideMenuState extends State<Admin_SideMenu> {
               );
             },
           ),
+          ListTile(
+            leading: Image.asset(
+              AppAssets.carIcon,
+              height: 24,
+              width: 24,
+            ),
+            title: Text(
+              'New Bookings',
+              style: TextStyle(
+                  color: const Color(0xFF193358),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => add_booking()),
+              );
+            },
+          ),
+
           ListTile(
             leading: Image.asset(
               'assets/images/log-out.png',
