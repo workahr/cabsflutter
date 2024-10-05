@@ -773,7 +773,8 @@ class _DriverMyTripState extends State<DriverMyTrip> {
                                                             ],
                                                           ),
                                                           Text(
-                                                            e.bookingCharges,
+                                                            e.bookingCharges
+                                                                .toString(),
                                                             //  '₹5000',
                                                             style: TextStyle(
                                                                 color: Color(

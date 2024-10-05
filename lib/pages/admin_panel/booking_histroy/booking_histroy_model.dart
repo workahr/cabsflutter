@@ -55,57 +55,57 @@ class BookingHistroy {
   int? seatCapacity;
   String? vehicleNumber;
   String? currentStatus;
-  dynamic latitude;
-  dynamic longitude;
-  dynamic imageUrl;
-  String status;
+  String? latitude;
+  String? longitude;
+  String? imageUrl;
+  int? status;
   int createdBy;
   DateTime createdDate;
   int? updatedBy;
   DateTime? updatedDate;
-  String driverId;
+  String? driverId;
   String? carId;
   String customerId;
-  dynamic bookingOtp;
-  BookingStatus bookingStatus;
+  String? bookingOtp;
+  String? bookingStatus;
   DateTime fromDatetime;
   DateTime toDatetime;
   String pickupLocation;
   String dropLocation;
-  dynamic totalDistance;
-  dynamic bookingCharges;
+  String? totalDistance;
+  String? bookingCharges;
   String? cancelReason;
 
   BookingHistroy({
     required this.id,
-    required this.rental,
-    required this.rentalId,
-    required this.brand,
-    required this.modal,
-    required this.fuelType,
-    required this.seatCapacity,
-    required this.vehicleNumber,
-    required this.currentStatus,
-    required this.latitude,
-    required this.longitude,
-    required this.imageUrl,
+    this.rental,
+    this.rentalId,
+    this.brand,
+    this.modal,
+    this.fuelType,
+    this.seatCapacity,
+    this.vehicleNumber,
+    this.currentStatus,
+    this.latitude,
+    this.longitude,
+    this.imageUrl,
     required this.status,
     required this.createdBy,
     required this.createdDate,
-    required this.updatedBy,
-    required this.updatedDate,
-    required this.driverId,
-    required this.carId,
+    this.updatedBy,
+    this.updatedDate,
+    this.driverId,
+    this.carId,
     required this.customerId,
     required this.bookingOtp,
-    required this.bookingStatus,
+    this.bookingStatus,
     required this.fromDatetime,
     required this.toDatetime,
     required this.pickupLocation,
     required this.dropLocation,
-    required this.totalDistance,
-    required this.bookingCharges,
-    required this.cancelReason,
+    this.totalDistance,
+    this.bookingCharges,
+    this.cancelReason,
   });
 
   factory BookingHistroy.fromJson(Map<String, dynamic> json) => BookingHistroy(
@@ -132,7 +132,7 @@ class BookingHistroy {
         carId: json["car_id"],
         customerId: json["customer_id"],
         bookingOtp: json["booking_otp"],
-        bookingStatus: bookingStatusValues.map[json["booking_status"]]!,
+        bookingStatus: json["booking_status"],
         fromDatetime: DateTime.parse(json["from_datetime"]),
         toDatetime: DateTime.parse(json["to_datetime"]),
         pickupLocation: json["pickup_location"],
@@ -164,7 +164,7 @@ class BookingHistroy {
         "car_id": carId,
         "customer_id": customerId,
         "booking_otp": bookingOtp,
-        "booking_status": bookingStatusValues.reverse[bookingStatus],
+        "booking_status": bookingStatus,
         "from_datetime": fromDatetime.toIso8601String(),
         "to_datetime": toDatetime.toIso8601String(),
         "pickup_location": pickupLocation,
@@ -175,26 +175,26 @@ class BookingHistroy {
       };
 }
 
-enum BookingStatus { COMPLETED, DRIVER_ASSIGNED, NEW, PENDING }
+// enum BookingStatus { COMPLETED, DRIVER_ASSIGNED, NEW, PENDING }
 
-final bookingStatusValues = EnumValues({
-  "COMPLETED": BookingStatus.COMPLETED,
-  "DRIVER ASSIGNED": BookingStatus.DRIVER_ASSIGNED,
-  "NEW": BookingStatus.NEW,
-  "PENDING": BookingStatus.PENDING
-});
+// final bookingStatusValues = EnumValues({
+//   "COMPLETED": BookingStatus.COMPLETED,
+//   "DRIVER ASSIGNED": BookingStatus.DRIVER_ASSIGNED,
+//   "NEW": BookingStatus.NEW,
+//   "PENDING": BookingStatus.PENDING
+// });
 
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
+// class EnumValues<T> {
+//   Map<String, T> map;
+//   late Map<T, String> reverseMap;
 
-  EnumValues(this.map);
+//   EnumValues(this.map);
 
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
-}
+//   Map<T, String> get reverse {
+//     reverseMap = map.map((k, v) => MapEntry(v, k));
+//     return reverseMap;
+//   }
+// }
 
 
 

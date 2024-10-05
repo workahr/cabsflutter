@@ -50,57 +50,57 @@ class AllBookings {
   int? seatCapacity;
   String? vehicleNumber;
   String? currentStatus;
-  dynamic latitude;
-  dynamic longitude;
-  dynamic imageUrl;
-  String status;
+  String? latitude;
+  String? longitude;
+  String? imageUrl;
+  int? status;
   int createdBy;
   DateTime createdDate;
   int? updatedBy;
   DateTime? updatedDate;
-  String driverId;
+  String? driverId;
   String? carId;
-  String customerId;
-  dynamic bookingOtp;
-  BookingStatus bookingStatus;
+  String? customerId;
+  String? bookingOtp;
+  String? bookingStatus;
   DateTime fromDatetime;
   DateTime toDatetime;
   String pickupLocation;
   String dropLocation;
-  dynamic totalDistance;
-  dynamic bookingCharges;
+  String? totalDistance;
+  String? bookingCharges;
   String? cancelReason;
 
   AllBookings({
     required this.id,
-    required this.rental,
-    required this.rentalId,
-    required this.brand,
-    required this.modal,
-    required this.fuelType,
-    required this.seatCapacity,
-    required this.vehicleNumber,
-    required this.currentStatus,
-    required this.latitude,
-    required this.longitude,
-    required this.imageUrl,
-    required this.status,
+    this.rental,
+    this.rentalId,
+    this.brand,
+    this.modal,
+    this.fuelType,
+    this.seatCapacity,
+    this.vehicleNumber,
+    this.currentStatus,
+    this.latitude,
+    this.longitude,
+    this.imageUrl,
+    this.status,
     required this.createdBy,
     required this.createdDate,
-    required this.updatedBy,
-    required this.updatedDate,
-    required this.driverId,
-    required this.carId,
-    required this.customerId,
-    required this.bookingOtp,
-    required this.bookingStatus,
+    this.updatedBy,
+    this.updatedDate,
+    this.driverId,
+    this.carId,
+    this.customerId,
+    this.bookingOtp,
+    this.bookingStatus,
     required this.fromDatetime,
     required this.toDatetime,
     required this.pickupLocation,
     required this.dropLocation,
-    required this.totalDistance,
-    required this.bookingCharges,
-    required this.cancelReason,
+    this.totalDistance,
+    this.bookingCharges,
+    this.cancelReason,
   });
 
   factory AllBookings.fromJson(Map<String, dynamic> json) => AllBookings(
@@ -127,7 +127,7 @@ class AllBookings {
         carId: json["car_id"],
         customerId: json["customer_id"],
         bookingOtp: json["booking_otp"],
-        bookingStatus: bookingStatusValues.map[json["booking_status"]]!,
+        bookingStatus: json["booking_status"],
         fromDatetime: DateTime.parse(json["from_datetime"]),
         toDatetime: DateTime.parse(json["to_datetime"]),
         pickupLocation: json["pickup_location"],
@@ -159,7 +159,7 @@ class AllBookings {
         "car_id": carId,
         "customer_id": customerId,
         "booking_otp": bookingOtp,
-        "booking_status": bookingStatusValues.reverse[bookingStatus],
+        "booking_status": bookingStatus,
         "from_datetime": fromDatetime.toIso8601String(),
         "to_datetime": toDatetime.toIso8601String(),
         "pickup_location": pickupLocation,
@@ -168,27 +168,6 @@ class AllBookings {
         "booking_charges": bookingCharges,
         "cancel_reason": cancelReason,
       };
-}
-
-enum BookingStatus { COMPLETED, DRIVER_ASSIGNED, NEW, PENDING }
-
-final bookingStatusValues = EnumValues({
-  "COMPLETED": BookingStatus.COMPLETED,
-  "DRIVER ASSIGNED": BookingStatus.DRIVER_ASSIGNED,
-  "NEW": BookingStatus.NEW,
-  "PENDING": BookingStatus.PENDING
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }
 
 

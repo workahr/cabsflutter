@@ -48,14 +48,78 @@ class _AddCarScreenState extends State<AddCarScreen> {
   @override
   void initState() {
     super.initState();
-    getthirdpartyList();
-    refresh();
+    if (widget.carId == null) {
+      getthirdpartyList();
+    }
+
+    if (widget.carId != null) {
+      getCarById();
+    }
+
+    //refresh();
     print('car id :' + widget.carId.toString());
   }
 
-  refresh() async {
-    if (widget.carId != null) {
-      await getCarById();
+  // refresh() async {
+  //   if (widget.carId != null) {
+  //     await getCarById();
+  //   }
+  // }
+
+  selectedrentalyesornoArray() {
+    List result;
+
+    if (referList.isNotEmpty) {
+      result = referList
+          .where((element) => element["name"] == carDetails!.rental)
+          .toList();
+
+      if (result.isNotEmpty) {
+        setState(() {
+          selectedReferArr = result[0];
+        });
+      } else {
+        setState(() {
+          selectedReferArr = null;
+        });
+      }
+    } else {
+      setState(() {
+        print('selectedArr empty');
+
+        selectedReferArr = null;
+      });
+    }
+  }
+
+  selectedrentalyesornoArray1() {
+    List result;
+
+    List referList = [
+      {"name": "Yes", "value": 1},
+      {"name": "No", "value": 2},
+    ];
+
+    if (referList.isNotEmpty) {
+      result = referList
+          .where((element) => element["name"] == carDetails!.rental)
+          .toList();
+
+      if (result.isNotEmpty) {
+        setState(() {
+          selectedReferArr = result[0];
+        });
+      } else {
+        setState(() {
+          selectedReferArr = null;
+        });
+      }
+    } else {
+      setState(() {
+        print('selectedArr empty');
+
+        selectedReferArr = null;
+      });
     }
   }
 
@@ -64,11 +128,12 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
     if (thirdpartyList!.isNotEmpty) {
       result = thirdpartyList!
-          .where((element) => element.id == carDetails!.rentalId)
+          .where((element) => element.id == selectedThirdpartyId)
           .toList();
 
       if (result.isNotEmpty) {
         setState(() {
+          print("result a 2 drop:$result");
           selectedthirpartyedit = result[0];
         });
       } else {
@@ -116,10 +181,24 @@ class _AddCarScreenState extends State<AddCarScreen> {
         seatCapacityCtrl.text = (carDetails!.seatCapacity ?? '').toString();
         vehicleNumberCtrl.text = carDetails!.vehicleNumber ?? '';
         liveimgSrc = carDetails!.imageUrl ?? '';
-        selectedReferArr = carDetails!.rental ?? '';
-        selectedthirpartyedit = (carDetails!.rentalId ?? '').toString();
+        selectedyes = carDetails!.rental ?? '';
+        selectedThirdpartyId = carDetails!.rentalId;
+
+        // if (thirdpartyList!.isNotEmpty) {
+        //   selectedThirdpartyArray();
+        // } else {
+        //   getthirdpartyList();
+        // }
+
+        if (referList.isNotEmpty) {
+          selectedrentalyesornoArray();
+        } else {
+          selectedrentalyesornoArray1();
+        }
+
         //  imageFile = carDetails!.imageUrl as XFile?;
       });
+      getthirdpartyList();
     } else {
       showInSnackBar(context, "Data not found");
       //isLoaded = false;
@@ -166,7 +245,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
           "u_seat_capacity": seatCapacityCtrl.text,
           "u_vehicle_number": vehicleNumberCtrl.text,
           "u_rental": selectedyes,
-          "u_rentalId": selectedThirdpartyId
+          "u_rental_id": selectedThirdpartyId
         };
         url = 'v1/cars/update-cars';
       }
@@ -179,12 +258,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
       if (response.status.toString() == 'SUCCESS') {
         showInSnackBar(context, response.message.toString());
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => car_list(),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => car_list(),
+        //   ),
+        // );
+
+        Navigator.pop(context, {'add': true});
 
         brandCtrl.text = '';
         modelCtrl.text = '';
@@ -426,7 +507,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 CustomAutoCompleteWidget(
                   width: MediaQuery.of(context).size.width / 1.1,
                   selectedItem: selectedReferArr,
-                  labelText: 'Refer Type',
+                  labelText: 'Select Yes Or No',
                   labelField: (item) => item["name"],
                   onChanged: (value) {
                     selectedyes = value["name"];
@@ -439,7 +520,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   CustomAutoCompleteWidget(
                     width: MediaQuery.of(context).size.width / 1.1,
                     selectedItem: selectedthirpartyedit,
-                    labelText: 'Refer Type',
+                    labelText: 'Select Rental Owner Name',
                     labelField: (item) => item.ownerName,
                     onChanged: (value) {
                       selectedThirdParty = value.ownerName;
@@ -447,22 +528,6 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     },
                     valArr: thirdpartyList,
                   ),
-                // DropdownButton<String>(
-                //   hint: Text("Select Third Party"),
-                //   value: selectedThirdParty,
-                //   onChanged: (newValue) {
-                //     print("test value" + newValue.toString());
-                //     setState(() {
-                //       selectedThirdParty = newValue;
-                //     });
-                //   },
-                //   items: thirdpartyList!.map((ThirdpartyList item) {
-                //     return DropdownMenuItem<String>(
-                //       value: item.id.toString(),
-                //       child: Text(item.ownerName),
-                //     );
-                //   }).toList(),
-                // ),
                 const SizedBox(height: 16.0),
                 OutlineBtnWidget(
                     title: 'Upload Image of Car',

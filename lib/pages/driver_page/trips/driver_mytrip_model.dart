@@ -40,43 +40,43 @@ class MytripsListData {
 }
 
 class MyTrips {
-  dynamic customerName;
-  dynamic customerMobile;
+  String? customerName;
+  String? customerMobile;
   int id;
   String driverId;
-  dynamic carId;
+  String? carId;
   String customerId;
-  dynamic bookingOtp;
+  String? bookingOtp;
   String bookingStatus;
   DateTime fromDatetime;
   DateTime toDatetime;
   String pickupLocation;
   String dropLocation;
-  dynamic totalDistance;
-  dynamic bookingCharges;
-  dynamic cancelReason;
-  String status;
+  String? totalDistance;
+  String? bookingCharges;
+  String? cancelReason;
+  int? status;
   int? createdBy;
   DateTime createdDate;
   int? updatedBy;
   DateTime? updatedDate;
 
   MyTrips({
-    required this.customerName,
-    required this.customerMobile,
+    this.customerName,
+    this.customerMobile,
     required this.id,
     required this.driverId,
-    required this.carId,
+    this.carId,
     required this.customerId,
-    required this.bookingOtp,
+    this.bookingOtp,
     required this.bookingStatus,
     required this.fromDatetime,
     required this.toDatetime,
     required this.pickupLocation,
     required this.dropLocation,
-    required this.totalDistance,
-    required this.bookingCharges,
-    required this.cancelReason,
+    this.totalDistance,
+    this.bookingCharges,
+    this.cancelReason,
     required this.status,
     required this.createdBy,
     required this.createdDate,

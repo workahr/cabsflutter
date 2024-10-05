@@ -78,6 +78,17 @@ class _car_listState extends State<car_list> {
     }
   }
 
+  addCars() {
+    Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AddCarScreen()))
+        .then((value) {
+      if (value != null) {
+        print("vale $value");
+        getcarList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -294,14 +305,14 @@ class _car_listState extends State<car_list> {
                                         width: 110,
                                         height: 40,
                                         child: ElevatedButton.icon(
-                                          onPressed: () {
+                                          onPressed: () => {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         AddCarScreen(
                                                           carId: e.id,
-                                                        ))).then((value) {});
+                                                        ))).then((value) {})
                                           },
                                           icon: Icon(Icons.edit_outlined),
                                           label: Text(
@@ -338,13 +349,14 @@ class _car_listState extends State<car_list> {
             title: 'Add Cars',
             buttonColor: AppColors.primary,
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddCarScreen(),
-                ),
-              );
-              AddCarScreen();
+              addCars();
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => AddCarScreen(),
+              //   ),
+              // );
+              // AddCarScreen();
             },
           ),
         ],

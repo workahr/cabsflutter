@@ -48,13 +48,13 @@ class BookingList {
   int? seatCapacity;
   String? vehicleNumber;
   String? imageUrl;
-  String status;
+  int? status;
   int? createdBy;
   DateTime createdDate;
   int? updatedBy;
   DateTime? updatedDate;
-  String driverId;
-  String carId;
+  String? driverId;
+  String? carId;
   String customerId;
   dynamic bookingOtp;
   String bookingStatus;
