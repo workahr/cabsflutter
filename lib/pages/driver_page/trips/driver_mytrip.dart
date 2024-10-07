@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/app_colors.dart';
 import '../../../services/cabs_api_service.dart';
 import '../../../services/comFuncService.dart';
+import '../sidemenu.dart';
 
 class DriverMyTrip extends StatefulWidget {
   @override
@@ -14,6 +15,7 @@ class DriverMyTrip extends StatefulWidget {
 
 class _DriverMyTripState extends State<DriverMyTrip> {
   final CabsApiService apiService = CabsApiService();
+  final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
 
   List<MyTrips>? mytripList;
   List<MyTrips>? mytripListAll;
@@ -78,15 +80,21 @@ class _DriverMyTripState extends State<DriverMyTrip> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
+            key: _drawerKey,
+            drawer: SideMenu(),
             appBar: AppBar(
-                backgroundColor: Color(0xFF193358),
-                title: Text(
-                  'My Trips',
-                  style: TextStyle(
-                    fontSize: 23,
-                    color: Colors.white,
-                  ),
-                )),
+              backgroundColor: Color(0xFF193358),
+              title: Text(
+                'My Trips',
+                style: TextStyle(
+                  fontSize: 23,
+                  color: Colors.white,
+                ),
+              ),
+              iconTheme: IconThemeData(
+                color: Colors.white, // Change drawer icon color to white
+              ),
+            ),
             body: Column(children: [
               TabBar(
                 dividerColor: Colors.transparent,

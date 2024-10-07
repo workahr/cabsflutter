@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'profile/profile_screen.dart';
+import 'vehical/add_vehical_status.dart';
+import 'vehical/vehicalreport.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -9,6 +13,16 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
   // final GlobalKey<ScaffoldState> _drawerKey = GlobalKey<ScaffoldState>();
+
+  Future<void> _handleLogout() async {
+    // Clear SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    // Navigate to Login Page
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/login', ModalRoute.withName('/login'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +68,12 @@ class _SideMenuState extends State<SideMenu> {
                   fontSize: 18,
                   fontWeight: FontWeight.w500),
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
           ),
           ListTile(
             leading: Image.asset(
@@ -68,6 +88,12 @@ class _SideMenuState extends State<SideMenu> {
                   fontSize: 18,
                   fontWeight: FontWeight.w500),
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => add_vehical_status()),
+              );
+            },
           ),
           ListTile(
             leading: Image.asset(
@@ -75,6 +101,12 @@ class _SideMenuState extends State<SideMenu> {
               height: 24,
               width: 24,
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => vehicalreport()),
+              );
+            },
             title: Text(
               'Vehicle report list',
               style: TextStyle(
@@ -96,6 +128,9 @@ class _SideMenuState extends State<SideMenu> {
                   fontSize: 18,
                   fontWeight: FontWeight.w500),
             ),
+            onTap: () async {
+              await _handleLogout();
+            },
           ),
         ],
       ),

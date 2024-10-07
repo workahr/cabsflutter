@@ -329,7 +329,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'To :',
+                                          'To Date:',
                                           style: TextStyle(fontSize: 15),
                                           textAlign: TextAlign.end,
                                         ),

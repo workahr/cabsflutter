@@ -39,13 +39,13 @@ class ListElement {
   String brand;
   String modal;
   String fuelType;
-  int seatCapacity;
+  int? seatCapacity;
   String vehicleNumber;
   String? imageUrl;
-  String status;
-  String createdBy;
+  int? status;
+  int? createdBy;
   DateTime createdDate;
-  String updatedBy;
+  int? updatedBy;
   DateTime? updatedDate;
 
   ListElement({
@@ -57,7 +57,7 @@ class ListElement {
     required this.vehicleNumber,
     this.imageUrl,
     required this.status,
-    required this.createdBy,
+    this.createdBy,
     required this.createdDate,
     required this.updatedBy,
     this.updatedDate,
@@ -74,7 +74,7 @@ class ListElement {
         status: json["status"],
         createdBy: json["created_by"],
         createdDate: DateTime.parse(json["created_date"]),
-        updatedBy: json["updated_by"] == null ? "" : json["updated_by"],
+        updatedBy: json["updated_by"],
         updatedDate: json["updated_date"] == null
             ? null
             : DateTime.parse(json["updated_date"]),

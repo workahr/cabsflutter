@@ -44,40 +44,40 @@ class BookingsDetails {
   String driverId;
   String carId;
   String customerId;
-  dynamic bookingOtp;
+  String? bookingOtp;
   String bookingStatus;
   DateTime fromDatetime;
   DateTime toDatetime;
   String pickupLocation;
   String dropLocation;
-  dynamic totalDistance;
-  dynamic bookingCharges;
-  dynamic cancelReason;
-  String status;
+  String? totalDistance;
+  String? bookingCharges;
+  String? cancelReason;
+  int? status;
   int createdBy;
   DateTime createdDate;
-  dynamic updatedBy;
-  dynamic updatedDate;
+  int? updatedBy;
+  DateTime? updatedDate;
 
   BookingsDetails({
     required this.id,
     required this.driverId,
     required this.carId,
     required this.customerId,
-    required this.bookingOtp,
+    this.bookingOtp,
     required this.bookingStatus,
     required this.fromDatetime,
     required this.toDatetime,
     required this.pickupLocation,
     required this.dropLocation,
-    required this.totalDistance,
-    required this.bookingCharges,
-    required this.cancelReason,
-    required this.status,
+    this.totalDistance,
+    this.bookingCharges,
+    this.cancelReason,
+    this.status,
     required this.createdBy,
     required this.createdDate,
-    required this.updatedBy,
-    required this.updatedDate,
+    this.updatedBy,
+    this.updatedDate,
   });
 
   factory BookingsDetails.fromJson(Map<String, dynamic> json) =>
