@@ -171,10 +171,9 @@ class _Add_ExpensesState extends State<Add_Expenses> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // widget.thirdpartyId == null
-                  //     ?
-                  saveexpenses();
-                  // : updateexpenses();
+                  widget.expenseseditId == null
+                      ? saveexpenses()
+                      : updateexpenses();
                 },
                 child: Text('Submit'),
                 style: ElevatedButton.styleFrom(
