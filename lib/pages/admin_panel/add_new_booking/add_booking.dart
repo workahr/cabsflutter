@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 
 import 'package:google_places_flutter/google_places_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../services/cabs_api_service.dart';
 import '../../../services/comFuncService.dart';
 import '../../../widgets/custom_text_field.dart';
@@ -103,9 +104,14 @@ class _add_bookingState extends State<add_booking> {
   //   }
   // }
 
+  int? customerid;
+
   Future saveBooking() async {
     await apiService.getBearerToken();
     if (bookingForm.currentState!.validate()) {
+      final prefs = await SharedPreferences.getInstance();
+      customerid = prefs.getInt('user_id');
+      print("customer id" + customerid.toString());
       DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(pickupDateCtrl.text);
       String formattedDate = DateFormat('yyyy-MM-dd').format(parsedDate);
 
@@ -115,7 +121,7 @@ class _add_bookingState extends State<add_booking> {
       Map<String, dynamic> postData = {
         "driver_id": '0',
         "car_id": "0",
-        "customer_id": "0",
+        "customer_id": customerid,
         "booking_status": "new",
         "from_datetime": formattedDate,
         "to_datetime": formattedDate1,

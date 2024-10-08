@@ -39,6 +39,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final TextEditingController modelCtrl = TextEditingController();
   final TextEditingController fuelTypeCtrl = TextEditingController();
   final TextEditingController seatCapacityCtrl = TextEditingController();
+  final TextEditingController perkilometerCtrl = TextEditingController();
   final TextEditingController vehicleNumberCtrl = TextEditingController();
 
   String? selectedThirdParty;
@@ -228,7 +229,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
         "modal": modelCtrl.text,
         "fuel_type": fuelTypeCtrl.text,
         "seat_capacity": seatCapacityCtrl.text,
-        "vehicle_number": vehicleNumberCtrl.text
+        "vehicle_number": vehicleNumberCtrl.text,
+        "per_km_price": perkilometerCtrl.text
       };
       print(postData);
 
@@ -245,7 +247,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
           "u_seat_capacity": seatCapacityCtrl.text,
           "u_vehicle_number": vehicleNumberCtrl.text,
           "u_rental": selectedyes,
-          "u_rental_id": selectedThirdpartyId
+          "u_rental_id": selectedThirdpartyId,
+          "u_per_km_price": perkilometerCtrl.text
         };
         url = 'v1/cars/update-cars';
       }
@@ -323,6 +326,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
     return (value) {
       if (value.isEmpty) {
         return 'Seat Capacity is required';
+      }
+      return null;
+    };
+  }
+
+  errValidateperkilometer(String? value) {
+    return (value) {
+      if (value.isEmpty) {
+        return 'Per kiloMeter Charge is required';
       }
       return null;
     };
@@ -529,6 +541,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     valArr: thirdpartyList,
                   ),
                 const SizedBox(height: 16.0),
+                CustomeTextField(
+                  control: perkilometerCtrl,
+                  validator: errValidateperkilometer(perkilometerCtrl.text),
+                  labelText: 'Per Kilometer Charges',
+                  width: MediaQuery.of(context).size.width - 10,
+                ),
+                const SizedBox(height: 16.0),
                 OutlineBtnWidget(
                     title: 'Upload Image of Car',
                     icon: Icons.add_circle,
@@ -589,9 +608,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // widget.carId == null ?
                       saveCar();
-                      // : updateCar();
                     },
                     child: Text(
                       widget.carId == null ? 'Add Now' : 'Update Now',

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'expenses/expenses_list.dart';
+import 'location/driver_location.dart';
+import 'location/driverhome_page..dart';
+import 'location/start_trip.dart';
 import 'profile/profile_screen.dart';
 import 'vehical/add_vehical_status.dart';
 import 'vehical/vehicalreport.dart';
@@ -56,6 +60,54 @@ class _SideMenuState extends State<SideMenu> {
                     color: const Color(0xFF193358),
                   ))),
           ListTile(
+            leading: Icon(Icons.location_on),
+            title: Text(
+              'Driver Home',
+              style: TextStyle(
+                  color: const Color(0xFF193358),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DriverhomePage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.location_history),
+            title: Text(
+              'Driver Location',
+              style: TextStyle(
+                  color: const Color(0xFF193358),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Driver_Location()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.start),
+            title: Text(
+              'Start Trip',
+              style: TextStyle(
+                  color: const Color(0xFF193358),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => start_trip()),
+              );
+            },
+          ),
+          ListTile(
             leading: Image.asset(
               'assets/images/User.png',
               height: 24,
@@ -72,6 +124,22 @@ class _SideMenuState extends State<SideMenu> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.file_open),
+            title: Text(
+              'Expenses',
+              style: TextStyle(
+                  color: const Color(0xFF193358),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Expenses_List()),
               );
             },
           ),

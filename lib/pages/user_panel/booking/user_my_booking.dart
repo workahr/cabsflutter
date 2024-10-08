@@ -387,10 +387,12 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                             Text('Price'),
                                                             Text(
                                                               e.bookingCharges
+                                                                          // .toString(),
                                                                           .toString() ==
                                                                       "null"
                                                                   ? ''
-                                                                  : e.bookingCharges,
+                                                                  : e.bookingCharges
+                                                                      .toString(),
                                                               style: TextStyle(
                                                                   color: Color(
                                                                       0xFF06234C),
@@ -1056,9 +1058,9 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                       // ),
                                                                       Text(
                                                                           e.bookingCharges.toString() == "null"
-                                                                              ? ''
-                                                                              : e
-                                                                                  .bookingCharges,
+                                                                              ? ""
+                                                                              : e.bookingCharges
+                                                                                  .toString(),
                                                                           // '5000',
                                                                           style: TextStyle(
                                                                               color: Color(0xFF06234C),

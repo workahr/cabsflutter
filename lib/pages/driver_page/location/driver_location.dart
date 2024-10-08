@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class driverhome_page extends StatefulWidget {
-  const driverhome_page({super.key});
+class Driver_Location extends StatefulWidget {
+  const Driver_Location({super.key});
 
   @override
-  State<driverhome_page> createState() => _driverhome_pageState();
+  State<Driver_Location> createState() => _Driver_LocationState();
 }
 
-class _driverhome_pageState extends State<driverhome_page> {
+class _Driver_LocationState extends State<Driver_Location> {
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;

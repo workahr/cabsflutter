@@ -65,7 +65,7 @@ class BookingHistroy {
   DateTime? updatedDate;
   String? driverId;
   String? carId;
-  String customerId;
+  String? customerId;
   String? bookingOtp;
   String? bookingStatus;
   DateTime fromDatetime;
@@ -96,7 +96,7 @@ class BookingHistroy {
     this.updatedDate,
     this.driverId,
     this.carId,
-    required this.customerId,
+    this.customerId,
     required this.bookingOtp,
     this.bookingStatus,
     required this.fromDatetime,

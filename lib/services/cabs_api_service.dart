@@ -665,6 +665,108 @@ class CabsApiService {
     }
   }
 
+  // save the Expenses
+
+  Future saveexpenses(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/expenses/create-expenses');
+      print("test1 ");
+      final response = await client.post(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+      print("test2 ");
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // Expenses list
+  Future getexpensesList() async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/expenses/getallexpenses');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // delete ExpensesById
+  Future deleteExpensesById(postData) async {
+    print('driver delete test $postData');
+    try {
+      final url = Uri.parse('${liveApiPath}v1/expenses/delete-expenses');
+      final response = await client.delete(
+        url,
+        headers: headerData,
+        body: jsonEncode(postData),
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  //get expenses by id
+
+  Future getExpensesById(id) async {
+    try {
+      final url =
+          Uri.parse('${liveApiPath}v1/expenses/list-expenses-ById?id=$id');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // expenses update
+
+  Future updateexpenses(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/expenses/update-expenses');
+      final response = await client.post(url,
+          headers: headerData, body: jsonEncode(postData));
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror ${e}');
+      return e;
+    }
+  }
+
 // save the Driver
 
   Future saveDriver(String apiCtrl, Map<String, dynamic> postData) async {
