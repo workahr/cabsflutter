@@ -24,7 +24,7 @@ class _userMyBookingsState extends State<UserMyBookings> {
 
   @override
   void initState() {
-    getbookingList();
+    getbookingbycustomer();
 
     super.initState();
   }
@@ -36,9 +36,9 @@ class _userMyBookingsState extends State<UserMyBookings> {
   List<BookingList>? upcomingBookings;
   List<BookingList>? completedBookings;
 
-  Future getbookingList() async {
+  Future getbookingbycustomer() async {
     await apiService.getBearerToken();
-    var result = await apiService.getbookingList();
+    var result = await apiService.getbookingbycustomer();
     var response = bookingListDataFromJson(result);
     if (response.status.toString() == 'SUCCESS') {
       setState(() {
@@ -1012,9 +1012,9 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                       .spaceBetween,
                                                               children: [
                                                                 Text(
-                                                                    // e
-                                                                    //     .driverId, // name
-                                                                    "Shiva Kumar",
+                                                                    e.driverId
+                                                                        .toString(), // name
+                                                                    // "Shiva Kumar",
                                                                     style: TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.bold)),
@@ -1053,24 +1053,15 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                           style: TextStyle(
                                                                               color: Color(0xFF06234C),
                                                                               fontWeight: FontWeight.bold)),
-                                                                      // SizedBox(
-                                                                      //   width: 170,
-                                                                      // ),
                                                                       Text(
                                                                           e.bookingCharges.toString() == "null"
                                                                               ? ""
                                                                               : e.bookingCharges
                                                                                   .toString(),
-                                                                          // '5000',
                                                                           style: TextStyle(
                                                                               color: Color(0xFF06234C),
                                                                               fontWeight: FontWeight.bold)),
                                                                     ]),
-                                                                // Row(children: [
-                                                                //   Text(
-                                                                //     'For 5 Days',
-                                                                //   )
-                                                                // ]),
                                                               ],
                                                             ),
                                                           ))

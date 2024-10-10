@@ -49,15 +49,15 @@ class DriverDetails {
   int status;
   int createdBy;
   DateTime createdDate;
-  dynamic updatedBy;
-  dynamic updatedDate;
+  int? updatedBy;
+  DateTime? updatedDate;
   String username;
   String password;
   String fullname;
   String email;
   String mobile;
   int role;
-  dynamic regOtp;
+  String? regOtp;
   int active;
 
   DriverDetails({
@@ -70,15 +70,15 @@ class DriverDetails {
     required this.status,
     required this.createdBy,
     required this.createdDate,
-    required this.updatedBy,
-    required this.updatedDate,
+    this.updatedBy,
+    this.updatedDate,
     required this.username,
     required this.password,
     required this.fullname,
     required this.email,
     required this.mobile,
     required this.role,
-    required this.regOtp,
+    this.regOtp,
     required this.active,
   });
 

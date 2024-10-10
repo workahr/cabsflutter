@@ -137,7 +137,7 @@ class _Third_party_detailsState extends State<Third_party_details> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: screenHeight * 0.13,
+        // toolbarHeight: screenHeight * 0.13,
         backgroundColor: Color(0xFF193358),
         title: Text(
           widget.thirdpartyId == null

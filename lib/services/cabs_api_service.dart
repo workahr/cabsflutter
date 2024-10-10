@@ -465,6 +465,48 @@ class CabsApiService {
     }
   }
 
+  // booking details by customer
+
+  // get all booking
+  Future getbookingbycustomer() async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/booking/list-booking-ByUser');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  //booking  update by driver id and car id
+
+  Future updatebookingbydriverid(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/booking/update-booking');
+      final response = await client.post(url,
+          headers: headerData, body: jsonEncode(postData));
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror ${e}');
+      return e;
+    }
+  }
+
   //save the Booking
 
   Future saveBooking(postData) async {
@@ -528,6 +570,26 @@ class CabsApiService {
     try {
       final url =
           Uri.parse('${liveApiPath}v1/booking/list-booking-ById?id=$id');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // get kilometer for booking
+
+  Future getkilometerByfromto(from, to) async {
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/booking/calculate-distance?from_location=$from&to_location=$to');
       final response = await client.get(
         url,
         headers: headerData,

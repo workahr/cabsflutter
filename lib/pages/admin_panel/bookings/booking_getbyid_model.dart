@@ -57,7 +57,7 @@ class BookingsDetails {
   int createdBy;
   DateTime createdDate;
   int? updatedBy;
-  DateTime? updatedDate;
+  String? updatedDate;
 
   BookingsDetails({
     required this.id,

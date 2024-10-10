@@ -47,8 +47,8 @@ class ThirdpartyDetails {
   int status;
   int createdBy;
   DateTime createdDate;
-  dynamic updatedBy;
-  dynamic updatedDate;
+  int? updatedBy;
+  String? updatedDate;
 
   ThirdpartyDetails({
     required this.id,
@@ -58,8 +58,8 @@ class ThirdpartyDetails {
     required this.status,
     required this.createdBy,
     required this.createdDate,
-    required this.updatedBy,
-    required this.updatedDate,
+    this.updatedBy,
+    this.updatedDate,
   });
 
   factory ThirdpartyDetails.fromJson(Map<String, dynamic> json) =>

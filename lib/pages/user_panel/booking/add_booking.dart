@@ -11,6 +11,7 @@ import '../../../services/cabs_api_service.dart';
 import '../../../services/comFuncService.dart';
 import '../../../widgets/custom_text_field.dart';
 
+import '../../admin_panel/add_new_booking/kilometercalculation_model.dart';
 import '../../home/home_page.dart';
 import '../../home/latlong_model.dart';
 import 'package:http/http.dart' as http; // For making HTTP requests
@@ -36,7 +37,7 @@ class _add_bookingState extends State<add_booking> {
   TextEditingController pickupLocCtrl = TextEditingController();
   TextEditingController dropDateCtrl = TextEditingController();
   TextEditingController dropLocCtrl = TextEditingController();
-//   TextEditingController dobCtrl = TextEditingController();
+  TextEditingController kilometerCtrl = TextEditingController();
 
   LatLong pickupLatLng = LatLong(latitude: 0.0, longitude: 0.0);
   LatLong dropLatLng = LatLong(latitude: 0.0, longitude: 0.0);
@@ -126,6 +127,7 @@ class _add_bookingState extends State<add_booking> {
         "to_datetime": formattedDate1,
         "pickup_location": pickupLocCtrl.text,
         "drop_location": dropLocCtrl.text,
+        "total_distance": kilometerCtrl.text,
       };
 
       var result = await apiService.saveBooking(postData);
@@ -201,6 +203,52 @@ class _add_bookingState extends State<add_booking> {
     } catch (error) {
       print('Error fetching place data: $error');
       return [];
+    }
+  }
+
+  KilometercalculationModel? kilometerDetails;
+  double kilometercal = 1.60934;
+
+  Future<void> getkilometerByfromto() async {
+    try {
+      // Fetch the Bearer token
+      await apiService.getBearerToken();
+
+      // Fetch the kilometer distance between two locations
+      var result = await apiService.getkilometerByfromto(
+          pickupLocCtrl.text, dropLocCtrl.text);
+
+      if (result != null) {
+        // Convert JSON response into KilometercalculationModel
+        KilometercalculationModel response =
+            kilometercalculationModelFromJson(result);
+        print(response);
+
+        // Check if the API response status is SUCCESS
+        if (response.status.toString() == 'SUCCESS') {
+          setState(() {
+            kilometerDetails = response;
+            print(kilometerDetails!.distance);
+            String sanitizedDistance =
+                kilometerDetails!.distance.replaceAll(RegExp(r'[^0-9.]'), '');
+            print("Sanitized distance: $sanitizedDistance");
+
+            double? parsedDistance = double.tryParse(sanitizedDistance);
+            print("Parsed distance: $parsedDistance");
+
+            double distanceInKilometers =
+                (parsedDistance != null ? parsedDistance * kilometercal : 0.0);
+            kilometerCtrl.text = distanceInKilometers.toStringAsFixed(2);
+          });
+        } else {
+          showInSnackBar(context, "Data not found");
+        }
+      } else {
+        showInSnackBar(context, "Failed to get results from API");
+      }
+    } catch (error) {
+      print('Error fetching kilometers: $error');
+      showInSnackBar(context, "An error occurred while fetching distance");
     }
   }
 
@@ -346,6 +394,10 @@ class _add_bookingState extends State<add_booking> {
                       // this method will return latlng with place detail
                       print("placeDetails lng" + prediction.lng.toString());
                       print("placeDetails lat" + prediction.lat.toString());
+                      if (pickupLocCtrl.text.isNotEmpty &&
+                          dropLocCtrl.text.isNotEmpty) {
+                        getkilometerByfromto(); // Ensure the function is called here
+                      }
                     }, // this callback is called when isLatLngRequired is true
                     itemClick: (Prediction prediction) {
                       dropLocCtrl.text = prediction.description!;
@@ -479,6 +531,14 @@ class _add_bookingState extends State<add_booking> {
                             }),
                       ),
                     ],
+                  ),
+
+                  CustomeTextField(
+                    control: kilometerCtrl,
+                    //  validator: errValidatebrand(kilometerCtrl.text),
+                    labelText: 'Kilometer',
+                    width: MediaQuery.of(context).size.width - 10,
+                    readOnly: true,
                   ),
                   SizedBox(height: 20),
                   // Book Now Button

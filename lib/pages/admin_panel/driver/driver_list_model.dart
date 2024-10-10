@@ -46,7 +46,7 @@ class DriversList {
   String email;
   String mobile;
   int role;
-  dynamic regOtp;
+  String? regOtp;
   int status;
   int active;
   int createdBy;
@@ -55,7 +55,7 @@ class DriversList {
   DateTime? updatedDate;
   int userId;
   int vehicleId;
-  String licenseNumber;
+  String? licenseNumber;
   DateTime licenseExpiry;
   String address;
 
@@ -67,7 +67,7 @@ class DriversList {
     required this.email,
     required this.mobile,
     required this.role,
-    required this.regOtp,
+    this.regOtp,
     required this.status,
     required this.active,
     required this.createdBy,
@@ -76,7 +76,7 @@ class DriversList {
     this.updatedDate,
     required this.userId,
     required this.vehicleId,
-    required this.licenseNumber,
+    this.licenseNumber,
     required this.licenseExpiry,
     required this.address,
   });

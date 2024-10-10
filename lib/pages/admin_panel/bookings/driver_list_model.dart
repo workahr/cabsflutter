@@ -46,7 +46,7 @@ class DriversList {
   String email;
   String mobile;
   int role;
-  dynamic regOtp;
+  String? regOtp;
   int status;
   int active;
   int createdBy;
@@ -67,7 +67,7 @@ class DriversList {
     required this.email,
     required this.mobile,
     required this.role,
-    required this.regOtp,
+    this.regOtp,
     required this.status,
     required this.active,
     required this.createdBy,

@@ -19,6 +19,7 @@ import 'dart:convert';
 import '../../main_container.dart';
 import '../admin_sidemenu.dart';
 import 'add_booking_model.dart';
+import 'kilometercalculation_model.dart';
 
 // Import for date formatting
 
@@ -37,7 +38,7 @@ class _add_bookingState extends State<add_booking> {
   TextEditingController pickupLocCtrl = TextEditingController();
   TextEditingController dropDateCtrl = TextEditingController();
   TextEditingController dropLocCtrl = TextEditingController();
-//   TextEditingController dobCtrl = TextEditingController();
+  TextEditingController kilometerCtrl = TextEditingController();
 
   LatLong pickupLatLng = LatLong(latitude: 0.0, longitude: 0.0);
   LatLong dropLatLng = LatLong(latitude: 0.0, longitude: 0.0);
@@ -127,6 +128,7 @@ class _add_bookingState extends State<add_booking> {
         "to_datetime": formattedDate1,
         "pickup_location": pickupLocCtrl.text,
         "drop_location": dropLocCtrl.text,
+        "total_distance": kilometerCtrl.text,
       };
 
       var result = await apiService.saveBooking(postData);
@@ -172,6 +174,15 @@ class _add_bookingState extends State<add_booking> {
     };
   }
 
+  // errValidatekilometer(String? value) {
+  //   return (value) {
+  //     if (value.isEmpty) {
+  //       return 'Kilometer is required';
+  //     }
+  //     return null;
+  //   };
+  // }
+
   final client = http.Client();
   static var headerData = {
     'Content-Type': 'application/json',
@@ -202,6 +213,52 @@ class _add_bookingState extends State<add_booking> {
     } catch (error) {
       print('Error fetching place data: $error');
       return [];
+    }
+  }
+
+  KilometercalculationModel? kilometerDetails;
+  double kilometercal = 1.60934;
+
+  Future<void> getkilometerByfromto() async {
+    try {
+      // Fetch the Bearer token
+      await apiService.getBearerToken();
+
+      // Fetch the kilometer distance between two locations
+      var result = await apiService.getkilometerByfromto(
+          pickupLocCtrl.text, dropLocCtrl.text);
+
+      if (result != null) {
+        // Convert JSON response into KilometercalculationModel
+        KilometercalculationModel response =
+            kilometercalculationModelFromJson(result);
+        print(response);
+
+        // Check if the API response status is SUCCESS
+        if (response.status.toString() == 'SUCCESS') {
+          setState(() {
+            kilometerDetails = response;
+            print(kilometerDetails!.distance);
+            String sanitizedDistance =
+                kilometerDetails!.distance.replaceAll(RegExp(r'[^0-9.]'), '');
+            print("Sanitized distance: $sanitizedDistance");
+
+            double? parsedDistance = double.tryParse(sanitizedDistance);
+            print("Parsed distance: $parsedDistance");
+
+            double distanceInKilometers =
+                (parsedDistance != null ? parsedDistance * kilometercal : 0.0);
+            kilometerCtrl.text = distanceInKilometers.toStringAsFixed(2);
+          });
+        } else {
+          showInSnackBar(context, "Data not found");
+        }
+      } else {
+        showInSnackBar(context, "Failed to get results from API");
+      }
+    } catch (error) {
+      print('Error fetching kilometers: $error');
+      showInSnackBar(context, "An error occurred while fetching distance");
     }
   }
 
@@ -243,9 +300,7 @@ class _add_bookingState extends State<add_booking> {
 
                   GooglePlaceAutoCompleteTextField(
                     textEditingController: pickupLocCtrl,
-
                     googleAPIKey: AppConstants.googleMapApiKey,
-                    // inputDecoration: InputDecoration(),
                     boxDecoration: BoxDecoration(),
                     inputDecoration: InputDecoration(
                       labelText: 'Pickup Location',
@@ -271,50 +326,29 @@ class _add_bookingState extends State<add_booking> {
                               BorderSide(width: 1.5, color: AppColors.primary),
                           borderRadius: BorderRadius.all(Radius.circular(25))),
                     ),
-                    debounceTime: 800, // default 600 ms,
-
-                    isLatLngRequired:
-                        true, // if you required coordinates from place detail
+                    debounceTime: 800,
+                    isLatLngRequired: true,
                     getPlaceDetailWithLatLng: (Prediction prediction) {
                       pickupLatLng.latitude = double.parse(prediction.lat!);
                       pickupLatLng.longitude = double.parse(prediction.lng!);
-                      // this method will return latlng with place detail
-                      print("placeDetails lng" + prediction.lng.toString());
-                      print("placeDetails lat" + prediction.lat.toString());
-                    }, // this callback is called when isLatLngRequired is true
+                      print(
+                          "Pickup Location: Lat: ${pickupLatLng.latitude}, Lng: ${pickupLatLng.longitude}");
+                    },
                     itemClick: (Prediction prediction) {
                       pickupLocCtrl.text = prediction.description!;
                       pickupLocCtrl.selection = TextSelection.fromPosition(
                           TextPosition(offset: prediction.description!.length));
                     },
-                    itemBuilder: (context, index, Prediction prediction) {
-                      return Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on),
-                            SizedBox(
-                              width: 7,
-                            ),
-                            Expanded(
-                                child: Text("${prediction.description ?? ""}"))
-                          ],
-                        ),
-                      );
-                    },
-
-                    isCrossBtnShown: false,
                   ),
 
                   SizedBox(height: 10),
 
                   GooglePlaceAutoCompleteTextField(
                     textEditingController: dropLocCtrl,
-
                     googleAPIKey: AppConstants.googleMapApiKey,
                     boxDecoration: BoxDecoration(),
                     inputDecoration: InputDecoration(
-                      labelText: 'Drop',
+                      labelText: 'Drop Location',
                       iconColor: AppColors.primary,
                       floatingLabelStyle:
                           TextStyle(fontSize: 14.0, color: AppColors.primary),
@@ -337,41 +371,25 @@ class _add_bookingState extends State<add_booking> {
                               BorderSide(width: 1.5, color: AppColors.primary),
                           borderRadius: BorderRadius.all(Radius.circular(25))),
                     ),
-                    debounceTime: 800, // default 600 ms,
-
-                    isLatLngRequired:
-                        true, // if you required coordinates from place detail
+                    debounceTime: 800,
+                    isLatLngRequired: true,
                     getPlaceDetailWithLatLng: (Prediction prediction) {
                       dropLatLng.latitude = double.parse(prediction.lat!);
                       dropLatLng.longitude = double.parse(prediction.lng!);
-                      // this method will return latlng with place detail
-                      print("placeDetails lng" + prediction.lng.toString());
-                      print("placeDetails lat" + prediction.lat.toString());
-                    }, // this callback is called when isLatLngRequired is true
+                      print(
+                          "Drop Location: Lat: ${dropLatLng.latitude}, Lng: ${dropLatLng.longitude}");
+
+                      // Call getkilometerByfromto once both locations are set
+                      if (pickupLocCtrl.text.isNotEmpty &&
+                          dropLocCtrl.text.isNotEmpty) {
+                        getkilometerByfromto(); // Ensure the function is called here
+                      }
+                    },
                     itemClick: (Prediction prediction) {
                       dropLocCtrl.text = prediction.description!;
                       dropLocCtrl.selection = TextSelection.fromPosition(
                           TextPosition(offset: prediction.description!.length));
                     },
-                    itemBuilder: (context, index, Prediction prediction) {
-                      return Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on),
-                            SizedBox(
-                              width: 7,
-                            ),
-                            Expanded(
-                                child: Text("${prediction.description ?? ""}"))
-                          ],
-                        ),
-                      );
-                    },
-                    // if you want to add seperator between list items
-                    // seperatedBuilder: Divider(),
-                    // want to show close icon
-                    isCrossBtnShown: false,
                   ),
 
                   SizedBox(height: 10),
@@ -481,17 +499,19 @@ class _add_bookingState extends State<add_booking> {
                       ),
                     ],
                   ),
+                  CustomeTextField(
+                    control: kilometerCtrl,
+                    //  validator: errValidatebrand(kilometerCtrl.text),
+                    labelText: 'Kilometer',
+                    width: MediaQuery.of(context).size.width - 10,
+                    readOnly: true,
+                  ),
+
                   SizedBox(height: 20),
-                  // Book Now Button
+
                   ElevatedButton(
                     onPressed: () {
                       saveBooking();
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => UserMyBookings(),
-                      //   ),
-                      // );
                     },
                     child: Center(
                       child: Text('Book Now'),

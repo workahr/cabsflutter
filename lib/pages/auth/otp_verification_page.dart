@@ -32,6 +32,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   final GlobalKey<FormState> loginForm = GlobalKey<FormState>();
 
   final otpFocusNode = FocusNode();
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancel the timer when the widget is disposed
+    for (var controller in _otpControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -41,15 +49,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
     super.initState();
     startTimer();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel(); // Cancel the timer when the widget is disposed
-    for (var controller in _otpControllers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 
   Timer? _timer;
