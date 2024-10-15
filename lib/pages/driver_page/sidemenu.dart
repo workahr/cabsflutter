@@ -5,6 +5,7 @@ import 'location/driver_location.dart';
 import 'location/driverhome_page..dart';
 import 'location/start_trip.dart';
 import 'profile/profile_screen.dart';
+import 'trips/driver_mytrip.dart';
 import 'vehical/add_vehical_status.dart';
 import 'vehical/vehicalreport.dart';
 
@@ -94,7 +95,7 @@ class _SideMenuState extends State<SideMenu> {
           ListTile(
             leading: Icon(Icons.start),
             title: Text(
-              'Start Trip',
+              'My Trips',
               style: TextStyle(
                   color: const Color(0xFF193358),
                   fontSize: 18,
@@ -103,7 +104,7 @@ class _SideMenuState extends State<SideMenu> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => start_trip()),
+                MaterialPageRoute(builder: (context) => DriverMyTrip()),
               );
             },
           ),
@@ -159,7 +160,7 @@ class _SideMenuState extends State<SideMenu> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => add_vehical_status()),
+                MaterialPageRoute(builder: (context) => AddVehicalStatus()),
               );
             },
           ),

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/app_colors.dart';
 import '../../../services/cabs_api_service.dart';
 import '../../../services/comFuncService.dart';
+import '../location/start_trip.dart';
 import '../sidemenu.dart';
 
 class DriverMyTrip extends StatefulWidget {
@@ -410,7 +411,20 @@ class _DriverMyTripState extends State<DriverMyTrip> {
                                                               10),
                                                     ),
                                                   ),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            start_trip(
+                                                                bookingId: e.id,
+                                                                customername: e
+                                                                    .customerName,
+                                                                customermobile:
+                                                                    e.customerMobile),
+                                                      ),
+                                                    );
+                                                  },
                                                   child: Text(
                                                     'Accept',
                                                     style: TextStyle(

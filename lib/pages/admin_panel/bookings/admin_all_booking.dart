@@ -175,7 +175,6 @@ class _Admin_All_BookingsState extends State<Admin_All_Bookings> {
                                     )
                                   ]),
                                   SizedBox(height: 8),
-
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -246,14 +245,6 @@ class _Admin_All_BookingsState extends State<Admin_All_Bookings> {
                                       ),
                                     ],
                                   ),
-
-                                  // DottedLine(
-                                  //   direction: Axis.horizontal,
-                                  //   lineLength: double.infinity,
-                                  //   lineThickness: 2.0,
-                                  //   dashLength: 6.0,
-                                  //   dashColor: Colors.black,
-                                  // ),
                                   SizedBox(height: 12),
                                   Center(
                                       child: TextButton(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../sidemenu.dart';
+import '../trips/driver_mytrip.dart';
 
 class DriverhomePage extends StatefulWidget {
   const DriverhomePage({super.key});
@@ -52,17 +53,17 @@ class _DriverhomePageState extends State<DriverhomePage> {
                                     color: const Color(0xFF193358),
                                   ))),
                           SizedBox(
-                            width: 170,
+                            width: 90,
                           ),
                           SizedBox(
                               height: 48,
-                              width: 124,
+                              width: 150,
                               child: DecoratedBox(
                                   decoration: BoxDecoration(
                                       color: const Color(0xFF193358),
                                       borderRadius: BorderRadius.circular(28)),
                                   child: Padding(
-                                    padding: const EdgeInsets.only(left: 4),
+                                    padding: const EdgeInsets.only(left: 2),
                                     child: Row(
                                       children: [
                                         CircleAvatar(
@@ -73,16 +74,31 @@ class _DriverhomePageState extends State<DriverhomePage> {
                                               Icons.person_2_outlined,
                                               color: const Color(0xFF193358),
                                             )),
-                                        SizedBox(
-                                          width: screenWidth * 0.015,
-                                        ),
-                                        Text(
-                                          'My Tips',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16),
-                                        )
+                                        ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  Color(0xFF193358),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DriverMyTrip(),
+                                                ),
+                                              );
+                                            },
+                                            child: Text(
+                                              'My Tips',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16),
+                                            ))
                                       ],
                                     ),
                                   ))),

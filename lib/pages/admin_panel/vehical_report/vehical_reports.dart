@@ -14,17 +14,17 @@ class _Vechical_ReportsPageState extends State<Vechical_ReportsPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: screenHeight * 0.13,
+        // toolbarHeight: screenHeight * 0.13,
         backgroundColor: Color(0xFF193358),
         title: Text(
           'Reports',
           style: TextStyle(
               fontSize: 23, color: Colors.white, fontWeight: FontWeight.w700),
         ),
-        leading: Icon(
-          Icons.arrow_back_ios_rounded,
-          color: Colors.white,
-        ),
+        // leading: Icon(
+        //   Icons.arrow_back_ios_rounded,
+        //   color: Colors.white,
+        // ),
       ),
       body: ListView.builder(
         itemCount: 2,

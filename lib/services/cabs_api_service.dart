@@ -727,6 +727,28 @@ class CabsApiService {
     }
   }
 
+// Save Vehicalstatus
+
+  Future savevehicalstatus(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/cars/update-vehicle_status');
+      final response = await client.post(url,
+          headers: headerData, body: jsonEncode(postData));
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror ${e}');
+      return e;
+    }
+  }
+
   // save the Expenses
 
   Future saveexpenses(postData) async {
@@ -812,6 +834,28 @@ class CabsApiService {
   Future updateexpenses(postData) async {
     try {
       final url = Uri.parse('${liveApiPath}v1/expenses/update-expenses');
+      final response = await client.post(url,
+          headers: headerData, body: jsonEncode(postData));
+
+      if (response.statusCode == 200) {
+        final json = response.body;
+        return json;
+      } else {
+        print('error');
+        throw Exception(
+            'Failed. Status code: ${response.statusCode} ${response.toString()}');
+      }
+    } catch (e) {
+      print('catcherror ${e}');
+      return e;
+    }
+  }
+
+  // Start Kilomter  update
+
+  Future updatestartkilomter(postData) async {
+    try {
+      final url = Uri.parse('${liveApiPath}v1/booking/startkm-endkm');
       final response = await client.post(url,
           headers: headerData, body: jsonEncode(postData));
 

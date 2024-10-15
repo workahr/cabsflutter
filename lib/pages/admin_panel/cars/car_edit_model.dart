@@ -168,6 +168,14 @@ class CarDetails {
   int seatCapacity;
   String vehicleNumber;
   String? imageUrl;
+  String? perKmPrice;
+  String? km_5_price;
+  String? km_10_price;
+  String? km_20_price;
+  String? rc_number;
+  String? insurance_number;
+  String? join_charge;
+  String? service_charge;
   int? status;
   int? createdBy;
   DateTime createdDate;
@@ -184,6 +192,14 @@ class CarDetails {
     required this.seatCapacity,
     required this.vehicleNumber,
     required this.imageUrl,
+    this.perKmPrice,
+    this.km_5_price,
+    this.km_10_price,
+    this.km_20_price,
+    this.rc_number,
+    this.insurance_number,
+    this.join_charge,
+    this.service_charge,
     required this.status,
     required this.createdBy,
     required this.createdDate,
@@ -201,6 +217,14 @@ class CarDetails {
         seatCapacity: json["seat_capacity"],
         vehicleNumber: json["vehicle_number"],
         imageUrl: json["image_url"],
+        perKmPrice: json["per_km_price"],
+        km_5_price: json["km_5_price"],
+        km_10_price: json["km_10_price"],
+        km_20_price: json["km_20_price"],
+        rc_number: json["rc_number"],
+        insurance_number: json["insurance_number"],
+        join_charge: json["join_charge"],
+        service_charge: json["service_charge"],
         status: json["status"],
         createdBy: json["created_by"],
         createdDate: DateTime.parse(json["created_date"]),
@@ -220,6 +244,14 @@ class CarDetails {
         "seat_capacity": seatCapacity,
         "vehicle_number": vehicleNumber,
         "image_url": imageUrl,
+        "per_km_price": perKmPrice,
+        "km_5_price": km_5_price,
+        "km_10_price": km_10_price,
+        "km_20_price": km_20_price,
+        "rc_number": rc_number,
+        "insurance_number": insurance_number,
+        "join_charge": join_charge,
+        "service_charge": service_charge,
         "status": status,
         "created_by": createdBy,
         "created_date": createdDate.toIso8601String(),

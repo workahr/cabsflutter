@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/app_assets.dart';
 import '../../../constants/app_constants.dart';
@@ -41,6 +42,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
   final TextEditingController seatCapacityCtrl = TextEditingController();
   final TextEditingController perkilometerCtrl = TextEditingController();
   final TextEditingController vehicleNumberCtrl = TextEditingController();
+  final TextEditingController km5priceCtrl = TextEditingController();
+  final TextEditingController km10priceCtrl = TextEditingController();
+  final TextEditingController km20priceCtrl = TextEditingController();
+  final TextEditingController rcnumberCtrl = TextEditingController();
+  final TextEditingController insurancenumberCtrl = TextEditingController();
+  final TextEditingController joinchargeCtrl = TextEditingController();
+  final TextEditingController servicechargeCtrl = TextEditingController();
 
   String? selectedThirdParty;
 
@@ -184,6 +192,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
         liveimgSrc = carDetails!.imageUrl ?? '';
         selectedyes = carDetails!.rental ?? '';
         selectedThirdpartyId = carDetails!.rentalId;
+        km5priceCtrl.text = carDetails!.km_5_price ?? '';
+        km10priceCtrl.text = carDetails!.km_10_price ?? '';
+        km20priceCtrl.text = carDetails!.km_20_price ?? '';
+        perkilometerCtrl.text = carDetails!.perKmPrice ?? '';
+        rcnumberCtrl.text = carDetails!.rc_number ?? '';
+        insurancenumberCtrl.text = carDetails!.insurance_number ?? '';
+        joinchargeCtrl.text = carDetails!.join_charge ?? '';
+        servicechargeCtrl.text = carDetails!.service_charge ?? '';
+        print(carDetails!.km_5_price);
 
         // if (thirdpartyList!.isNotEmpty) {
         //   selectedThirdpartyArray();
@@ -230,7 +247,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
         "fuel_type": fuelTypeCtrl.text,
         "seat_capacity": seatCapacityCtrl.text,
         "vehicle_number": vehicleNumberCtrl.text,
-        "per_km_price": perkilometerCtrl.text
+        "per_km_price": perkilometerCtrl.text,
+        "5km_price": km5priceCtrl.text,
+        "10km_price": km10priceCtrl.text,
+        "20km_price": km20priceCtrl.text,
+        "rc_number": rcnumberCtrl.text,
+        "insurance_no": insurancenumberCtrl.text,
+        "join_charge": joinchargeCtrl.text,
+        "service_charge": servicechargeCtrl.text,
       };
       print(postData);
 
@@ -248,7 +272,14 @@ class _AddCarScreenState extends State<AddCarScreen> {
           "u_vehicle_number": vehicleNumberCtrl.text,
           "u_rental": selectedyes,
           "u_rental_id": selectedThirdpartyId,
-          "u_per_km_price": perkilometerCtrl.text
+          "u_per_km_price": perkilometerCtrl.text,
+          "u_5km_price": km5priceCtrl.text,
+          "u_10km_price": km10priceCtrl.text,
+          "u_20km_price": km20priceCtrl.text,
+          "u_rc_number": rcnumberCtrl.text,
+          "u_insurance_no": insurancenumberCtrl.text,
+          "u_join_charge": joinchargeCtrl.text,
+          "u_service_charge": servicechargeCtrl.text,
         };
         url = 'v1/cars/update-cars';
       }
@@ -326,6 +357,33 @@ class _AddCarScreenState extends State<AddCarScreen> {
     return (value) {
       if (value.isEmpty) {
         return 'Seat Capacity is required';
+      }
+      return null;
+    };
+  }
+
+  errValidate5km(String? value) {
+    return (value) {
+      if (value.isEmpty) {
+        return '5 Km Price is required';
+      }
+      return null;
+    };
+  }
+
+  errValidate10km(String? value) {
+    return (value) {
+      if (value.isEmpty) {
+        return '10 Km Price is required';
+      }
+      return null;
+    };
+  }
+
+  errValidate20km(String? value) {
+    return (value) {
+      if (value.isEmpty) {
+        return '20 Km Price is required';
       }
       return null;
     };
@@ -507,6 +565,11 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   validator: errValidateseat(seatCapacityCtrl.text),
                   labelText: 'Seat Capacity',
                   width: MediaQuery.of(context).size.width - 10,
+                  type: const TextInputType.numberWithOptions(),
+                  inputFormaters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^-?(\d+)?\.?\d{0,11}'))
+                  ],
                 ),
                 const SizedBox(height: 16.0),
                 CustomeTextField(
@@ -514,6 +577,49 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   validator: errValidatevehiclenumber(vehicleNumberCtrl.text),
                   labelText: 'Vehicle Number',
                   width: MediaQuery.of(context).size.width - 10,
+                ),
+                const SizedBox(height: 16.0),
+                CustomeTextField(
+                  control: perkilometerCtrl,
+                  validator: errValidateperkilometer(perkilometerCtrl.text),
+                  labelText: 'Per Kilometer Charges',
+                  width: MediaQuery.of(context).size.width - 10,
+                ),
+                const SizedBox(height: 16.0),
+                CustomeTextField(
+                  control: km5priceCtrl,
+                  validator: errValidate5km(km5priceCtrl.text),
+                  labelText: '5 Km Price',
+                  width: MediaQuery.of(context).size.width - 10,
+                  type: const TextInputType.numberWithOptions(),
+                  inputFormaters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^-?(\d+)?\.?\d{0,11}'))
+                  ],
+                ),
+                const SizedBox(height: 16.0),
+                CustomeTextField(
+                  control: km10priceCtrl,
+                  validator: errValidate10km(km10priceCtrl.text),
+                  labelText: '10 Km Price',
+                  width: MediaQuery.of(context).size.width - 10,
+                  type: const TextInputType.numberWithOptions(),
+                  inputFormaters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^-?(\d+)?\.?\d{0,11}'))
+                  ],
+                ),
+                const SizedBox(height: 16.0),
+                CustomeTextField(
+                  control: km20priceCtrl,
+                  validator: errValidate20km(km20priceCtrl.text),
+                  labelText: '20 Km Price',
+                  width: MediaQuery.of(context).size.width - 10,
+                  type: const TextInputType.numberWithOptions(),
+                  inputFormaters: [
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^-?(\d+)?\.?\d{0,11}'))
+                  ],
                 ),
                 const SizedBox(height: 16.0),
                 CustomAutoCompleteWidget(
@@ -542,9 +648,30 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   ),
                 const SizedBox(height: 16.0),
                 CustomeTextField(
-                  control: perkilometerCtrl,
-                  validator: errValidateperkilometer(perkilometerCtrl.text),
-                  labelText: 'Per Kilometer Charges',
+                  control: rcnumberCtrl,
+                  validator: errValidatevehiclenumber(vehicleNumberCtrl.text),
+                  labelText: 'Rc Number',
+                  width: MediaQuery.of(context).size.width - 10,
+                ),
+                const SizedBox(height: 16.0),
+                CustomeTextField(
+                  control: insurancenumberCtrl,
+                  validator: errValidatevehiclenumber(vehicleNumberCtrl.text),
+                  labelText: 'Insurance Number',
+                  width: MediaQuery.of(context).size.width - 10,
+                ),
+                const SizedBox(height: 16.0),
+                CustomeTextField(
+                  control: joinchargeCtrl,
+                  validator: errValidatevehiclenumber(vehicleNumberCtrl.text),
+                  labelText: 'Join Charge',
+                  width: MediaQuery.of(context).size.width - 10,
+                ),
+                const SizedBox(height: 16.0),
+                CustomeTextField(
+                  control: servicechargeCtrl,
+                  validator: errValidatevehiclenumber(vehicleNumberCtrl.text),
+                  labelText: 'Service Charge',
                   width: MediaQuery.of(context).size.width - 10,
                 ),
                 const SizedBox(height: 16.0),
