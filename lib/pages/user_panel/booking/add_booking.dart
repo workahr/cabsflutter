@@ -38,6 +38,7 @@ class _add_bookingState extends State<add_booking> {
   TextEditingController dropDateCtrl = TextEditingController();
   TextEditingController dropLocCtrl = TextEditingController();
   TextEditingController kilometerCtrl = TextEditingController();
+  TextEditingController bookingchargeCtrl = TextEditingController();
 
   LatLong pickupLatLng = LatLong(latitude: 0.0, longitude: 0.0);
   LatLong dropLatLng = LatLong(latitude: 0.0, longitude: 0.0);
@@ -537,6 +538,13 @@ class _add_bookingState extends State<add_booking> {
                     control: kilometerCtrl,
                     //  validator: errValidatebrand(kilometerCtrl.text),
                     labelText: 'Kilometer',
+                    width: MediaQuery.of(context).size.width - 10,
+                    readOnly: true,
+                  ),
+                  CustomeTextField(
+                    control: bookingchargeCtrl,
+                    //  validator: errValidatebrand(kilometerCtrl.text),
+                    labelText: 'Booking charge',
                     width: MediaQuery.of(context).size.width - 10,
                     readOnly: true,
                   ),

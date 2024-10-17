@@ -13,6 +13,7 @@ import '../../main_container.dart';
 import '../add_new_booking/add_booking_model.dart';
 import 'booking_getbyid_model.dart';
 import 'booking_update_model.dart';
+import 'calculate_bookingcharge_model.dart';
 
 class BookingApprovel extends StatefulWidget {
   int? bookingId;
@@ -147,49 +148,6 @@ class _BookingApprovelState extends State<BookingApprovel> {
 
   int? customerid;
 
-  // Future updatebookingbydriverid() async {
-  //   await apiService.getBearerToken();
-
-  //   final prefs = await SharedPreferences.getInstance();
-  //   customerid = prefs.getInt('user_id');
-  //   print("customer id" + customerid.toString());
-
-  //   DateTime parsedDate1 = DateFormat('yyyy-MM-dd')
-  //       .parse(bookingsDetails!.fromDatetime.toIso8601String());
-
-  //   DateTime parsedDate2 = DateFormat('yyyy-MM-dd')
-  //       .parse(bookingsDetails!.toDatetime.toIso8601String());
-
-  //   Map<String, dynamic> postData = {
-  //     "id": (bookingsDetails!.id ?? '').toString(),
-  //     "u_driver_id": selectedDriver,
-  //     "u_car_id": selectedCar,
-  //     "u_customer_id": customerid,
-  //     "u_booking_status": "DRIVER_ASSIGNED",
-  //     "u_from_datetime": DateFormat('dd-MM-yyyy').format(parsedDate1),
-  //     "u_to_datetime": DateFormat('dd-MM-yyyy').format(parsedDate2),
-  //     "u_pickup_location": (bookingsDetails!.pickupLocation ?? '').toString(),
-  //     "u_drop_location": (bookingsDetails!.dropLocation ?? '').toString(),
-  //   };
-
-  //   var result = await apiService.updatebookingbydriverid(postData);
-  //   BookingAddModel response = bookingAddModelFromJson(result);
-
-  //   if (response.status.toString() == 'SUCCESS') {
-  //     showInSnackBar(context, response.message.toString());
-  //     // Navigator.pop(context, {'add': true});
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //         builder: (context) => MainContainerAdmin(),
-  //       ),
-  //     );
-  //   } else {
-  //     print(response.message.toString());
-  //     showInSnackBar(context, response.message.toString());
-  //   }
-  // }
-
   Future updatebookingbydriverid() async {
     await apiService.getBearerToken();
     final prefs = await SharedPreferences.getInstance();
@@ -201,11 +159,12 @@ class _BookingApprovelState extends State<BookingApprovel> {
       "u_driver_id": selectedDriver,
       "u_car_id": selectedCar,
       "u_customer_id": customerid,
-      "u_booking_status": "New",
+      "u_booking_status": "DRIVER ASSIGNED",
       "u_from_datetime": (bookingsDetails!.fromDatetime.toIso8601String()),
       "u_to_datetime": (bookingsDetails!.toDatetime.toIso8601String()),
       "u_pickup_location": (bookingsDetails!.pickupLocation ?? '').toString(),
       "u_drop_location": (bookingsDetails!.dropLocation ?? '').toString(),
+      "u_booking_charges": calculatebookingcharge,
     };
     print("updateexpenses $postData");
     var result = await apiService.updatebookingbydriverid(postData);
@@ -223,6 +182,37 @@ class _BookingApprovelState extends State<BookingApprovel> {
     } else {
       print(response.message.toString());
       showInSnackBar(context, response.message.toString());
+    }
+  }
+
+  CalculatebookingchargeModel? calculatechargeDetails;
+  int calculatebookingcharge = 0;
+
+  Future<void> getboookingchargeBykmdate() async {
+    try {
+      await apiService.getBearerToken();
+      var result = await apiService.getboookingchargeBykmdate(
+          20, Fromdate, Todate, selectedCar);
+
+      if (result != null) {
+        CalculatebookingchargeModel response =
+            calculatebookingchargeModelFromJson(result);
+        print(response);
+        if (response.status.toString() == 'SUCCESS') {
+          setState(() {
+            calculatechargeDetails = response;
+            print(calculatechargeDetails!.calculatedValue);
+            calculatebookingcharge = calculatechargeDetails!.calculatedValue;
+          });
+        } else {
+          showInSnackBar(context, "Data not found");
+        }
+      } else {
+        showInSnackBar(context, "Failed to get results from API");
+      }
+    } catch (error) {
+      print('Error fetching kilometers: $error');
+      showInSnackBar(context, "An error occurred while fetching distance");
     }
   }
 
@@ -624,6 +614,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                           setState(() {
                                             selectedCar = value!;
                                             print("selectedCar  :$selectedCar");
+                                            getboookingchargeBykmdate();
                                           });
                                         },
                                         activeColor: Color(0xFF0A3068),

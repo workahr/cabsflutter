@@ -34,6 +34,7 @@ class _userMyBookingsState extends State<UserMyBookings> {
   List<BookingList>? bookingListtAll;
 
   List<BookingList>? upcomingBookings;
+  List<BookingList>? confirmBookings;
   List<BookingList>? completedBookings;
 
   Future getbookingbycustomer() async {
@@ -47,7 +48,13 @@ class _userMyBookingsState extends State<UserMyBookings> {
         upcomingBookings = bookingList!
             .where((booking) =>
                 booking.bookingStatus.trim().toUpperCase() != 'COMPLETED' &&
-                booking.bookingStatus.trim().toUpperCase() != 'CANCELLED')
+                booking.bookingStatus.trim().toUpperCase() != 'CANCELLED' &&
+                booking.bookingStatus.trim().toUpperCase() != 'DRIVER ASSIGNED')
+            .toList();
+
+        confirmBookings = bookingList!
+            .where((booking) =>
+                booking.bookingStatus.trim().toUpperCase() == 'DRIVER ASSIGNED')
             .toList();
 
         completedBookings = bookingList!
@@ -107,7 +114,7 @@ class _userMyBookingsState extends State<UserMyBookings> {
           automaticallyImplyLeading: false,
         ),
         body: DefaultTabController(
-            length: 2,
+            length: 3,
             child: Column(children: [
               Container(
                   child: TabBar(
@@ -115,7 +122,8 @@ class _userMyBookingsState extends State<UserMyBookings> {
                 labelColor: Colors.black,
                 unselectedLabelColor: Colors.black26,
                 tabs: [
-                  Tab(text: "Upcoming"),
+                  Tab(text: "New Booking"),
+                  Tab(text: "Confirmed"),
                   Tab(text: "Completed"),
                 ],
               )),
@@ -695,6 +703,491 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                               ))
                                   ]))
                     ])),
+                SingleChildScrollView(
+                    child: Column(children: [
+                  isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Column(children: [
+                            if (confirmBookings != null)
+                              ...confirmBookings!.map((BookingList e) =>
+                                  Container(
+                                    padding: EdgeInsets.all(10.0),
+                                    margin: EdgeInsets.symmetric(vertical: 5.0),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.light,
+                                      borderRadius: BorderRadius.circular(7.0),
+                                      border: Border.all(
+                                        color: AppColors.lightGrey,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            e.imageUrl != null
+                                                ? ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Image.network(
+                                                      AppConstants.imgBaseUrl +
+                                                          e.imageUrl!,
+                                                      width: double.infinity,
+                                                      fit: BoxFit.contain,
+                                                      height: 60.0,
+                                                      // height: 100.0,
+                                                      errorBuilder:
+                                                          (BuildContext context,
+                                                              Object exception,
+                                                              StackTrace?
+                                                                  stackTrace) {
+                                                        return Image.asset(
+                                                            AppAssets.logo,
+                                                            width: 50.0,
+                                                            height: 50.0,
+                                                            fit: BoxFit.cover);
+                                                      },
+                                                    ))
+                                                : Image.asset(AppAssets.logo,
+                                                    width: 50.0,
+                                                    height: 50.0,
+                                                    fit: BoxFit.cover),
+                                            SizedBox(width: 10),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    e.brand.toString() == "null"
+                                                        ? ''
+                                                        : e.brand.toString(),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16)),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                    e.modal.toString() == "null"
+                                                        ? ''
+                                                        : e.modal.toString(),
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.grey[600])),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                    e.vehicleNumber
+                                                                .toString() ==
+                                                            "null"
+                                                        ? ''
+                                                        : e.vehicleNumber
+                                                            // e.vehicleNumber
+                                                            .toString(),
+                                                    style: TextStyle(
+                                                        color:
+                                                            Colors.grey[600])),
+                                              ],
+                                            ),
+                                            // Spacer(),
+                                            // Text(status,
+                                            //     style: TextStyle(
+                                            //         color: Color(0xFF06234C), fontWeight: FontWeight.bold)),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: Colors.grey,
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('From: '),
+                                              Icon(Icons.compare_arrows),
+                                              Text('To: '),
+                                            ]),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Flexible(
+                                              child: Text(
+                                                e.pickupLocation,
+                                                style: TextStyle(
+                                                  color: Color(0xFF06234C),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                softWrap:
+                                                    true, // Enable soft wrapping
+                                                maxLines: 4,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                                width:
+                                                    10), // Optional: Add spacing between the two texts
+                                            Flexible(
+                                              child: Text(
+                                                e.dropLocation,
+                                                style: TextStyle(
+                                                  color: Color(0xFF06234C),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                softWrap:
+                                                    true, // Enable soft wrapping
+                                                maxLines: 4,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        // Row(
+                                        //     mainAxisAlignment:
+                                        //         MainAxisAlignment
+                                        //             .spaceBetween,
+                                        //     children: [
+                                        //       Text(
+                                        //         e.pickupLocation,
+                                        //         style: TextStyle(
+                                        //             color: Color(
+                                        //                 0xFF06234C),
+                                        //             fontWeight:
+                                        //                 FontWeight
+                                        //                     .bold),
+                                        //       ),
+                                        //       // SizedBox(
+                                        //       //   width: 150,
+                                        //       // ),
+                                        //       Text(
+                                        //         e.dropLocation,
+                                        //         style: TextStyle(
+                                        //             color: Color(
+                                        //                 0xFF06234C),
+                                        //             fontWeight:
+                                        //                 FontWeight
+                                        //                     .bold),
+                                        //       ),
+                                        //     ]),
+                                        Divider(
+                                          color: Colors.grey,
+                                        ),
+                                        Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(children: [
+                                                Text('Price'),
+                                                Text(
+                                                  e.bookingCharges.toString() ==
+                                                          "null"
+                                                      ? ''
+                                                      : e.bookingCharges
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      color: Color(0xFF06234C),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ]),
+                                              Column(children: [
+                                                Text('From Date'),
+                                                Text(
+                                                  formattedDate = DateFormat(
+                                                          'dd-MM-yyyy')
+                                                      .format(e.fromDatetime),
+                                                  // e.createdDate
+                                                  // .toString(),
+                                                  style: TextStyle(
+                                                      color: Color(0xFF06234C),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ]),
+                                              Column(children: [
+                                                Text('To Date'),
+                                                Text(
+                                                  formattedDate =
+                                                      DateFormat('dd-MM-yyyy')
+                                                          .format(e.toDatetime),
+                                                  // e.createdDate
+                                                  // .toString(),
+                                                  style: TextStyle(
+                                                      color: Color(0xFF06234C),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ]),
+                                              Column(children: [
+                                                Text('Vehicle No.'),
+                                                Text(
+                                                  e.vehicleNumber.toString() ==
+                                                          "null"
+                                                      ? ''
+                                                      : e.vehicleNumber
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      color: Color(0xFF06234C),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ]),
+                                            ]),
+                                        // Row(
+                                        //     mainAxisAlignment:
+                                        //         MainAxisAlignment
+                                        //             .spaceBetween,
+                                        //     children: [
+                                        //       Text(
+                                        //         e.bookingCharges
+                                        //                     .toString() ==
+                                        //                 "null"
+                                        //             ? ''
+                                        //             : e.bookingCharges,
+                                        //         style: TextStyle(
+                                        //             color: Color(
+                                        //                 0xFF06234C),
+                                        //             fontWeight:
+                                        //                 FontWeight
+                                        //                     .bold),
+                                        //       ),
+                                        //       Text(
+                                        //         formattedDate = DateFormat(
+                                        //                 'dd-MM-yyyy')
+                                        //             .format(e
+                                        //                 .fromDatetime),
+                                        //         // e.createdDate
+                                        //         // .toString(),
+                                        //         style: TextStyle(
+                                        //             color: Color(
+                                        //                 0xFF06234C),
+                                        //             fontWeight:
+                                        //                 FontWeight
+                                        //                     .bold),
+                                        //       ),
+                                        //       Text(
+                                        //         formattedDate = DateFormat(
+                                        //                 'dd-MM-yyyy')
+                                        //             .format(e
+                                        //                 .toDatetime),
+                                        //         // e.createdDate
+                                        //         // .toString(),
+                                        //         style: TextStyle(
+                                        //             color: Color(
+                                        //                 0xFF06234C),
+                                        //             fontWeight:
+                                        //                 FontWeight
+                                        //                     .bold),
+                                        //       ),
+                                        //       Text(
+                                        //         e.vehicleNumber
+                                        //                     .toString() ==
+                                        //                 "null"
+                                        //             ? ''
+                                        //             : e.vehicleNumber
+                                        //                 .toString(),
+                                        //         style: TextStyle(
+                                        //             color: Color(
+                                        //                 0xFF06234C),
+                                        //             fontWeight:
+                                        //                 FontWeight
+                                        //                     .bold),
+                                        //       ),
+                                        //     ]),
+                                        SizedBox(height: 20),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            e.id;
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return StatefulBuilder(
+                                                  builder: (context, setState) {
+                                                    return AlertDialog(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    10.0)),
+                                                      ),
+                                                      content:
+                                                          SingleChildScrollView(
+                                                        child: Container(
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          padding:
+                                                              EdgeInsets.all(2),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(16.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                SizedBox(
+                                                                    height: 16),
+                                                                Text(
+                                                                  "Please Select the Reason for Cancellation",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16),
+                                                                ),
+                                                                // SizedBox(height: 16),
+
+                                                                // // Radio buttons for cancellation reasons
+                                                                // RadioListTile<String>(
+                                                                //   title: const Text('Change Plan'),
+                                                                //   value: 'Change Plan',
+                                                                //   groupValue: _selectedReason,
+                                                                //   onChanged: (value) {
+                                                                //     setState(() {
+                                                                //       _selectedReason = value;
+                                                                //       print(value); // Update selection
+                                                                //     });
+                                                                //   },
+                                                                // ),
+                                                                // RadioListTile<String>(
+                                                                //   title: const Text('Weather condition'),
+                                                                //   value: 'Weather condition',
+                                                                //   groupValue: _selectedReason,
+                                                                //   onChanged: (value) {
+                                                                //     setState(() {
+                                                                //       _selectedReason = value;
+                                                                //       print(value);
+                                                                //     });
+                                                                //   },
+                                                                // ),
+                                                                // RadioListTile<String>(
+                                                                //   title: const Text('Schedule conflict'),
+                                                                //   value: 'Schedule conflict',
+                                                                //   groupValue: _selectedReason,
+                                                                //   onChanged: (value) {
+                                                                //     setState(() {
+                                                                //       _selectedReason = value;
+                                                                //       print(value);
+                                                                //     });
+                                                                //   },
+                                                                // ),
+                                                                // RadioListTile<String>(
+                                                                //   title: const Text('Booking Error'),
+                                                                //   value: 'Booking Error',
+                                                                //   groupValue: _selectedReason,
+                                                                //   onChanged: (value) {
+                                                                //     setState(() {
+                                                                //       _selectedReason = value;
+                                                                //       print(value);
+                                                                //     });
+                                                                //   },
+                                                                // ),
+                                                                // RadioListTile<String>(
+                                                                //   title: const Text('Other'),
+                                                                //   value: 'Other',
+                                                                //   groupValue: _selectedReason,
+                                                                //   onChanged: (value) {
+                                                                //     setState(() {
+                                                                //       _selectedReason = value;
+                                                                //     });
+                                                                //   },
+                                                                // ),
+                                                                SizedBox(
+                                                                    height: 16),
+
+                                                                // Description text field
+                                                                CustomeTextField(
+                                                                  control:
+                                                                      _descriptionController,
+                                                                  lines: 4,
+                                                                  hint:
+                                                                      "Description",
+                                                                  // decoration: InputDecoration(
+                                                                  //   hintText: "Description",
+                                                                  //   border: OutlineInputBorder(
+                                                                  //     borderRadius: BorderRadius.circular(12),
+                                                                  //     borderSide: BorderSide(color: Colors.grey),
+                                                                  //   ),
+                                                                  // ),
+                                                                ),
+                                                                SizedBox(
+                                                                    height: 30),
+
+                                                                // Submit button
+                                                                SizedBox(
+                                                                  width: double
+                                                                      .infinity,
+                                                                  height: 50,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .blue[900], // Color for button
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(8),
+                                                                      ),
+                                                                    ),
+                                                                    onPressed:
+                                                                        () {
+                                                                      print(
+                                                                          e.id);
+
+                                                                      updatecancelbooking(
+                                                                          e.id);
+                                                                    },
+                                                                    child: Text(
+                                                                      'Submit',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              16),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Text('Cancel Booking'),
+                                          style: ElevatedButton.styleFrom(
+                                            textStyle:
+                                                TextStyle(color: Colors.white),
+                                            backgroundColor: Color(0xFF06234C),
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 16),
+                                            minimumSize:
+                                                Size(double.infinity, 50),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ))
+                          ]))
+                ])),
                 SingleChildScrollView(
                     child: Column(
                         // crossAxisAlignment: CrossAxisAlignment.start,

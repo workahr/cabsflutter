@@ -604,6 +604,26 @@ class CabsApiService {
     }
   }
 
+  // calculate bookinfg charges
+  Future getboookingchargeBykmdate(
+      totalkm, Fromdate, Todate, selectedCar) async {
+    try {
+      final url = Uri.parse(
+          '${liveApiPath}v1/booking/calculate-booking_charge?total_distance=$totalkm&from_datetime=$Fromdate&to_datetime=$Todate&car_id=$selectedCar');
+      final response = await client.get(
+        url,
+        headers: headerData,
+      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        return response;
+      }
+    } catch (e) {
+      return e;
+    }
+  }
+
   // thirdparty details Add
 
   Future saveThirdParty(postData) async {

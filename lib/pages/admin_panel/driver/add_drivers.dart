@@ -5,11 +5,13 @@ import 'package:intl/intl.dart';
 import '../../../constants/app_colors.dart';
 import '../../../services/cabs_api_service.dart';
 import '../../../services/comFuncService.dart';
+import '../../../widgets/custom_autocomplete_widget.dart';
 import '../../../widgets/custom_text_field.dart';
 import 'add_drivers_model.dart';
 import 'driver_edit_model.dart';
 import 'driver_list_page.dart';
 import 'driver_update_model.dart';
+import 'vehicle_id_model.dart';
 
 class AddDrivers extends StatefulWidget {
   int? driverId;
@@ -35,6 +37,14 @@ class _AddDriverState extends State<AddDrivers> {
   TextEditingController emailIdController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
+  var selectedRoleArr;
+  String? selectedrole;
+  int? selectedRoleId;
+  List RoleList = [
+    {"name": "Driver", "value": 6},
+    {"name": "Acting Driver", "value": 12},
+  ];
+
   Future saveDriver() async {
     if (driverForm.currentState!.validate()) {
       DateTime parsedDate =
@@ -46,12 +56,13 @@ class _AddDriverState extends State<AddDrivers> {
         "username": userNameController.text,
         "password": passwordController.text,
         "fullname": fullnameController.text,
-        "vehicle_id": vehicleIdController.text,
+        "vehicle_id": selectedcarnumberId,
         "license_number": licenseNumberController.text,
         "license_expiry": formattedDate,
         "mobile": mobileNumberController.text,
         "email": emailIdController.text,
         "address": addressController.text,
+        // "user_roleId": selectedRoleId,
       };
       print('postData $postData');
 
@@ -162,14 +173,68 @@ class _AddDriverState extends State<AddDrivers> {
     };
   }
 
+// drop down funtion for edit
+  selectedCarNumberArray() {
+    List result;
+    if (carnumberList!.isNotEmpty) {
+      result = carnumberList!
+          .where((element) => element.id == selectedcarnumberId)
+          .toList();
+      print("test1");
+      if (result.isNotEmpty) {
+        setState(() {
+          print("result a 2 drop:$result");
+          selectedcarnumberedit = result[0];
+        });
+      } else {
+        setState(() {
+          selectedcarnumberedit = null;
+        });
+      }
+    } else {
+      setState(() {
+        print('selectedVisitPurposeArr empty');
+        selectedcarnumberedit = null;
+      });
+    }
+  }
+
+  var selectedcarnumberedit;
+  List<VehicleDetails>? carnumberList = [];
+  List<VehicleDetails>? carnumberListAll = [];
+
+  var selectedcarnumberArr;
+  String? selectedcarnumber;
+  int? selectedcarnumberId;
+
+  Future getcarList() async {
+    await apiService.getBearerToken();
+    var result = await apiService.getcarList();
+    var response = carNumberModelFromJson(result);
+    if (response.status.toString() == 'SUCCESS') {
+      setState(() {
+        carnumberList = response.list;
+        carnumberListAll = carnumberList;
+        if (widget.driverId != null) {
+          print("test");
+          selectedCarNumberArray();
+        }
+      });
+    } else {
+      setState(() {
+        carnumberList = [];
+        carnumberListAll = [];
+      });
+      showInSnackBar(context, response.message.toString());
+    }
+    setState(() {});
+  }
+
   Future updatedriver() async {
     await apiService.getBearerToken();
     if (driverForm.currentState!.validate()) {
       int userId =
           int.parse(userIdController.text.toString()); // Convert to int
-
-      int vehicleId =
-          int.parse(vehicleIdController.text.toString()); // Convert to int
 
       DateTime parsedDate =
           DateFormat('dd-MM-yyyy').parse(licenseExpiryDateController.text);
@@ -185,7 +250,7 @@ class _AddDriverState extends State<AddDrivers> {
         "u_mobile": mobileNumberController.text,
         "u_email": emailIdController.text,
         "u_user_id": userId,
-        "u_vehicle_id": vehicleId,
+        "u_vehicle_id": selectedcarnumberId,
         "u_license_number": licenseNumberController.text,
         "u_license_expiry": formattedDate,
         "u_address": addressController.text
@@ -216,6 +281,7 @@ class _AddDriverState extends State<AddDrivers> {
   void initState() {
     super.initState();
     refresh();
+    getcarList();
     print('Driver id :' + widget.driverId.toString());
   }
 
@@ -238,7 +304,10 @@ class _AddDriverState extends State<AddDrivers> {
         userIdController.text = (driverDetails!.userId ?? '').toString();
         fullnameController.text = (driverDetails!.fullname ?? '').toString();
         passwordController.text = (driverDetails!.password ?? '').toString();
-        vehicleIdController.text = (driverDetails!.vehicleId ?? '').toString();
+        selectedcarnumberId = driverDetails!.vehicleId;
+        // selectedcarnumberArr = carnumberList!.firstWhere(
+        //   (element) => element.id == selectedcarnumberId,
+        // );
         licenseNumberController.text = driverDetails!.licenseNumber ?? '';
         userNameController.text = driverDetails!.username;
 
@@ -298,12 +367,42 @@ class _AddDriverState extends State<AddDrivers> {
                     width: MediaQuery.of(context).size.width - 10,
                   ),
                   SizedBox(height: 16),
-                  CustomeTextField(
-                    control: vehicleIdController,
-                    validator: errValidatevehicleId(fullnameController.text),
-                    labelText: 'Vehicle Id',
-                    width: MediaQuery.of(context).size.width - 10,
+                  // CustomeTextField(
+                  //   control: vehicleIdController,
+                  //   validator: errValidatevehicleId(fullnameController.text),
+                  //   labelText: 'Vehicle Id',
+                  //   width: MediaQuery.of(context).size.width - 10,
+                  // ),
+
+                  // CustomAutoCompleteWidget(
+                  //   width: MediaQuery.of(context).size.width / 1.1,
+                  //   selectedItem: selectedcarnumberArr,
+                  //   labelText: 'Vehicle Number',
+                  //   labelField: (item) => item.vehicleNumber,
+                  //   onChanged: (value) {
+                  //     selectedcarnumber = value.vehicleNumber;
+                  //     selectedcarnumberId = value.id;
+                  //     print("car id $selectedcarnumber");
+                  //   },
+                  //   valArr: carnumberList,
+                  // ),
+
+                  CustomAutoCompleteWidget(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    selectedItem: selectedcarnumberArr,
+                    labelText: 'Vehicle Number',
+                    labelField: (item) => item.vehicleNumber,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedcarnumber = value.vehicleNumber
+                            .toString(); // Ensure it's a string
+                        selectedcarnumberId = value.id;
+                        print("Selected car number: $selectedcarnumber");
+                      });
+                    },
+                    valArr: carnumberList,
                   ),
+
                   SizedBox(height: 16),
                   CustomeTextField(
                     control: licenseNumberController,
@@ -386,6 +485,21 @@ class _AddDriverState extends State<AddDrivers> {
                     labelText: 'Address',
                     width: MediaQuery.of(context).size.width - 10,
                     lines: 4,
+                  ),
+                  SizedBox(height: 16),
+                  CustomAutoCompleteWidget(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    selectedItem: selectedRoleArr,
+                    labelText: 'Driver Role',
+                    labelField: (item) => item["name"],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedrole = value["name"];
+                        selectedRoleId = value["value"];
+                        print("role id $selectedRoleId");
+                      });
+                    },
+                    valArr: RoleList,
                   ),
                   SizedBox(height: 32),
                   ElevatedButton(

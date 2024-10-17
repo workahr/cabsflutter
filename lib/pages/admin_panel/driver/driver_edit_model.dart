@@ -50,7 +50,7 @@ class DriverDetails {
   int createdBy;
   DateTime createdDate;
   int? updatedBy;
-  DateTime? updatedDate;
+  String? updatedDate;
   String username;
   String password;
   String fullname;
