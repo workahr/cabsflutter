@@ -32,14 +32,21 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   final GlobalKey<FormState> loginForm = GlobalKey<FormState>();
 
   final otpFocusNode = FocusNode();
+  // @override
+  // void dispose() {
+  //   _timer?.cancel(); // Cancel the timer when the widget is disposed
+  //   for (var controller in _otpControllers) {
+  //     controller.dispose();
+  //   }
+  //   super.dispose();
+  // }
+
   @override
-  void dispose() {
-    _timer?.cancel(); // Cancel the timer when the widget is disposed
-    for (var controller in _otpControllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
+void dispose() {
+  _timer?.cancel(); // Cancel the timer when the widget is disposed
+  otpCtrl.dispose(); // Dispose the controller as well
+  super.dispose();
+}
 
   @override
   void initState() {
@@ -56,24 +63,47 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   bool _isResendButtonEnabled = false;
 
   // Function to start the timer
+  // void startTimer() {
+  //   const oneSec = Duration(seconds: 1);
+  //   _timer = Timer.periodic(
+  //     oneSec,
+  //     (Timer timer) {
+  //       if (_start == 0) {
+  //         setState(() {
+  //           timer.cancel();
+  //           _isResendButtonEnabled = true;
+  //         });
+  //       } else {
+  //         setState(() {
+  //           _start--;
+  //         });
+  //       }
+  //     },
+  //   );
+  // }
+
   void startTimer() {
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (_start == 0) {
+  const oneSec = Duration(seconds: 1);
+  _timer = Timer.periodic(
+    oneSec,
+    (Timer timer) {
+      if (_start == 0) {
+        if (mounted) {
           setState(() {
             timer.cancel();
             _isResendButtonEnabled = true;
           });
-        } else {
+        }
+      } else {
+        if (mounted) {
           setState(() {
             _start--;
           });
         }
-      },
-    );
-  }
+      }
+    },
+  );
+}
 
   // Function to resend the OTP
   void resendOTP() {

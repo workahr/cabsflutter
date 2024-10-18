@@ -43,9 +43,9 @@ class BookingsDetails {
   int id;
   String driverId;
   String carId;
-  String customerId;
+  String? customerId;
   String? bookingOtp;
-  String bookingStatus;
+  String? bookingStatus;
   DateTime fromDatetime;
   DateTime toDatetime;
   String pickupLocation;
@@ -63,9 +63,9 @@ class BookingsDetails {
     required this.id,
     required this.driverId,
     required this.carId,
-    required this.customerId,
+     this.customerId,
     this.bookingOtp,
-    required this.bookingStatus,
+     this.bookingStatus,
     required this.fromDatetime,
     required this.toDatetime,
     required this.pickupLocation,

@@ -156,7 +156,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
 
     Map<String, dynamic> postData = {
       "id": (bookingsDetails!.id ?? '').toString(),
-      "u_driver_id": selectedDriver,
+      "u_driver_id": int.parse(selectedDriver),
       "u_car_id": selectedCar,
       "u_customer_id": customerid,
       "u_booking_status": "DRIVER ASSIGNED",
@@ -322,7 +322,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      BookingDate,
+                                      BookingDate.toString(),
                                       // '15-Sept-2024',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -393,7 +393,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                         style: TextStyle(fontSize: 15),
                                       ),
                                       Text(
-                                        Fromdate,
+                                        Fromdate.toString(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF06234C),
@@ -412,7 +412,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                           textAlign: TextAlign.end,
                                         ),
                                         Text(
-                                          Todate,
+                                          Todate.toString(),
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFF06234C),
@@ -436,7 +436,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                       Text('From',
                                           style: TextStyle(fontSize: 15)),
                                       Text(
-                                        Fromlocation,
+                                        Fromlocation.toString(),
                                         //'Ramanathapuram',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -455,7 +455,8 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                           children: [
                                         Text('To',
                                             style: TextStyle(fontSize: 15)),
-                                        Text(Tolocation,
+                                        Text(
+                                          Tolocation.toString(),
                                             //'Kaniyakumari',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -623,9 +624,11 @@ class _BookingApprovelState extends State<BookingApprovel> {
                                   ),
                                 ))
                         ]),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //SizedBox(height: 20),
+                  
+                ])))
+                ,bottomNavigationBar: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                           height: 50,
@@ -654,6 +657,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
                               ),
                             ),
                           )),
+                          SizedBox(width: 15.0,),
                       SizedBox(
                           height: 50,
                           width: 130,
@@ -674,8 +678,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
                             ),
                           )),
                     ],
-                  ),
-                ]))));
+                  ),);
   }
 }
 
