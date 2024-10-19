@@ -48,12 +48,13 @@ class _Third_party_detailsState extends State<Third_party_details> {
       if (response.status.toString() == 'SUCCESS') {
         showInSnackBar(context, response.message.toString());
         // Navigator.pop(context, {'type': 1});
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Third_party_List(),
-          ),
-        );
+        Navigator.pop(context, {'add': true});
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => Third_party_List(),
+        //   ),
+        // );
       } else {
         print(response.message.toString());
         showInSnackBar(context, response.message.toString());
@@ -115,12 +116,13 @@ class _Third_party_detailsState extends State<Third_party_details> {
 
       if (response.status.toString() == 'SUCCESS') {
         showInSnackBar(context, response.message.toString());
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Third_party_List(),
-          ),
-        );
+          Navigator.pop(context, {'update': true});
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => Third_party_List(),
+        //   ),
+        // );
       } else {
         print(response.message.toString());
         showInSnackBar(context, response.message.toString());

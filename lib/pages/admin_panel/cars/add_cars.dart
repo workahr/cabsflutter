@@ -630,6 +630,10 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   onChanged: (value) {
                     selectedyes = value["name"];
                     print(selectedyes);
+                    // if (selectedyes == 'No') {
+                    //   selectedThirdpartyId == 0;
+                    //   selectedThirdParty == '';
+                    // }
                   },
                   valArr: referList,
                 ),

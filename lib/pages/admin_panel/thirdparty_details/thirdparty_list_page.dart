@@ -91,6 +91,16 @@ class _ThirdpartyListState extends State<Third_party_List> {
     }
   }
 
+  addThirdparty() {
+    Navigator.push(context,
+            MaterialPageRoute(builder: (context) => Third_party_details()))
+        .then((value) {
+      if (value != null && value['add']) {
+        getthirdpartyList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

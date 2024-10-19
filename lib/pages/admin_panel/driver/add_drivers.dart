@@ -38,6 +38,7 @@ class _AddDriverState extends State<AddDrivers> {
   TextEditingController addressController = TextEditingController();
 
   var selectedRoleArr;
+  var selectedroleedit;
   String? selectedrole;
   int? selectedRoleId;
   List RoleList = [
@@ -62,7 +63,7 @@ class _AddDriverState extends State<AddDrivers> {
         "mobile": mobileNumberController.text,
         "email": emailIdController.text,
         "address": addressController.text,
-        // "user_roleId": selectedRoleId,
+        "role": selectedRoleId,
       };
       print('postData $postData');
 
@@ -75,12 +76,13 @@ class _AddDriverState extends State<AddDrivers> {
       if (response.status.toString() == 'SUCCESS') {
         showInSnackBar(context, response.message.toString());
         // Navigator.pop(context, {'type': 1});
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DriverList(),
-          ),
-        );
+        Navigator.pop(context, {'add': true});
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => DriverList(),
+        //   ),
+        // );
       } else {
         print(response.message.toString());
         showInSnackBar(context, response.message.toString());
@@ -173,7 +175,35 @@ class _AddDriverState extends State<AddDrivers> {
     };
   }
 
-// drop down funtion for edit
+  // Role dropdown funtion for edit
+
+  selectedRoleListArray() {
+    List result;
+    if (RoleList!.isNotEmpty) {
+      result = RoleList!
+          .where((element) => element["value"] == selectedRoleId)
+          .toList();
+      print("test1");
+      if (result.isNotEmpty) {
+        setState(() {
+          print("result a 2 drop:$result");
+          selectedRoleArr = result[0];
+        });
+      } else {
+        setState(() {
+          selectedRoleArr = null;
+        });
+      }
+    } else {
+      setState(() {
+        print('selectedRoleArr empty');
+        selectedRoleArr = null;
+      });
+    }
+  }
+
+//Car Number dropdown funtion for edit
+
   selectedCarNumberArray() {
     List result;
     if (carnumberList!.isNotEmpty) {
@@ -218,6 +248,7 @@ class _AddDriverState extends State<AddDrivers> {
         if (widget.driverId != null) {
           print("test");
           selectedCarNumberArray();
+          selectedRoleListArray();
         }
       });
     } else {
@@ -253,7 +284,8 @@ class _AddDriverState extends State<AddDrivers> {
         "u_vehicle_id": selectedcarnumberId,
         "u_license_number": licenseNumberController.text,
         "u_license_expiry": formattedDate,
-        "u_address": addressController.text
+        "u_address": addressController.text,
+        "u_role": selectedRoleId,
       };
       print("driverupdate $postData");
       var result = await apiService.updatedriver(postData);
@@ -262,12 +294,13 @@ class _AddDriverState extends State<AddDrivers> {
 
       if (response.status.toString() == 'SUCCESS') {
         showInSnackBar(context, response.message.toString());
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DriverList(),
-          ),
-        );
+        Navigator.pop(context, {'update': true});
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => DriverList(),
+        //   ),
+        // );
       } else {
         print(response.message.toString());
         showInSnackBar(context, response.message.toString());
@@ -305,6 +338,8 @@ class _AddDriverState extends State<AddDrivers> {
         fullnameController.text = (driverDetails!.fullname ?? '').toString();
         passwordController.text = (driverDetails!.password ?? '').toString();
         selectedcarnumberId = driverDetails!.vehicleId;
+        selectedRoleId = driverDetails!.role;
+        print("role : $selectedRoleId");
         // selectedcarnumberArr = carnumberList!.firstWhere(
         //   (element) => element.id == selectedcarnumberId,
         // );
@@ -314,7 +349,6 @@ class _AddDriverState extends State<AddDrivers> {
         DateTime parsedDate = DateFormat('yyyy-MM-dd')
             .parse(driverDetails!.licenseExpiry.toIso8601String());
 
-        // Format the date to yyyy-MM-dd
         String formattedDate = DateFormat('dd-MM-yyyy').format(parsedDate);
 
         licenseExpiryDateController.text = formattedDate;
@@ -367,12 +401,6 @@ class _AddDriverState extends State<AddDrivers> {
                     width: MediaQuery.of(context).size.width - 10,
                   ),
                   SizedBox(height: 16),
-                  // CustomeTextField(
-                  //   control: vehicleIdController,
-                  //   validator: errValidatevehicleId(fullnameController.text),
-                  //   labelText: 'Vehicle Id',
-                  //   width: MediaQuery.of(context).size.width - 10,
-                  // ),
 
                   // CustomAutoCompleteWidget(
                   //   width: MediaQuery.of(context).size.width / 1.1,
@@ -389,7 +417,8 @@ class _AddDriverState extends State<AddDrivers> {
 
                   CustomAutoCompleteWidget(
                     width: MediaQuery.of(context).size.width / 1.1,
-                    selectedItem: selectedcarnumberArr,
+                    //  selectedItem: selectedcarnumberArr,
+                    selectedItem: selectedcarnumberedit,
                     labelText: 'Vehicle Number',
                     labelField: (item) => item.vehicleNumber,
                     onChanged: (value) {
@@ -490,6 +519,7 @@ class _AddDriverState extends State<AddDrivers> {
                   CustomAutoCompleteWidget(
                     width: MediaQuery.of(context).size.width / 1.1,
                     selectedItem: selectedRoleArr,
+                    //selectedItem: selectedroleedit,
                     labelText: 'Driver Role',
                     labelField: (item) => item["name"],
                     onChanged: (value) {

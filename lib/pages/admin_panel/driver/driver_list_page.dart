@@ -90,6 +90,27 @@ class _DriverListState extends State<DriverList> {
     }
   }
 
+  // addDriver() {
+  //   Navigator.push(
+  //           context, MaterialPageRoute(builder: (context) => AddDrivers()))
+  //       .then((value) {
+  //     if (value != null) {
+  //       print("vale $value");
+  //       getdriverList();
+  //     }
+  //   });
+  // }
+
+  addDriver() {
+    Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AddDrivers()))
+        .then((value) {
+      if (value != null && value['add']) {
+        getdriverList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
