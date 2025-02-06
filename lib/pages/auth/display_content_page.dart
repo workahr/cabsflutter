@@ -151,8 +151,7 @@ class _DisplayContentPageState extends State<DisplayContentPage> {
                         ),
                       ),
                       child: Text(
-                        //  _currentPage == 2 ? 'Next' :
-                        'Next',
+                        _currentPage == 2 ? 'Done' : 'Next',
                         style: const TextStyle(
                             fontSize: 16.0, color: Colors.white),
                       ),

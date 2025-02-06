@@ -1,6 +1,7 @@
 import 'package:cabs/constants/app_assets.dart';
 import 'package:cabs/pages/admin_panel/cars/car_list_page.dart';
 import 'package:cabs/pages/main_container.dart';
+import 'package:cabs/widgets/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,12 +27,23 @@ class _Admin_SideMenuState extends State<Admin_SideMenu> {
 
   Future<void> _handleLogout() async {
     // Clear SharedPreferences
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
 
-    // Navigate to Login Page
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/login', ModalRoute.withName('/login'));
+    bool shouldLogout = await customAlertDialog(
+      context: context,
+      alertTitle: 'Logout the App',
+      alertContent: 'Do you want to logout?',
+      yesButtonTitle: 'Logout',
+      noButtonTitle: 'No',
+    );
+    // Clear SharedPreferences
+    if (shouldLogout) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+
+      // Navigate to Login Page
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/login', ModalRoute.withName('/login'));
+    }
   }
 
   @override

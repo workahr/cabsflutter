@@ -1,4 +1,5 @@
 import 'package:cabs/constants/app_assets.dart';
+import 'package:cabs/widgets/custom_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -86,13 +87,22 @@ class _MainContainerState extends State<MainContainer>
   }
 
   Future<void> _handleLogout() async {
+    bool shouldLogout = await customAlertDialog(
+      context: context,
+      alertTitle: 'Logout the App',
+      alertContent: 'Do you want to logout?',
+      yesButtonTitle: 'Logout',
+      noButtonTitle: 'No',
+    );
     // Clear SharedPreferences
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
 
-    // Navigate to Login Page
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/login', ModalRoute.withName('/login'));
+    if (shouldLogout) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      // Navigate to Login Page
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/login', ModalRoute.withName('/login'));
+    }
   }
 
   @override
