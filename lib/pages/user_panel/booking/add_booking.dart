@@ -1,5 +1,7 @@
 import 'package:cabs/constants/constants.dart';
+import 'package:cabs/widgets/from_to_date_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -47,6 +49,9 @@ class _add_bookingState extends State<add_booking> {
   String dropLocation = '';
   DateTime selectedDate = DateTime.now();
   int selectedPersons = 1;
+
+  DateTime? fromDate;
+  DateTime? toDate;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -108,53 +113,144 @@ class _add_bookingState extends State<add_booking> {
   int? customerid;
 
   Future saveBooking() async {
+    print("saveBooking() called");
+
+    print("Pickup Location: ${pickupLocCtrl.text}");
+    print("Pickup Location is Empty: ${pickupLocCtrl.text.isEmpty}");
+
     await apiService.getBearerToken();
-    if (bookingForm.currentState!.validate()) {
-      final prefs = await SharedPreferences.getInstance();
-      customerid = prefs.getInt('user_id');
-      print("customer id" + customerid.toString());
-      DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(pickupDateCtrl.text);
-      String formattedDate = DateFormat('yyyy-MM-dd').format(parsedDate);
+    print("Bearer token retrieved");
 
-      DateTime parsedDate1 = DateFormat('dd-MM-yyyy').parse(dropDateCtrl.text);
-      String formattedDate1 = DateFormat('yyyy-MM-dd').format(parsedDate1);
+    bool isValid = bookingForm.currentState!.validate();
+    print("Form Validation Status: $isValid");
+    if (!isValid) {
+      print("Form validation failed. Exiting.");
+      return;
+    }
 
-      Map<String, dynamic> postData = {
-        "driver_id": '0',
-        "car_id": "0",
-        "customer_id": customerid,
-        "booking_status": "new",
-        "from_datetime": formattedDate,
-        "to_datetime": formattedDate1,
-        "pickup_location": pickupLocCtrl.text,
-        "drop_location": dropLocCtrl.text,
-        "total_distance": kilometerCtrl.text,
-      };
+    if (pickupLocCtrl.text.isEmpty && dropLocCtrl.text.isEmpty) {
+      print("Form validation failed. Exiting.");
+      showInSnackBar(
+          context, "Pick-Up And Drop Location Could Not Be Empty ".toString());
 
+      return;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    customerid = prefs.getInt('user_id');
+    print("Customer ID: ${customerid ?? "Not found"}");
+
+    if (fromDate == null || toDate == null) {
+      print("Error: fromDate or toDate is null!");
+      return;
+    }
+
+    String formattedDate = DateFormat('yyyy-MM-dd').format(fromDate!);
+    String formattedDate1 = DateFormat('yyyy-MM-dd').format(toDate!);
+
+    print("Formatted From Date: $formattedDate");
+    print("Formatted To Date: $formattedDate1");
+
+    Map<String, dynamic> postData = {
+      "driver_id": '0',
+      "car_id": "0",
+      "customer_id": customerid,
+      "booking_status": "new",
+      "from_datetime": formattedDate,
+      "to_datetime": formattedDate1,
+      "pickup_location": pickupLocCtrl.text,
+      "drop_location": dropLocCtrl.text,
+      "total_distance": kilometerCtrl.text,
+    };
+
+    try {
+      print("Sending booking request...");
       var result = await apiService.saveBooking(postData);
+      print("API Response: $result");
+
       BookingAddModel response = bookingAddModelFromJson(result);
 
       if (response.status.toString() == 'SUCCESS') {
+        print("Booking successful: ${response.message}");
+
+        if (!context.mounted) return;
         showInSnackBar(context, response.message.toString());
-        // Navigator.pop(context, {'add': true});
+
         pickupLocCtrl.text = '';
         dropLocCtrl.text = '';
         pickupDateCtrl.text = '';
         dropDateCtrl.text = '';
+
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => MainContainer(),
-          ),
+          MaterialPageRoute(builder: (context) => MainContainer()),
         );
       } else {
-        print(response.message.toString());
+        print("Booking failed: ${response.message}");
+        if (!context.mounted) return;
         showInSnackBar(context, response.message.toString());
       }
-    } else {
-      // showInSnackBar(context, "Please fill all fields");
+    } catch (e) {
+      print("Error in saveBooking: $e");
     }
   }
+
+  // Future saveBooking() async {
+  //   print(pickupLocCtrl.text);
+  //   print(pickupLocCtrl.isBlank);
+
+  //   await apiService.getBearerToken();
+  //   if (bookingForm.currentState!.validate()) {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     customerid = prefs.getInt('user_id');
+  //     print("customer id" + customerid.toString());
+  //     print("Isssue");
+  //     print(pickupLocCtrl.text);
+  //     print(pickupLocCtrl.isBlank);
+  //     // DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(pickupDateCtrl.text);
+  //     print(fromDate);
+  //     String formattedDate = DateFormat('yyyy-MM-dd').format(fromDate!);
+
+  //     // DateTime parsedDate1 = DateFormat('dd-MM-yyyy').parse(dropDateCtrl.text);
+  //     print(toDate);
+  //     String formattedDate1 = DateFormat('yyyy-MM-dd').format(toDate!);
+
+  //     Map<String, dynamic> postData = {
+  //       "driver_id": '0',
+  //       "car_id": "0",
+  //       "customer_id": customerid,
+  //       "booking_status": "new",
+  //       "from_datetime": formattedDate,
+  //       "to_datetime": formattedDate1,
+  //       "pickup_location": pickupLocCtrl.text,
+  //       "drop_location": dropLocCtrl.text,
+  //       "total_distance": kilometerCtrl.text,
+  //     };
+
+  //     var result = await apiService.saveBooking(postData);
+  //     BookingAddModel response = bookingAddModelFromJson(result);
+
+  //     if (response.status.toString() == 'SUCCESS') {
+  //       showInSnackBar(context, response.message.toString());
+  //       // Navigator.pop(context, {'add': true});
+  //       pickupLocCtrl.text = '';
+  //       dropLocCtrl.text = '';
+  //       pickupDateCtrl.text = '';
+  //       dropDateCtrl.text = '';
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => MainContainer(),
+  //         ),
+  //       );
+  //     } else {
+  //       print(response.message.toString());
+  //       showInSnackBar(context, response.message.toString());
+  //     }
+  //   } else {
+  //     // showInSnackBar(context, "Please fill all fields");
+  //   }
+  // }
 
   errValidatepickupdate(String? value) {
     return (value) {
@@ -165,10 +261,28 @@ class _add_bookingState extends State<add_booking> {
     };
   }
 
+  errValidatepickuploc(String? value) {
+    return (value) {
+      if (value.isEmpty) {
+        return 'Pick-Up Location is required';
+      }
+      return null;
+    };
+  }
+
   errValidatedropdate(String? value) {
     return (value) {
       if (value.isEmpty) {
         return 'To Date is required';
+      }
+      return null;
+    };
+  }
+
+  errValidatedropLoc(String? value) {
+    return (value) {
+      if (value.isEmpty) {
+        return 'Drop Location is required';
       }
       return null;
     };
@@ -290,6 +404,7 @@ class _add_bookingState extends State<add_booking> {
                   SizedBox(height: 10),
 
                   GooglePlaceAutoCompleteTextField(
+                    // validator: (value) => errValidatepickuploc(value),
                     textEditingController: pickupLocCtrl,
 
                     googleAPIKey: AppConstants.googleMapApiKey,
@@ -358,7 +473,7 @@ class _add_bookingState extends State<add_booking> {
 
                   GooglePlaceAutoCompleteTextField(
                     textEditingController: dropLocCtrl,
-
+                    // validator: (value) => errValidatedropLoc(value),
                     googleAPIKey: AppConstants.googleMapApiKey,
                     boxDecoration: BoxDecoration(),
                     inputDecoration: InputDecoration(
@@ -430,107 +545,115 @@ class _add_bookingState extends State<add_booking> {
                   Row(
                     children: [
                       Expanded(
+                        child: FromAndToDatePickerField(
+                          onDatesSelected: (from, to) {
+                            setState(() {
+                              fromDate = from;
+                              toDate = to;
+                            });
+                          },
+                        ),
                         // Date Field
-                        child: CustomeTextField(
-                            labelText: 'DD/MM/YYYY',
-                            prefixIcon: const Icon(
-                              Icons.date_range,
-                            ),
-                            control: pickupDateCtrl,
-                            width: MediaQuery.of(context).size.width - 10,
-                            readOnly: true, // when true user cannot edit text
-                            validator:
-                                errValidatepickupdate(pickupDateCtrl.text),
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1948),
-                                lastDate: DateTime(2100),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: Theme.of(context)
-                                            .primaryColor, // <-- SEE HERE
-                                        onSurface: Theme.of(context)
-                                            .primaryColor, // <-- SEE HERE
-                                      ),
-                                      textButtonTheme: TextButtonThemeData(
-                                        style: TextButton.styleFrom(
-                                          foregroundColor: AppColors.light,
-                                          backgroundColor: AppColors.primary,
-                                        ),
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
+                        // child: CustomeTextField(
+                        //     labelText: 'DD/MM/YYYY',
+                        //     prefixIcon: const Icon(
+                        //       Icons.date_range,
+                        //     ),
+                        //     control: pickupDateCtrl,
+                        //     width: MediaQuery.of(context).size.width - 10,
+                        //     readOnly: true, // when true user cannot edit text
+                        //     validator:
+                        //         errValidatepickupdate(pickupDateCtrl.text),
+                        //     onTap: () async {
+                        //       DateTime? pickedDate = await showDatePicker(
+                        //         context: context,
+                        //         initialDate: DateTime.now(),
+                        //         firstDate: DateTime(1948),
+                        //         lastDate: DateTime(2100),
+                        //         builder: (context, child) {
+                        //           return Theme(
+                        //             data: Theme.of(context).copyWith(
+                        //               colorScheme: ColorScheme.light(
+                        //                 primary: Theme.of(context)
+                        //                     .primaryColor, // <-- SEE HERE
+                        //                 onSurface: Theme.of(context)
+                        //                     .primaryColor, // <-- SEE HERE
+                        //               ),
+                        //               textButtonTheme: TextButtonThemeData(
+                        //                 style: TextButton.styleFrom(
+                        //                   foregroundColor: AppColors.light,
+                        //                   backgroundColor: AppColors.primary,
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //             child: child!,
+                        //           );
+                        //         },
+                        //       );
 
-                              if (pickedDate != null) {
-                                String formattedDate =
-                                    DateFormat('dd-MM-yyyy').format(pickedDate);
+                        //       if (pickedDate != null) {
+                        //         String formattedDate =
+                        //             DateFormat('dd-MM-yyyy').format(pickedDate);
 
-                                setState(() {
-                                  pickupDateCtrl.text = formattedDate;
-                                });
-                              } else {
-                                print("Date is not selected");
-                              }
-                            }),
+                        //         setState(() {
+                        //           pickupDateCtrl.text = formattedDate;
+                        //         });
+                        //       } else {
+                        //         print("Date is not selected");
+                        //       }
+                        //     }),
                       ),
                       SizedBox(width: 10),
-                      Expanded(
-                        // Date Field
-                        child: CustomeTextField(
-                            labelText: 'DD/MM/YYYY',
-                            prefixIcon: const Icon(
-                              Icons.date_range,
-                            ),
-                            control: dropDateCtrl,
-                            width: MediaQuery.of(context).size.width - 10,
-                            readOnly: true,
-                            validator: errValidatedropdate(dropDateCtrl.text),
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1948),
-                                lastDate: DateTime(2100),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: Theme.of(context)
-                                            .primaryColor, // <-- SEE HERE
-                                        onSurface: Theme.of(context)
-                                            .primaryColor, // <-- SEE HERE
-                                      ),
-                                      textButtonTheme: TextButtonThemeData(
-                                        style: TextButton.styleFrom(
-                                          foregroundColor: AppColors.light,
-                                          backgroundColor: AppColors.primary,
-                                        ),
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
+                      // Expanded(
+                      // Date Field
+                      //   child: CustomeTextField(
+                      //       labelText: 'DD/MM/YYYY',
+                      //       prefixIcon: const Icon(
+                      //         Icons.date_range,
+                      //       ),
+                      //       control: dropDateCtrl,
+                      //       width: MediaQuery.of(context).size.width - 10,
+                      //       readOnly: true,
+                      //       validator: errValidatedropdate(dropDateCtrl.text),
+                      //       onTap: () async {
+                      //         DateTime? pickedDate = await showDatePicker(
+                      //           context: context,
+                      //           initialDate: DateTime.now(),
+                      //           firstDate: DateTime(1948),
+                      //           lastDate: DateTime(2100),
+                      //           builder: (context, child) {
+                      //             return Theme(
+                      //               data: Theme.of(context).copyWith(
+                      //                 colorScheme: ColorScheme.light(
+                      //                   primary: Theme.of(context)
+                      //                       .primaryColor, // <-- SEE HERE
+                      //                   onSurface: Theme.of(context)
+                      //                       .primaryColor, // <-- SEE HERE
+                      //                 ),
+                      //                 textButtonTheme: TextButtonThemeData(
+                      //                   style: TextButton.styleFrom(
+                      //                     foregroundColor: AppColors.light,
+                      //                     backgroundColor: AppColors.primary,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               child: child!,
+                      //             );
+                      //           },
+                      //         );
 
-                              if (pickedDate != null) {
-                                String formattedDate =
-                                    DateFormat('dd-MM-yyyy').format(pickedDate);
+                      //         if (pickedDate != null) {
+                      //           String formattedDate =
+                      //               DateFormat('dd-MM-yyyy').format(pickedDate);
 
-                                setState(() {
-                                  dropDateCtrl.text = formattedDate;
-                                });
-                              } else {
-                                print("Date is not selected");
-                              }
-                            }),
-                      ),
+                      //           setState(() {
+                      //             dropDateCtrl.text = formattedDate;
+                      //           });
+                      //         } else {
+                      //           print("Date is not selected");
+                      //         }
+                      //       }),
+                      // ),
                     ],
                   ),
 

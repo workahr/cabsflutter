@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class FromAndToDatePickerField extends StatefulWidget {
   final Function(DateTime?, DateTime?) onDatesSelected;
@@ -21,7 +22,7 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
     DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: _fromDate ?? DateTime.now(),
-      firstDate: DateTime(2000),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -41,6 +42,8 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
         );
       },
     );
+
+    print(selectedDate);
 
     if (selectedDate != null) {
       setState(() {
@@ -104,32 +107,38 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
                 color: Colors.black,
               ),
               labelText: "From Date",
+              labelStyle: TextStyle(color: Colors.grey),
               suffixIcon: Icon(Icons.calendar_today, color: Colors.black),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(20.0),
                 borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(20.0),
                 borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(20.0),
                 borderSide: BorderSide(
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 105, 194, 235),
                   width: 2.0,
                 ),
               ),
             ),
+            // controller: TextEditingController(
+            //   text: _fromDate != null
+            //       ? "${_fromDate!.toLocal()}".split(' ')[0]
+            //       : '',
+            // ),
             controller: TextEditingController(
               text: _fromDate != null
-                  ? "${_fromDate!.toLocal()}".split(' ')[0]
+                  ? DateFormat('dd-MM-yyyy').format(_fromDate!)
                   : '',
             ),
           ),
@@ -146,32 +155,38 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
                 color: Colors.black,
               ),
               labelText: "To Date",
+              labelStyle: TextStyle(color: Colors.grey),
               suffixIcon: Icon(Icons.calendar_today, color: Colors.black),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(20.0),
                 borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(20.0),
                 borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: BorderRadius.circular(20.0),
                 borderSide: BorderSide(
-                  color: Colors.black,
+                  color: Colors.lightBlue,
                   width: 2.0,
                 ),
               ),
             ),
+            // controller: TextEditingController(
+            //   text:
+            //       _toDate != null ? "${_toDate!.toLocal()}".split(' ')[0] : '',
+            // ),
             controller: TextEditingController(
-              text:
-                  _toDate != null ? "${_toDate!.toLocal()}".split(' ')[0] : '',
+              text: _toDate != null
+                  ? DateFormat('dd-MM-yyyy').format(_toDate!)
+                  : '',
             ),
           ),
         ),

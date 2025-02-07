@@ -563,6 +563,21 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                           crossAxisAlignment:
                                                                               CrossAxisAlignment.start,
                                                                           children: [
+                                                                            Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                              children: [
+                                                                                Text(
+                                                                                  "Cancellation Reason",
+                                                                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                                                                ),
+                                                                                IconButton(
+                                                                                  icon: Icon(Icons.close, color: Colors.black),
+                                                                                  onPressed: () {
+                                                                                    Navigator.of(context).pop();
+                                                                                  },
+                                                                                ),
+                                                                              ],
+                                                                            ),
                                                                             SizedBox(height: 16),
                                                                             Text(
                                                                               "Please Select the Reason for Cancellation",
@@ -1037,6 +1052,33 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                   CrossAxisAlignment
                                                                       .start,
                                                               children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Text(
+                                                                      "Cancellation Reason",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
+                                                                    ),
+                                                                    IconButton(
+                                                                      icon: Icon(
+                                                                          Icons
+                                                                              .close,
+                                                                          color:
+                                                                              Colors.black),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                                 SizedBox(
                                                                     height: 16),
                                                                 Text(

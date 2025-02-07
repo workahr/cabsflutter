@@ -11,11 +11,13 @@ class _MyBookingsPageState extends State<MyBookingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            "My Bookings",
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Color(0xFF06234C),automaticallyImplyLeading: false,),
+        title: Text(
+          "My Bookings",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xFF06234C),
+        automaticallyImplyLeading: false,
+      ),
       body: ListView(
         children: [
           BookingCard(
@@ -87,20 +89,20 @@ class BookingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(                         
-          //width: MediaQuery.of(context).size.width * 0.43,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: const Offset(0, 3),
-              ),
-            ],
+    return Container(
+      //width: MediaQuery.of(context).size.width * 0.43,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
           ),
+        ],
+      ),
       margin: EdgeInsets.all(10),
       child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -143,9 +145,7 @@ class BookingCard extends StatelessWidget {
               ),
               Text('To: '),
             ]),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text(
                 '$fromLocation',
                 style: TextStyle(
@@ -160,9 +160,7 @@ class BookingCard extends StatelessWidget {
                     color: Color(0xFF06234C), fontWeight: FontWeight.bold),
               ),
             ]),
-            Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text('$fromdateRange'),
               // SizedBox(
               //   width: 170,
@@ -175,20 +173,20 @@ class BookingCard extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                    Text('Total Amount:',
-                        style: TextStyle(
-                            color: Color(0xFF06234C),
-                            fontWeight: FontWeight.bold)),
-                    // SizedBox(
-                    //   width: 170,
-                    // ),
-                    Text('$amount',
-                        style: TextStyle(
-                            color: Color(0xFF06234C),
-                            fontWeight: FontWeight.bold)),
-                  ]),
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Total Amount:',
+                            style: TextStyle(
+                                color: Color(0xFF06234C),
+                                fontWeight: FontWeight.bold)),
+                        // SizedBox(
+                        //   width: 170,
+                        // ),
+                        Text('$amount',
+                            style: TextStyle(
+                                color: Color(0xFF06234C),
+                                fontWeight: FontWeight.bold)),
+                      ]),
                   Row(children: [
                     Text(
                       'For 5 Days',
