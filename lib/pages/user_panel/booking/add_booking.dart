@@ -50,7 +50,7 @@ class _add_bookingState extends State<add_booking> {
   DateTime selectedDate = DateTime.now();
   int selectedPersons = 1;
 
-  late DateTime fromDate;
+  DateTime? fromDate;
   DateTime? toDate;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -141,8 +141,12 @@ class _add_bookingState extends State<add_booking> {
     print("Customer ID: ${customerid ?? "Not found"}");
 
     if (fromDate == null || toDate == null) {
+      setState(() {
+        fromDate = DateTime.now();
+        toDate = DateTime.now();
+      });
       print("Error: fromDate or toDate is null!");
-      return;
+      // return;
     }
 
     String formattedDate = DateFormat('yyyy-MM-dd').format(fromDate!);

@@ -49,12 +49,12 @@ class _userMyBookingsState extends State<UserMyBookings> {
             .where((booking) =>
                 booking.bookingStatus.trim().toUpperCase() != 'COMPLETED' &&
                 booking.bookingStatus.trim().toUpperCase() != 'CANCELLED' &&
-                booking.bookingStatus.trim().toUpperCase() != 'DRIVER ASSIGNED')
+                booking.bookingStatus.trim().toUpperCase() != 'BOOKED')
             .toList();
 
         confirmBookings = bookingList!
             .where((booking) =>
-                booking.bookingStatus.trim().toUpperCase() == 'DRIVER ASSIGNED')
+                booking.bookingStatus.trim().toUpperCase() == 'BOOKED')
             .toList();
 
         completedBookings = bookingList!
@@ -216,7 +216,7 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                           .imgBaseUrl +
                                                                       e.imageUrl!,
                                                                   width: double
-                                                                      .infinity,
+                                                                      .minPositive,
                                                                   fit: BoxFit
                                                                       .contain,
                                                                   height: 60.0,
@@ -752,7 +752,7 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                     child: Image.network(
                                                       AppConstants.imgBaseUrl +
                                                           e.imageUrl!,
-                                                      width: double.infinity,
+                                                      width: double.minPositive,
                                                       fit: BoxFit.contain,
                                                       height: 60.0,
                                                       // height: 100.0,
@@ -1318,7 +1318,7 @@ class _userMyBookingsState extends State<UserMyBookings> {
                                                                         .imgBaseUrl +
                                                                     e.imageUrl!,
                                                                 width: double
-                                                                    .infinity,
+                                                                    .minPositive,
                                                                 fit: BoxFit
                                                                     .contain,
                                                                 height: 60.0,

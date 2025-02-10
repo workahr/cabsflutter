@@ -134,6 +134,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
         DateTime parsedDate2 = DateFormat('yyyy-MM-dd')
             .parse(bookingsDetails!.toDatetime.toIso8601String());
         Todate = DateFormat('dd-MM-yyyy').format(parsedDate2);
+        userId = bookingsDetails!.customerId;
 
         // licenseExpiryDateController.text = formattedDate;
         // mobileNumberController.text = driverDetails!.mobile ?? '';
@@ -147,6 +148,7 @@ class _BookingApprovelState extends State<BookingApprovel> {
   }
 
   int? customerid;
+  String? userId;
 
   Future updatebookingbydriverid() async {
     await apiService.getBearerToken();
@@ -158,8 +160,8 @@ class _BookingApprovelState extends State<BookingApprovel> {
       "id": (bookingsDetails!.id ?? '').toString(),
       "u_driver_id": int.parse(selectedDriver),
       "u_car_id": selectedCar,
-      "u_customer_id": customerid,
-      "u_booking_status": "DRIVER ASSIGNED",
+      "u_customer_id": userId,
+      "u_booking_status": "BOOKED",
       "u_from_datetime": (bookingsDetails!.fromDatetime.toIso8601String()),
       "u_to_datetime": (bookingsDetails!.toDatetime.toIso8601String()),
       "u_pickup_location": (bookingsDetails!.pickupLocation ?? '').toString(),
@@ -219,466 +221,456 @@ class _BookingApprovelState extends State<BookingApprovel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Center(
-              child: Text(
-            'Booking Approvel',
-            style: TextStyle(color: Colors.white),
-          )),
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: Color(0xFF06234C),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Center(
+            child: Text(
+          'Booking Approvel',
+          style: TextStyle(color: Colors.white),
+        )),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
-        body: SingleChildScrollView(
-            child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: Colors.grey.shade300),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            spreadRadius: 5,
-                            blurRadius: 10,
-                            offset: Offset(0, 3),
-                          ),
-                        ]),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                color: Color(0xFF06234C),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(10.0),
-                                    topLeft: Radius.circular(10.0))),
-                            child: Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Row(children: [
-                                  // Text(
-                                  //   'Booking ID #5232555',
-                                  //   style: TextStyle(
-                                  //       color: Colors.white,
-                                  //       fontWeight: FontWeight.bold,
-                                  //       fontSize: 15),
-                                  // ),
-                                  Text(
-                                    'Booking ID ',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+        backgroundColor: Color(0xFF06234C),
+      ),
+      body: SingleChildScrollView(
+          child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(color: Colors.grey.shade300),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          spreadRadius: 5,
+                          blurRadius: 10,
+                          offset: Offset(0, 3),
+                        ),
+                      ]),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              color: Color(0xFF06234C),
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(10.0),
+                                  topLeft: Radius.circular(10.0))),
+                          child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(children: [
+                                // Text(
+                                //   'Booking ID #5232555',
+                                //   style: TextStyle(
+                                //       color: Colors.white,
+                                //       fontWeight: FontWeight.bold,
+                                //       fontSize: 15),
+                                // ),
+                                Text(
+                                  'Booking ID ',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                                Text(
+                                  '#$BookingId',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              ]))),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Customer Name:',
+                                    style: TextStyle(fontSize: 15),
                                   ),
-                                  Text(
-                                    '#$BookingId',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Booking date:',
+                                    style: TextStyle(fontSize: 15),
+                                    textAlign: TextAlign.end,
                                   ),
-                                ]))),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Customer Name:',
-                                      style: TextStyle(fontSize: 15),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 1),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Vetrimaran',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF06234C),
+                                      fontSize: 15,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Text(
-                                      'Booking date:',
-                                      style: TextStyle(fontSize: 15),
-                                      textAlign: TextAlign.end,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    BookingDate.toString(),
+                                    // '15-Sept-2024',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF06234C),
+                                      fontSize: 15,
                                     ),
+                                    textAlign: TextAlign.end,
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 1),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Vetrimaran',
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Mobile number:',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                    Text(
+                                      '+91 856325241',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF06234C),
                                         fontSize: 15,
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      BookingDate.toString(),
-                                      // '15-Sept-2024',
+                                  ],
+                                ),
+                                // Column(
+                                //     crossAxisAlignment:
+                                //         CrossAxisAlignment.start,
+                                //     children: [
+                                //       Text(
+                                //         'No. of Persons:',
+                                //         style: TextStyle(fontSize: 15),
+                                //         textAlign: TextAlign.end,
+                                //       ),
+                                //       Text(
+                                //         // e.,
+                                //         '5',
+                                //         style: TextStyle(
+                                //           fontWeight: FontWeight.bold,
+                                //           color: Color(0xFF06234C),
+                                //           fontSize: 15,
+                                //         ),
+                                //         textAlign: TextAlign.left,
+                                //       ),
+                                //     ])
+                              ],
+                            ),
+                            SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'From Date :',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                    Text(
+                                      Fromdate.toString(),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF06234C),
                                         fontSize: 15,
                                       ),
-                                      textAlign: TextAlign.end,
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 30),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
+                                  ],
+                                ),
+                                Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Mobile number:',
+                                        'To Date:',
                                         style: TextStyle(fontSize: 15),
+                                        textAlign: TextAlign.end,
                                       ),
                                       Text(
-                                        '+91 856325241',
+                                        Todate.toString(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF06234C),
                                           fontSize: 15,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                    ],
-                                  ),
-                                  // Column(
-                                  //     crossAxisAlignment:
-                                  //         CrossAxisAlignment.start,
-                                  //     children: [
-                                  //       Text(
-                                  //         'No. of Persons:',
-                                  //         style: TextStyle(fontSize: 15),
-                                  //         textAlign: TextAlign.end,
-                                  //       ),
-                                  //       Text(
-                                  //         // e.,
-                                  //         '5',
-                                  //         style: TextStyle(
-                                  //           fontWeight: FontWeight.bold,
-                                  //           color: Color(0xFF06234C),
-                                  //           fontSize: 15,
-                                  //         ),
-                                  //         textAlign: TextAlign.left,
-                                  //       ),
-                                  //     ])
-                                ],
-                              ),
-                              SizedBox(height: 30),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'From Date :',
-                                        style: TextStyle(fontSize: 15),
+                                    ])
+                              ],
+                            ),
+                            SizedBox(height: 30),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('From',
+                                        style: TextStyle(fontSize: 15)),
+                                    Text(
+                                      Fromlocation.toString(),
+                                      //'Ramanathapuram',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF06234C),
+                                        fontSize: 15,
                                       ),
-                                      Text(
-                                        Fromdate.toString(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF06234C),
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'To Date:',
-                                          style: TextStyle(fontSize: 15),
-                                          textAlign: TextAlign.end,
-                                        ),
-                                        Text(
-                                          Todate.toString(),
+                                    ),
+                                  ],
+                                )),
+                                Icon(Icons.compare_arrows, color: Colors.black),
+                                Expanded(
+                                    child: Column(
+                                        // crossAxisAlignment:
+                                        //     CrossAxisAlignment.start,
+                                        children: [
+                                      Text('To',
+                                          style: TextStyle(fontSize: 15)),
+                                      Text(Tolocation.toString(),
+                                          //'Kaniyakumari',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFF06234C),
                                             fontSize: 15,
                                           ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ])
-                                ],
-                              ),
-                              SizedBox(height: 30),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                      child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('From',
-                                          style: TextStyle(fontSize: 15)),
-                                      Text(
-                                        Fromlocation.toString(),
-                                        //'Ramanathapuram',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF06234C),
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  )),
-                                  Icon(Icons.compare_arrows,
-                                      color: Colors.black),
-                                  Expanded(
-                                      child: Column(
-                                          // crossAxisAlignment:
-                                          //     CrossAxisAlignment.start,
-                                          children: [
-                                        Text('To',
-                                            style: TextStyle(fontSize: 15)),
-                                        Text(
-                                          Tolocation.toString(),
-                                            //'Kaniyakumari',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF06234C),
-                                              fontSize: 15,
-                                            ),
-                                            textAlign: TextAlign.end),
-                                      ]))
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 25),
-                  Text(
-                    'Available Drivers',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  Divider(),
-                  isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : Column(
-                          children: [
-                            if (driverList != null)
-                              ...driverList!.map(
-                                (DriversList e) => Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 16.0),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        width: 36,
-                                        height: 36,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color(0xFFF3F8FF),
-                                        ),
-                                        child: Icon(
-                                          Icons.person_2_outlined,
-                                          color: Colors.grey.shade700,
-                                          size: 20,
-                                        ),
-                                      ),
-                                      SizedBox(width: 20),
-                                      Expanded(
-                                        child: Text(
-                                          e.username,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Radio<String>(
-                                        value: e.id.toString(),
-                                        groupValue: selectedDriver,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            selectedDriver = value!;
-                                            print(
-                                                "selectedDriver  :$selectedDriver");
-                                          });
-                                        },
-                                        activeColor: Color(0xFF0A3068),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                                          textAlign: TextAlign.end),
+                                    ]))
+                              ],
+                            ),
+                            SizedBox(height: 10),
                           ],
                         ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Available Cars',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
-                  Divider(),
-                  isLoading
-                      ? Center(child: CircularProgressIndicator())
-                      : Column(children: [
-                          if (carList != null)
-                            ...carList!.map((ListElement e) => Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 16.0),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                          width: 50,
-                                          child: e.imageUrl != null
-                                              ? ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: Image.network(
-                                                    AppConstants.imgBaseUrl +
-                                                        e.imageUrl!,
-                                                    width: double.infinity,
-                                                    fit: BoxFit.contain,
-                                                    height: 60.0,
-                                                    // height: 100.0,
-                                                    errorBuilder:
-                                                        (BuildContext context,
-                                                            Object exception,
-                                                            StackTrace?
-                                                                stackTrace) {
-                                                      return Image.asset(
-                                                          AppAssets.logo,
-                                                          width: 30.0,
-                                                          height: 50.0,
-                                                          fit: BoxFit.cover);
-                                                    },
-                                                  ),
-                                                )
-                                              : Image.asset(AppAssets.logo,
-                                                  width: 30.0,
-                                                  height: 50.0,
-                                                  fit: BoxFit.contain)),
-                                      SizedBox(width: 18),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(children: [
-                                              Text(
-                                                e.brand,
+                ),
+                SizedBox(height: 25),
+                Text(
+                  'Available Drivers',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Divider(),
+                isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Column(
+                        children: [
+                          if (driverList != null)
+                            ...driverList!.map(
+                              (DriversList e) => Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 16.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 36,
+                                      height: 36,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xFFF3F8FF),
+                                      ),
+                                      child: Icon(
+                                        Icons.person_2_outlined,
+                                        color: Colors.grey.shade700,
+                                        size: 20,
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Expanded(
+                                      child: Text(
+                                        e.username,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Radio<String>(
+                                      value: e.id.toString(),
+                                      groupValue: selectedDriver,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          selectedDriver = value!;
+                                          print(
+                                              "selectedDriver  :$selectedDriver");
+                                        });
+                                      },
+                                      activeColor: Color(0xFF0A3068),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                SizedBox(height: 20),
+                Text(
+                  'Available Cars',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Divider(),
+                isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Column(children: [
+                        if (carList != null)
+                          ...carList!.map((ListElement e) => Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 16.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                        width: 50,
+                                        child: e.imageUrl != null
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Image.network(
+                                                  AppConstants.imgBaseUrl +
+                                                      e.imageUrl!,
+                                                  width: double.infinity,
+                                                  fit: BoxFit.contain,
+                                                  height: 60.0,
+                                                  // height: 100.0,
+                                                  errorBuilder: (BuildContext
+                                                          context,
+                                                      Object exception,
+                                                      StackTrace? stackTrace) {
+                                                    return Image.asset(
+                                                        AppAssets.logo,
+                                                        width: 30.0,
+                                                        height: 50.0,
+                                                        fit: BoxFit.cover);
+                                                  },
+                                                ),
+                                              )
+                                            : Image.asset(AppAssets.logo,
+                                                width: 30.0,
+                                                height: 50.0,
+                                                fit: BoxFit.contain)),
+                                    SizedBox(width: 18),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(children: [
+                                            Text(
+                                              e.brand,
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              width: 15,
+                                            ),
+                                            Text(e.modal,
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                width: 15,
-                                              ),
-                                              Text(e.modal,
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold))
-                                            ]),
-                                            Text(
-                                              'Sedan, Manual, 5 person',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16),
-                                            ),
-                                          ],
-                                        ),
+                                                        FontWeight.bold))
+                                          ]),
+                                          Text(
+                                            'Sedan, Manual, 5 person',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                          ),
+                                        ],
                                       ),
-                                      Radio<String>(
-                                        value: e.id.toString(),
-                                        groupValue: selectedCar,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            selectedCar = value!;
-                                            print("selectedCar  :$selectedCar");
-                                            getboookingchargeBykmdate();
-                                          });
-                                        },
-                                        activeColor: Color(0xFF0A3068),
-                                      ),
-                                    ],
-                                  ),
-                                ))
-                        ]),
-                  //SizedBox(height: 20),
-                  
-                ])))
-                ,bottomNavigationBar: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                          height: 50,
-                          width: 130,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              _makePhoneCall();
-                            },
-                            icon: Icon(
-                              Icons.phone_outlined,
-                              color: Colors.black,
-                              size: 30,
-                            ),
-                            label: Text(
-                              'Call',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              backgroundColor: Colors.white,
-                              side: BorderSide(
-                                color: Colors.black,
-                              ),
-                            ),
-                          )),
-                          SizedBox(width: 15.0,),
-                      SizedBox(
-                          height: 50,
-                          width: 130,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              updatebookingbydriverid();
-                            },
-                            child: Text(
-                              'Confirm',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF06234C),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          )),
-                    ],
-                  ),);
+                                    ),
+                                    Radio<String>(
+                                      value: e.id.toString(),
+                                      groupValue: selectedCar,
+                                      onChanged: (String? value) {
+                                        setState(() {
+                                          selectedCar = value!;
+                                          print("selectedCar  :$selectedCar");
+                                          getboookingchargeBykmdate();
+                                        });
+                                      },
+                                      activeColor: Color(0xFF0A3068),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                      ]),
+                //SizedBox(height: 20),
+              ]))),
+      bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+              height: 50,
+              width: 130,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  _makePhoneCall();
+                },
+                icon: Icon(
+                  Icons.phone_outlined,
+                  color: Colors.black,
+                  size: 30,
+                ),
+                label: Text(
+                  'Call',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  backgroundColor: Colors.white,
+                  side: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+              )),
+          SizedBox(
+            width: 15.0,
+          ),
+          SizedBox(
+              height: 50,
+              width: 130,
+              child: ElevatedButton(
+                onPressed: () {
+                  updatebookingbydriverid();
+                },
+                child: Text(
+                  'Confirm',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF06234C),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              )),
+        ],
+      ),
+    );
   }
 }
 

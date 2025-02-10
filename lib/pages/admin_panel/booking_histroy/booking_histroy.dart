@@ -95,15 +95,15 @@ class _BookingHistoryState extends State<BookingHistory> {
   Color getStatusColor(String status) {
     switch (status) {
       case 'COMPLETED':
-        return Colors.lightGreen;
+        return Colors.teal;
       case 'PENDING':
-        return Colors.blue.shade100;
+        return Colors.amber;
       case 'CANCELED':
-        return Colors.red.shade100;
+        return Colors.red;
       case 'NEW':
-        return Colors.yellow;
+        return Colors.blue;
       default:
-        return Colors.grey.shade200;
+        return Colors.purple;
     }
   }
 
