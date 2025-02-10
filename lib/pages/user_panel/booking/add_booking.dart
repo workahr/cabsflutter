@@ -50,7 +50,7 @@ class _add_bookingState extends State<add_booking> {
   DateTime selectedDate = DateTime.now();
   int selectedPersons = 1;
 
-  DateTime? fromDate;
+  late DateTime fromDate;
   DateTime? toDate;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -354,6 +354,8 @@ class _add_bookingState extends State<add_booking> {
             double distanceInKilometers =
                 (parsedDistance != null ? parsedDistance * kilometercal : 0.0);
             kilometerCtrl.text = distanceInKilometers.toStringAsFixed(2);
+
+            generateCharge(distanceInKilometers);
           });
         } else {
           showInSnackBar(context, "Data not found");
@@ -364,6 +366,33 @@ class _add_bookingState extends State<add_booking> {
     } catch (error) {
       print('Error fetching kilometers: $error');
       showInSnackBar(context, "An error occurred while fetching distance");
+    }
+  }
+
+  bool isAc = true;
+  int ac = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    ac = isAc ? 13 : 12;
+  }
+
+  int belowTenKm = 150;
+  int rangeTenToTwenty = 200;
+  int aboveTwentyKm = 420;
+
+  generateCharge(dynamic km) {
+    double roundedKm = double.parse(km.toStringAsFixed(2));
+    print('km : $roundedKm');
+    if (km <= 10) {
+      bookingchargeCtrl.text = (belowTenKm + 12 * roundedKm).toStringAsFixed(2);
+    } else if (km > 10 && km < 20) {
+      bookingchargeCtrl.text =
+          (rangeTenToTwenty + 12 * roundedKm).toStringAsFixed(2);
+    } else if (km >= 20) {
+      bookingchargeCtrl.text =
+          (aboveTwentyKm + ac * roundedKm).toStringAsFixed(2);
     }
   }
 
@@ -548,7 +577,7 @@ class _add_bookingState extends State<add_booking> {
                         child: FromAndToDatePickerField(
                           onDatesSelected: (from, to) {
                             setState(() {
-                              fromDate = from;
+                              fromDate = from!;
                               toDate = to;
                             });
                           },
@@ -669,6 +698,7 @@ class _add_bookingState extends State<add_booking> {
                     //  validator: errValidatebrand(kilometerCtrl.text),
                     labelText: 'Booking charge',
                     width: MediaQuery.of(context).size.width - 10,
+                    // inputType: 'number',
                     readOnly: true,
                   ),
                   SizedBox(height: 20),

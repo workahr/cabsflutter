@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../constants/app_colors.dart';
+
 class FromAndToDatePickerField extends StatefulWidget {
   final Function(DateTime?, DateTime?) onDatesSelected;
 
@@ -17,6 +19,8 @@ class FromAndToDatePickerField extends StatefulWidget {
 class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
   DateTime? _fromDate;
   DateTime? _toDate;
+  late TextEditingController _fromDateController;
+  late TextEditingController _toDateController;
 
   Future<void> _selectFromDate(BuildContext context) async {
     DateTime? selectedDate = await showDatePicker(
@@ -47,8 +51,11 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
 
     if (selectedDate != null) {
       setState(() {
+        _fromDateController.text =
+            DateFormat('dd-MM-yyyy').format(selectedDate);
         _fromDate = selectedDate;
         _toDate = null;
+        _toDateController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
       });
     }
   }
@@ -88,9 +95,25 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
     if (selectedDate != null) {
       setState(() {
         _toDate = selectedDate;
+        _toDateController.text = DateFormat('dd-MM-yyyy').format(selectedDate);
         widget.onDatesSelected(_fromDate, _toDate);
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fromDate = DateTime.now();
+    _toDate = _fromDate; // or _fromDate!.add(const Duration(days: 1));
+
+    _fromDateController = TextEditingController(
+      text: DateFormat('dd-MM-yyyy').format(_fromDate!),
+    );
+
+    _toDateController = TextEditingController(
+      text: DateFormat('dd-MM-yyyy').format(_toDate!),
+    );
   }
 
   @override
@@ -107,27 +130,27 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
                 color: Colors.black,
               ),
               labelText: "From Date",
-              labelStyle: TextStyle(color: Colors.grey),
+              labelStyle: TextStyle(color: Colors.grey, fontSize: 14.0),
               suffixIcon: Icon(Icons.calendar_today, color: Colors.black),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(25.0),
                 borderSide: const BorderSide(
                   color: Colors.grey,
-                  width: 1.0,
+                  width: 1.5,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(25.0),
                 borderSide: const BorderSide(
                   color: Colors.grey,
-                  width: 1.0,
+                  width: 1.5,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(25.0),
                 borderSide: BorderSide(
-                  color: Color.fromARGB(255, 105, 194, 235),
-                  width: 2.0,
+                  color: AppColors.primary,
+                  width: 1.5,
                 ),
               ),
             ),
@@ -136,11 +159,12 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
             //       ? "${_fromDate!.toLocal()}".split(' ')[0]
             //       : '',
             // ),
-            controller: TextEditingController(
-              text: _fromDate != null
-                  ? DateFormat('dd-MM-yyyy').format(_fromDate!)
-                  : '',
-            ),
+            controller: _fromDateController,
+            // controller: TextEditingController(
+            //   text: _fromDate != null
+            //       ? DateFormat('dd-MM-yyyy').format(_fromDate!)
+            //       : '',
+            // ),
           ),
         ),
         const SizedBox(width: 16),
@@ -155,27 +179,27 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
                 color: Colors.black,
               ),
               labelText: "To Date",
-              labelStyle: TextStyle(color: Colors.grey),
+              labelStyle: TextStyle(color: Colors.grey, fontSize: 14.0),
               suffixIcon: Icon(Icons.calendar_today, color: Colors.black),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(25.0),
                 borderSide: const BorderSide(
                   color: Colors.grey,
-                  width: 1.0,
+                  width: 1.5,
                 ),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(25.0),
                 borderSide: const BorderSide(
                   color: Colors.grey,
-                  width: 1.0,
+                  width: 1.5,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(25.0),
                 borderSide: BorderSide(
-                  color: Colors.lightBlue,
-                  width: 2.0,
+                  color: AppColors.primary,
+                  width: 1.5,
                 ),
               ),
             ),
@@ -183,11 +207,12 @@ class _FromAndToDatePickerFieldState extends State<FromAndToDatePickerField> {
             //   text:
             //       _toDate != null ? "${_toDate!.toLocal()}".split(' ')[0] : '',
             // ),
-            controller: TextEditingController(
-              text: _toDate != null
-                  ? DateFormat('dd-MM-yyyy').format(_toDate!)
-                  : '',
-            ),
+            controller: _toDateController,
+            // controller: TextEditingController(
+            //   text: _toDate != null
+            //       ? DateFormat('dd-MM-yyyy').format(_toDate!)
+            //       : '',
+            // ),
           ),
         ),
       ],
